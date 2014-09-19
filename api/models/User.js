@@ -6,9 +6,35 @@
 */
 
 module.exports = {
-
+	schema: true,
   attributes: {
+		name: 'string',
+		email: {
+			type: 'email',
+			unique: true,
+			required: true
+		},
+		password: {
+			type: 'string',
+			required: true
+		},
+		online: {
+			type: 'boolean',
+			defaultsTo: true,
 
-  }
+		},
+		admin: {
+			type: 'boolean',
+			defaultsTo: false
+		}
+  },
+	beforeCreate: function(values, cb){
+		var bcrypt = require('bcrypt');
+		bcrypt.hash(values.password, 10, function(err, hash){
+			if(err) return cb(err);
+			values.password=hash;
+			cb();
+		});
+	}
 };
 
