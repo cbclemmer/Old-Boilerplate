@@ -1,35 +1,50 @@
-<div class="container" id="err" style="color: white; padding: 20px;position: absolute; top:10px;background: red;margin-left: 20%;opacity: .9;text-align: center;font-size: 20px;">
-</div>
-<div ng-app="app" ng-controller="userController as use">
-	<div>
-		<div id="topNav" class="container">
-			<div>App</div>
-			<div class="loggedIn">{{user.name}}</div>
-			<div ng-click="use.logOut()" class="loggedIn">Logout</div>
-		</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your App Here!</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <!--STYLES END-->
+  </head>
+
+  <body>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
+    <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/app.jquery.js"></script>
+    <script src="/js/dependencies/app.angular.js"></script>
+    <script src="/js/dependencies/app.angular.search.js"></script>
+    <script src="/js/dependencies/app.angular.page.js"></script>
+    <script src="/js/dependencies/app.angular.directives.js"></script>
+    <script src="/js/dependencies/bootstrap.min.js"></script>
+    <!--SCRIPTS END-->
+	<div ng-app="app" ng-controller="userController as use">
+			<div id="err"></div>
+            <div id="info"></div>
+			<div id="topNav" class="container">
+				<div><a ui-sref="home">App</a></div>
+				<div class="loggedIn"><a ui-sref="user">{{user.name}}</a></div>
+				<div id="searchBar" ng-controller="searchController as s">
+						<input type="text" placeholder="Search..." id="search"/>
+						<div ng-repeat="option in options">{{option.type}}:  {{option.name}}</div>
+				</div>
+				<div ng-click="use.logOut()" class="loggedIn">Logout</div>
+			</div>
+	<div class="container">
+    <div ui-view></div>
 	</div>
-	
-	
-	<div class="login container" id="startLog">
-		<div>
-			<h2>Login</h2>
-			<!-- login form -->
-			<form ng-controller="userController as userCtrl" ng-submit="userCtrl.login()">
-				<input type="email" ng-model="userCtrl.tLogin.email" placeholder="email" /><br>
-				<input type="password" ng-model="userCtrl.tLogin.password" placeholder="password" /><br>
-				<input type="submit" value="submit" />
-			</form>
-		</div>
-		<div>
-			<!-- signup form -->
-			<h2>Sign up</h2>
-			<form ng-controller="userController as userCtrl" ng-submit="userCtrl.signUp()">
-				<input type="text" ng-model="userCtrl.temp.name" placeholder="name/username" /><br>
-				<input type="email" ng-model="userCtrl.temp.email" placeholder="email" /><br>
-				<input type="password" ng-model="userCtrl.temp.password" placeholder="password" /><br>
-				<input type="password" ng-model="userCtrl.temp.cPassword" placeholder="confirm password" /><br>
-				<input type="submit" value="submit" />
-			</form>
-		</div>
-	</div>
 </div>
+
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+  </body>
+</html>

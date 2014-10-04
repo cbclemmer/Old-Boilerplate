@@ -1,0 +1,9 @@
+<div class="container">
+	<h2>{{user.name}}</h2>
+	<div class="container user.friends">
+		<h3>Friend List</h3>
+		<ul>
+			<li ng-repeat="friend in user.friends">{{friend.name}} {{friend.online}}</li>
+		</ul>
+	</div>
+</div>

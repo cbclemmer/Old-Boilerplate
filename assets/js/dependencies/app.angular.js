@@ -1,20 +1,61 @@
 (function(){
-	var app = angular.module("app", []);
-	app.controller("userController", ['$http', '$scope', '$rootScope', function($http, $scope, $rootScope){
+	//module defines controllers
+	var app = angular.module("app", ['ui.router', 'page', 'search']);
+	app.config(function($stateProvider, $urlRouterProvider){
+		$urlRouterProvider.otherwise('/login');
+		$stateProvider
+		.state('login', {
+			url: '/login', 
+			templateUrl: '/login'
+		}).state('user', {
+			url: '/use',
+			templateUrl: '/pages/user?p=0',
+			controller: function($scope) {
+
+			}
+		}).state('feed', {
+			url: '/feed',
+			templateUrl: '/pages/feed'
+		})
+	});
+	app.service("myServices", ['$http', '$scope', '$rootScope', function(){
+		return {
+			getFriends: function(){
+				$http.get("/user/friends").success(function(res){
+					if(res.err) return showErr(res.err);
+					console.log(res);
+					if($rootScope.user){
+						$rootScope.user.friends = res;
+					}
+				});
+			}
+		};
+	}]);
+	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
 		$scope.temp = {};
 		$scope.tLogin = {};
-		$('.login').show();
-		$('.loggedIn').hide();
+		$rootScope.page = {};
 		$http.get("/user/get").success(function(res){
 			if(res.status){
 				$rootScope.user = res.user;
 				$rootScope.auth = true;
 				$('.loggedIn').show();
-				$('.login').hide();;
+				$('.loggedOut').hide();
+				$state.go("feed");
 			}else{
-					console.log(res);
+				$('.loggedIn').hide();
+				console.log(res);
 			}
 		});
+		//get friends
+		$http.get("/user/friends").success(function(res){
+			if(res.err) return showErr(res.err);
+			console.log(res);
+			if($rootScope.user){
+				$rootScope.user.friends = res;
+			}
+		});
+		//services.getFriends();
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
@@ -22,10 +63,20 @@
 					$scope.userCtrl.tLogin = {};
 					$rootScope.user = res.user;
 					$rootScope.auth = true;
-					console.log($scope.user);
 					$('.loggedIn').show();
-					$('.login').hide();
+					$('.loggedOut').hide();
+					//get friends
+					$http.get("/user/friends").success(function(res){
+					if(res.err) return showErr(res.err);
+					console.log(res);
+						if($rootScope.user){
+						$rootScope.user.friends = res;
+						showInfo("Logged In!");
+						$state.go("feed");
+					}
+					});
 				}else{
+					console.log(res);
 					showErr(res.reason);
 				};
 			});
@@ -40,7 +91,9 @@
 				$rootScope.user = res;
 				$rootScope.auth = true;
 				$('.loggedIn').show();
-				$('.login').hide();
+				$('.loggedOut').hide();
+				showInfo("Logged In!");
+				$state.go("feed");
 			});
 			}
 		};
@@ -49,10 +102,12 @@
 				if(res.status){
 					$rootScope.auth = false;
 					$rootScope.user = {};
-					$('.login').show();
 					$('.loggedIn').hide();
-				}
-			});;
+					$('.loggedOut').show();
+					$state.go("login");
+					showInfo("Logged Out!");
+				}else showErr("error logging out");
+			});
 		};
 	}]);
 })();

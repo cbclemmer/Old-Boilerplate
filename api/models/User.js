@@ -21,11 +21,14 @@ module.exports = {
 		online: {
 			type: 'boolean',
 			defaultsTo: true,
-
 		},
 		admin: {
 			type: 'boolean',
 			defaultsTo: false
+		},
+		friends: {
+			collection: 'User',
+			via: 'email'
 		}
   },
 	beforeCreate: function(values, cb){

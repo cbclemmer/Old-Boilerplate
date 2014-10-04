@@ -8,10 +8,9 @@
 #topNav div {
     opacity: .9;
     color: white;
-    display: inline-block;
-    height: 20px;
+    display: inline-table;
     width:   10%;
-    padding: 15px;
+    padding: 10px;
     font-size: 25px;
     background: black;
     text-align: center;
@@ -20,8 +19,15 @@
 #topNav div:last-child {
     float: right;
 }
-#topNav div:hover {
-    opacity: .5;
+#topNav div a {
+    color: white;
+    border: 0px;
+}
+#topNav div a:hover {
+       border: 0px;
+}
+#topNav div:hover:not(#searchBar) {
+    opacity: .5
 }
 #startLog {
     margin-top: 75px;
@@ -51,4 +57,28 @@
 }
 #startLog div input:last-child:hover{
     box-shadow: 1px 1px 0px grey;
+}
+#err {
+    text-align: center;
+    font-size: 25px;
+    position: absolute;
+    margin-left: 20%;
+    width: 50%;
+    color: white;
+    background: #E01220;
+    z-index: 20;
+    padding: 15px;
+    opacity: .9;
+}
+#info{
+    text-align: center;
+    font-size: 25px;
+    position: absolute;
+    margin-left: 20%;
+    width: 50%;
+    color: white;
+    background: #1AB824;
+    z-index: 20;
+    padding: 15px;
+    opacity: .9;   
 }
