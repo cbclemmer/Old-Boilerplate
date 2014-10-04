@@ -23,6 +23,12 @@ module.exports = {
 			var q = User.find({where: {name: reg}, limit: 10, sort: {name: 1}});
 			q.exec(function(err, users){
 				if(err) return res.json({'err': err});
+				users.forEach(function(user){
+					user['type']="user";
+					user['password']="";
+					user['createdAt']="";
+					user['updatedAt']="";
+				})
 				res.json(users);
 			});
 		}

@@ -29,6 +29,9 @@ module.exports = {
 		friends: {
 			collection: 'User',
 			via: 'email'
+		},
+		friendRequests: {
+			type: 'array'
 		}
   },
 	beforeCreate: function(values, cb){

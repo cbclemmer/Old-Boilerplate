@@ -8,14 +8,18 @@
 			url: '/login', 
 			templateUrl: '/login'
 		}).state('user', {
-			url: '/use',
+			url: '/user',
 			templateUrl: '/pages/user?p=0',
-			controller: function($scope) {
-
+			controller: function($rootScope, $state){
+				if(!$rootScope.auth) $state.go("login");
+				if(!$rootScope.page["type"]||$rootScope.page["type"]=="") $rootScope.page = $rootScope.user
 			}
 		}).state('feed', {
 			url: '/feed',
-			templateUrl: '/pages/feed'
+			templateUrl: '/pages/feed',
+			controller: function($rootScope, $state){
+				if(!$rootScope.auth) $state.go("login");
+			}
 		})
 	});
 	app.service("myServices", ['$http', '$scope', '$rootScope', function(){
@@ -42,18 +46,23 @@
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
 				$state.go("feed");
+				//get friends
+				$http.get("/user/friends").success(function(res){
+					if(res.err) return showErr(res.err);
+					console.log(res);
+					if($rootScope.user){
+						$rootScope.user.friends = res;
+					}
+				});
+				$http.get("/user/getFriendRequests").success(function(res){
+					if(res.err) {console.log;return showErr(res.err);}
+					$rootScope.user.friendRequests = res;
+				});
 			}else{
 				$('.loggedIn').hide();
 				console.log(res);
 			}
-		});
-		//get friends
-		$http.get("/user/friends").success(function(res){
-			if(res.err) return showErr(res.err);
-			console.log(res);
-			if($rootScope.user){
-				$rootScope.user.friends = res;
-			}
+
 		});
 		//services.getFriends();
 		this.login = function(){
@@ -75,6 +84,10 @@
 						$state.go("feed");
 					}
 					});
+					$http.get("/user/getFriendRequests").success(function(res){
+						if(res.err) {console.log;return showErr(res.err);}
+						$rootScope.user.friendRequests = res;
+					});
 				}else{
 					console.log(res);
 					showErr(res.reason);
@@ -94,6 +107,10 @@
 				$('.loggedOut').hide();
 				showInfo("Logged In!");
 				$state.go("feed");
+				$http.get("/user/getFriendRequests").success(function(res){
+					if(res.err) {console.log;return showErr(res.err);}
+					$rootScope.user.friendRequests = res;
+				});
 			});
 			}
 		};
@@ -109,5 +126,42 @@
 				}else showErr("error logging out");
 			});
 		};
+		this.addFriend = function(user){
+			//hold the friend request for fast access
+			req = $rootScope.user.friendRequests;
+			$http.get("/user/addFriend?email="+user).success(function(){
+				if(res.err){console.log(err);showErr(err.reason)};
+				if(res){
+					for(var i=0;i<req.length;i++){
+						if(req[i]==user){
+							$rootScope.user.friendRequests.splice(i, 1);
+						}
+					}
+				}
+			});
+		};
+		this.addFriendRequest = function(user){
+			//add the user: user to their friend request list
+			console.log("adding friend request");
+			$http.get("/user/addFriendRequest?user="+user).success(function(res){
+				if(res.err){console.log(err);showErr(err.reason)};
+				if(res){
+					$rootScope.page.request = true;
+				}
+			});
+		};
+		this.deleteFriendRequest = function(user){
+			req = $rootScope.user.friendRequests;
+			$http.get("/user/deleteFriendRequest").success(function(res){
+				if(res.err){console.log(err);showErr(err.reason)};
+				if(res){
+					for(var i=0;i<req.length;i++){
+						if(req[i]==user){
+							$rootScope.user.friendRequests.splice(i, 1);
+						}
+					}
+				}
+			});
+		}
 	}]);
 })();

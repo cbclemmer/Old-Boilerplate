@@ -23,6 +23,11 @@ function showInfo(s){
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
+	$(document).on('click', function(event) {
+	  if (!$(event.target).closest('#searchBar').length) {
+	    $("#searchBar").find("div").remove();
+	  }
+	});
 	$("#search").keydown(function(){
 		console.log("searching");
 		if($('#search').val().length>0){

@@ -1,9 +1,26 @@
 <div class="container">
-	<h2>{{user.name}}</h2>
-	<div class="container user.friends">
+	<h2>{{page.name}}</h2>
+	<div class="container page.friends">
+		<div id="friendsWith" ng-controller="userController as use">
+			<span ng-show="page.friendsWith">Friends</span>
+			<div ng-show="!page.friendsWith">
+				<button ng-show="!page.request" on-click="use.addFriendRequest(page.id)">Add Friend</button>
+				<span ng-show="page.request">Request Sent</span>
+			</div>
+		</div>
+		<div ng-show="user.id==page.id">
+			<h4>Requests</h4>
+			<ul ng-controller="searchController as s">
+				<li ng-repeat="request in page.friendRequests">
+				<span ng-click="s.getPage(request.id)">{{request.name}} ({{request.email}})</span>
+				<button ng-click="use.addFriend(request.email)">Confirm</button>&emsp;
+				<button ng-click="use.deleteFriendRequest(request.id)">Delete</button>
+				</li>
+			</ul>
+		</div>
 		<h3>Friend List</h3>
 		<ul>
-			<li ng-repeat="friend in user.friends">{{friend.name}} {{friend.online}}</li>
+			<li ng-repeat="friend in page.friends">{{friend.name}} {{page.online}}</li>
 		</ul>
 	</div>
 </div>

@@ -30,11 +30,11 @@
 			<div id="err"></div>
             <div id="info"></div>
 			<div id="topNav" class="container">
-				<div><a ui-sref="home">App</a></div>
+				<div><a ui-sref="feed">App</a></div>
 				<div class="loggedIn"><a ui-sref="user">{{user.name}}</a></div>
 				<div id="searchBar" ng-controller="searchController as s">
 						<input type="text" placeholder="Search..." id="search"/>
-						<div ng-repeat="option in options">{{option.type}}:  {{option.name}}</div>
+						<div ng-repeat="option in options" ng-click="s.getPage(option)">{{option.type}}:  {{option.name}}</div>
 				</div>
 				<div ng-click="use.logOut()" class="loggedIn">Logout</div>
 			</div>
