@@ -10,9 +10,9 @@
 		}).state('user', {
 			url: '/user',
 			templateUrl: '/pages/user?p=0',
-			controller: function($rootScope, $state){
+			controller: function($rootScope, $state, $scope){
 				if(!$rootScope.auth) $state.go("login");
-				if(!$rootScope.page["type"]||$rootScope.page["type"]=="") $rootScope.page = $rootScope.user
+				//angular.element(document.getElementById('searchBar')).scope().s.getPage($rootScope.page);
 			}
 		}).state('feed', {
 			url: '/feed',
@@ -45,7 +45,6 @@
 				$rootScope.auth = true;
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
-				$state.go("feed");
 				//get friends
 				$http.get("/user/friends").success(function(res){
 					if(res.err) return showErr(res.err);
@@ -54,40 +53,48 @@
 						$rootScope.user.friends = res;
 					}
 				});
-				$http.get("/user/getFriendRequests").success(function(res){
-					if(res.err) {console.log;return showErr(res.err);}
-					$rootScope.user.friendRequests = res;
-				});
+				$rootScope.user.frJSON = [];
+				//get friend request data
+				for(var i=0;i<$rootScope.user.friendRequests.length;i++){
+					$http.get("/user/getOne?user="+$rootScope.user.friendRequests[i]).success(function(res){
+						//friend request JSON object
+						$rootScope.user.frJSON.push(res);
+					});
+				};
 			}else{
 				$('.loggedIn').hide();
 				console.log(res);
 			}
 
 		});
-		//services.getFriends();
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
 				if(res.auth){
 					$scope.userCtrl.tLogin = {};
 					$rootScope.user = res.user;
+					$rootScope.page = $rootScope.user;
 					$rootScope.auth = true;
 					$('.loggedIn').show();
 					$('.loggedOut').hide();
 					//get friends
 					$http.get("/user/friends").success(function(res){
-					if(res.err) return showErr(res.err);
-					console.log(res);
-						if($rootScope.user){
-						$rootScope.user.friends = res;
-						showInfo("Logged In!");
-						$state.go("feed");
-					}
+						if(res.err) return showErr(res.err);
+						console.log(res);
+							if($rootScope.user){
+							$rootScope.user.friends = res;
+							showInfo("Logged In!");
+							$state.go("feed");
+						}
 					});
-					$http.get("/user/getFriendRequests").success(function(res){
-						if(res.err) {console.log;return showErr(res.err);}
-						$rootScope.user.friendRequests = res;
-					});
+					$rootScope.user.frJSON = [];
+					//get friend request data
+					for(var i=0;i<$rootScope.user.friendRequests.length;i++){
+						$http.get("/user/getOne?user="+$rootScope.user.friendRequests[i]).success(function(res){
+							//friend request JSON object
+							$rootScope.user.frJSON.push(res);
+						});
+					};
 				}else{
 					console.log(res);
 					showErr(res.reason);
@@ -126,38 +133,38 @@
 				}else showErr("error logging out");
 			});
 		};
-		this.addFriend = function(user){
+		$scope.use.addFriend = function(user){
 			//hold the friend request for fast access
 			req = $rootScope.user.friendRequests;
-			$http.get("/user/addFriend?email="+user).success(function(){
+			$http.get("/user/addFriend?request="+user).success(function(res){
 				if(res.err){console.log(err);showErr(err.reason)};
 				if(res){
 					for(var i=0;i<req.length;i++){
 						if(req[i]==user){
-							$rootScope.user.friendRequests.splice(i, 1);
+							$rootScope.user.frJSON.splice(i, 1);
 						}
 					}
 				}
 			});
 		};
-		this.addFriendRequest = function(user){
+		$scope.use.addFriendRequest = function(user){
 			//add the user: user to their friend request list
 			console.log("adding friend request");
-			$http.get("/user/addFriendRequest?user="+user).success(function(res){
-				if(res.err){console.log(err);showErr(err.reason)};
+			$http.get("/user/addFriendRequest?friend="+user).success(function(res){
+				if(res.err){console.log(res.err);showErr(err.reason)};
 				if(res){
 					$rootScope.page.request = true;
 				}
 			});
 		};
-		this.deleteFriendRequest = function(user){
+		$scope.use.deleteRequest = function(user){
 			req = $rootScope.user.friendRequests;
-			$http.get("/user/deleteFriendRequest").success(function(res){
+			$http.get("/user/deleteRequest?request="+user).success(function(res){
 				if(res.err){console.log(err);showErr(err.reason)};
 				if(res){
 					for(var i=0;i<req.length;i++){
 						if(req[i]==user){
-							$rootScope.user.friendRequests.splice(i, 1);
+							$rootScope.user.frJSON.splice(i, 1);
 						}
 					}
 				}

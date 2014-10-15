@@ -22,6 +22,7 @@ module.exports = {
 						req.session.auth = true;
 						user['password'] = "";
 						req.session.user = user;
+						console.log("logging in");
 						return res.json({auth: true, user: user});
 					});
 				}else return res.json({'login':false, 'reason': 'Password is wrong'});

@@ -1,10 +1,10 @@
 <div class="container">
-	<h2>{{page.name}}</h2>
+	<h2>{{page.email}}</h2>
 	<div class="container page.friends">
 		<div id="friendsWith" ng-controller="userController as use">
 			<span ng-show="page.friendsWith">Friends</span>
 			<div ng-show="!page.friendsWith">
-				<button ng-show="!page.request" on-click="use.addFriendRequest(page.id)">Add Friend</button>
+				<button ng-show="!page.request" ng-click="use.addFriendRequest(page.id)">Add Friend</button>
 				<span ng-show="page.request">Request Sent</span>
 			</div>
 		</div>

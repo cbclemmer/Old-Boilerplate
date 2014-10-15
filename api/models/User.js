@@ -16,7 +16,6 @@ module.exports = {
 		},
 		password: {
 			type: 'string',
-			required: true
 		},
 		online: {
 			type: 'boolean',
@@ -27,8 +26,8 @@ module.exports = {
 			defaultsTo: false
 		},
 		friends: {
-			collection: 'User',
-			via: 'email'
+			collection: 'user',
+			via: 'id'
 		},
 		friendRequests: {
 			type: 'array'

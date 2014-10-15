@@ -10,6 +10,7 @@
 			});
 		},
 		scope.s.getPage = function(obj){
+			state.go("user");
 			rs.page = obj;
 			if(obj.type=="user"){
 				h.get("/user/friends").success(function(res){
@@ -28,9 +29,9 @@
 							rs.page.request=true;
 						}else{rs.page.request=false}
 					})
-					state.go("user");
 				});
 			}
 		}
+		rs.search = this;
 	}]);
 })();
