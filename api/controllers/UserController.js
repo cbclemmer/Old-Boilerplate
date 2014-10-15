@@ -22,6 +22,7 @@ module.exports = {
 		getOne: function(req, res, next){
 			User.findOne({id: req.param('user')}, function(err, user){
 				if(err) return next(err);
+				if(!user) return console.log("Could not find user(getOne)");
 				user['password']="";
 				user['createdAt']="";
 				user['updatedAt']="";
@@ -30,12 +31,10 @@ module.exports = {
 		},
 		//friends segment
 		friends: function(req,res, next){
-			var q = User.find({user: req.session.user}).populate("friends");
-			q.exec(function(err, user){
-				if(err) return res.json({err: err});
-				console.log(user);
-				res.json(user.friends);
-			});
+			Friend.find({owner: req.session.user.id}, function(err, friends){
+				if(err) return next(err);
+				res.json(friends);
+			})
 		},
 		addFriend: function(req, res, next){
 			User.findOne({id: req.session.user.id}, function(err, user){
@@ -45,9 +44,15 @@ module.exports = {
 				for(var i=0;i<user.friendRequests.length;i++){
 					if(user.friendRequests[i]==req.param("request")){
 						console.log("match found");
-						
-						if(!user.friends) user.friends = [];
-						user.friends.add(user.friendRequests[i]);
+						var id = user.id.toString();
+						console.log(id);
+						console.log(req.param('request'));
+						Friend.create({user: id, owner: req.param("request")}, function(err, f){
+							if(err) return next(err);
+							Friend.create({user: req.param("request"), owner: id}, function(err, f){
+								if(err) return next(err);
+							});
+						});
 						user.friendRequests.splice(i, 1);
 						break;
 					}

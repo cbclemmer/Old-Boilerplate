@@ -25,10 +25,6 @@ module.exports = {
 			type: 'boolean',
 			defaultsTo: false
 		},
-		friends: {
-			collection: 'user',
-			via: 'id'
-		},
 		friendRequests: {
 			type: 'array'
 		}

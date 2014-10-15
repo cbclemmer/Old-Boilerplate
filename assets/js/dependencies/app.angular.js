@@ -46,12 +46,22 @@
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
 				//get friends
+				//get friend
 				$http.get("/user/friends").success(function(res){
-					if(res.err) return showErr(res.err);
 					console.log(res);
-					if($rootScope.user){
-						$rootScope.user.friends = res;
-					}
+					if(res.err) return showErr(res.err);
+						if($rootScope.user){
+							$rootScope.user.fJSON = [];
+							$rootScope.user.friends = res;
+							for(var i=0;i<$rootScope.user.friends.length;i++){	
+								console.log($rootScope.user.friends[i]);
+								$http.get("/user/getOne?user="+$rootScope.user.friends[i].user).success(function(res){
+									//friend JSON object
+									$rootScope.user.fJSON.push(res);
+								});
+							};
+							showInfo("Logged In!");
+						}
 				});
 				$rootScope.user.frJSON = [];
 				//get friend request data
@@ -77,16 +87,24 @@
 					$rootScope.auth = true;
 					$('.loggedIn').show();
 					$('.loggedOut').hide();
-					//get friends
-					$http.get("/user/friends").success(function(res){
-						if(res.err) return showErr(res.err);
-						console.log(res);
-							if($rootScope.user){
+					//get friend
+				$http.get("/user/friends").success(function(res){
+					console.log(res);
+					if(res.err) return showErr(res.err);
+						if($rootScope.user){
+							$rootScope.user.fJSON = [];
 							$rootScope.user.friends = res;
+							for(var i=0;i<$rootScope.user.friends.length;i++){	
+								console.log($rootScope.user.friends[i]);
+								$http.get("/user/getOne?user="+$rootScope.user.friends[i].user).success(function(res){
+									//friend JSON object
+									$rootScope.user.fJSON.push(res);
+								});
+							};
 							showInfo("Logged In!");
 							$state.go("feed");
 						}
-					});
+				});
 					$rootScope.user.frJSON = [];
 					//get friend request data
 					for(var i=0;i<$rootScope.user.friendRequests.length;i++){
@@ -139,6 +157,9 @@
 			$http.get("/user/addFriend?request="+user).success(function(res){
 				if(res.err){console.log(err);showErr(err.reason)};
 				if(res){
+					$http.get("/user/getOne?user="+user).success(function(res){
+						$rootScope.user.friends.push(res);
+					});
 					for(var i=0;i<req.length;i++){
 						if(req[i]==user){
 							$rootScope.user.frJSON.splice(i, 1);

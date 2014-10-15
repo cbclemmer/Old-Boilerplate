@@ -13,22 +13,24 @@
 			state.go("user");
 			rs.page = obj;
 			if(obj.type=="user"){
+				rs.page.request=false;
+				rs.page.friendsWith=false;
 				h.get("/user/friends").success(function(res){
 					if(res.err) return showErr(res.err);
 					console.log(res);
 					if(rs.user){
 						rs.page.friends = res;
 						for(var i=0;i<res.length;i++){
-							if(res[i].id==rs.user.id){
+							if(res[i].user==rs.page.id){
 								rs.page.friendsWith=true;
 							}else{rs.page.friendsWith=false;}
 						}
 					}
-					rs.user.friendRequests.forEach(function(fr){
-						if(fr==rs.user.id){
-							rs.page.request=true;
-						}else{rs.page.request=false}
-					})
+					for(var i=0;i<rs.user.friendRequests.length;i++){
+						if(rs.user.friendRequests[i]==rs.user.id){
+							return rs.page.request=true;
+						}
+					}
 				});
 			}
 		}
