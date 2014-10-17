@@ -21,7 +21,7 @@ module.exports = {
 		getOne: function(req, res, next){
 			User.findOne({id: req.param('user')}, function(err, user){
 				if(err) return next(err);
-				if(!user) return console.log("Could not find user(getOne)");
+				if(!user) return console.log("Could not find user(getOne: "+req.param('user')+")");
 				user['password']="";
 				user['createdAt']="";
 				user['updatedAt']="";
@@ -61,6 +61,29 @@ module.exports = {
 					if(err) return res.json({err: err});
 					res.json(true);
 				});
+			});
+		},
+		rFriend: function(req, res, next){
+			Friend.findOne({owner: req.param('user'), user: req.session.user.id}, function(err, friend){
+				if(err) return next(err);
+				if(!friend){
+					console.log("Cannot find record for owner: "+req.param('user')+" and user: "+req.session.user.id);
+					return res.json("Something has gone terribly wrong");
+				}
+				Friend.destroy(friend.id, function(err){
+					if(err) return next(err);
+					Friend.findOne({owner: req.session.user.id, user: req.param('user')}, function(err, friend){
+						if(err) return next(err);
+						if(!friend){
+							console.log("Cannot find record for owner: "+req.param('user')+" and user: "+req.session.user.id);
+							return res.json("Something has gone terribly wrong");
+						}
+						Friend.destroy(friend.id, function(err){
+							if(err) return next(err);
+							return res.json({status: true});
+						});
+					})
+				})
 			});
 		},
 		addFriendRequest: function(req, res, next){

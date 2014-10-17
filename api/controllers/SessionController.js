@@ -7,6 +7,7 @@
 
 module.exports = {
 	create: function(req, res, next){
+		console.log("attempting login");
 		var bcrypt = require('bcrypt');
 		User.findOne({email: req.param('email')}, function(err, user){
 			if(err) return res.json({'err': err});

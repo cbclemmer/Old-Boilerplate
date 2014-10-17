@@ -2,7 +2,9 @@
 	<h2>{{pag.name}}</h2>
 	<div class="container pag.friends">
 		<div id="friendsWith" ng-controller="userController as use" ng-hide="pag.id==user.id">
-			<span ng-show="pag.friendsWith">Friends</span>
+			<span ng-show="pag.friendsWith">Friends
+			<button ng-click="use.rFriend(pag.id)">Remove Friend</button>
+			</span>
 			<div ng-show="!pag.friendsWith">
 				<button ng-show="!pag.request" ng-click="use.addFriendRequest(pag.id)">Add Friend</button>
 				<span ng-show="pag.request">Request Sent</span>
