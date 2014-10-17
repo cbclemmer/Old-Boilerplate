@@ -1,9 +1,15 @@
+button {
+    border: 0px none; 
+    font-size: 15px; 
+    padding: 5px;
+}
+
 #topNav {
     width: 100%;
     height: 50px;
     background: black;
     opacity: .8;
-    
+    margin-bottom: 50px;
 }
 #topNav div {
     opacity: .9;
@@ -11,12 +17,13 @@
     display: inline-table;
     width:   10%;
     padding: 10px;
+    padding-bottom: 0px;
     font-size: 25px;
     background: black;
     text-align: center;
     cursor: pointer;
 }
-#topNav div:last-child {
+#logout{
     float: right;
 }
 #topNav div a {
@@ -28,6 +35,9 @@
 }
 #topNav div:hover:not(#searchBar) {
     opacity: .5
+}
+.opt {
+    float: left;
 }
 #startLog {
     margin-top: 75px;
@@ -81,4 +91,34 @@
     z-index: 20;
     padding: 15px;
     opacity: .9;   
+}
+.aside{
+    float: right;
+    
+}
+#feed {
+    margin-left: 10%;
+    display: inline-block;
+    width: 60%;
+    margin-right: 10%;
+}
+#fRequests {
+    float: right;
+    width: 100%;
+    display: block;
+}
+#fRequests p{
+    font-style: italic;
+    font-size: 12px;
+    margin-left: 10px;
+}
+.friends {
+    float: right;
+    width: 100%;
+    height: 300px;
+}
+.friends p{
+    font-style: italic;
+    font-size: 12px;
+    margin-left: 10px;
 }

@@ -15,7 +15,6 @@ module.exports = {
 		},
 		//get current user
 		get: function(req, res, next){
-			console.log("get");
 			if(req.session.auth) return res.json({'status': true, 'user': req.session.user});
 			else return res.json({"status": false});
 		},
@@ -31,7 +30,7 @@ module.exports = {
 		},
 		//friends segment
 		friends: function(req,res, next){
-			Friend.find({owner: req.session.user.id}, function(err, friends){
+			Friend.find({owner: req.param('user')}, function(err, friends){
 				if(err) return next(err);
 				res.json(friends);
 			})

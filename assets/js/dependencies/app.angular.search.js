@@ -8,31 +8,35 @@
 				rs.options = res;
 				}else{rs.options = [{type: 404, name: "Sorry nothing was found"}];}
 			});
-		},
+		};
 		scope.s.getPage = function(obj){
-			state.go("user");
-			rs.page = obj;
-			if(obj.type=="user"){
-				rs.page.request=false;
-				rs.page.friendsWith=false;
-				h.get("/user/friends").success(function(res){
-					if(res.err) return showErr(res.err);
-					console.log(res);
-					if(rs.user){
-						rs.page.friends = res;
-						for(var i=0;i<res.length;i++){
-							if(res[i].user==rs.page.id){
-								rs.page.friendsWith=true;
-							}else{rs.page.friendsWith=false;}
+			rs.pag  = obj;
+			rs.pag.request=false;
+			rs.pag.friendsWith=false;
+			h.get("/user/friends?user="+obj.id).success(function(res){
+				if(res.err) return showErr(res.err);
+				if(rs.user){
+					rs.pag.f = res;
+					rs.pag.friends = [];
+					for(var i=0;i<rs.pag.f.length;i++){	
+						h.get("/user/getOne?user="+rs.pag.f[i].user).success(function(res){
+							//friend JSON object
+							rs.pag.friends.push(res);
+						});
+					};
+					for(var i=0;i<res.length;i++){
+						if(res[i].user==rs.user.id){
+							rs.pag.friendsWith=true;
 						}
 					}
-					for(var i=0;i<rs.user.friendRequests.length;i++){
-						if(rs.user.friendRequests[i]==rs.user.id){
-							return rs.page.request=true;
-						}
+				}
+				for(var i=0;i<rs.user.friendRequests.length;i++){
+					if(rs.user.friendRequests[i]==rs.user.id){
+						return rs.pag.request=true;
 					}
-				});
-			}
+				}
+				state.go("user");
+			});
 		}
 		rs.search = this;
 	}]);

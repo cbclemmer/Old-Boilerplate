@@ -6,13 +6,17 @@
 		$stateProvider
 		.state('login', {
 			url: '/login', 
-			templateUrl: '/login'
+			templateUrl: '/login',
+			controller: function($rootScope){
+				if($rootScope.auth) $state.go("feed");
+			}
+
 		}).state('user', {
 			url: '/user',
 			templateUrl: '/pages/user?p=0',
 			controller: function($rootScope, $state, $scope){
 				if(!$rootScope.auth) $state.go("login");
-				//angular.element(document.getElementById('searchBar')).scope().s.getPage($rootScope.page);
+				if(!$rootScope.pag||$rootScope.pag=={}) $state.go("feed");
 			}
 		}).state('feed', {
 			url: '/feed',
@@ -22,19 +26,6 @@
 			}
 		})
 	});
-	app.service("myServices", ['$http', '$scope', '$rootScope', function(){
-		return {
-			getFriends: function(){
-				$http.get("/user/friends").success(function(res){
-					if(res.err) return showErr(res.err);
-					console.log(res);
-					if($rootScope.user){
-						$rootScope.user.friends = res;
-					}
-				});
-			}
-		};
-	}]);
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
 		$scope.temp = {};
 		$scope.tLogin = {};
@@ -47,20 +38,17 @@
 				$('.loggedOut').hide();
 				//get friends
 				//get friend
-				$http.get("/user/friends").success(function(res){
-					console.log(res);
+				$http.get("/user/friends?user="+res.user.id).success(function(res){
 					if(res.err) return showErr(res.err);
 						if($rootScope.user){
 							$rootScope.user.fJSON = [];
 							$rootScope.user.friends = res;
 							for(var i=0;i<$rootScope.user.friends.length;i++){	
-								console.log($rootScope.user.friends[i]);
 								$http.get("/user/getOne?user="+$rootScope.user.friends[i].user).success(function(res){
 									//friend JSON object
 									$rootScope.user.fJSON.push(res);
 								});
 							};
-							showInfo("Logged In!");
 						}
 				});
 				$rootScope.user.frJSON = [];
@@ -73,7 +61,6 @@
 				};
 			}else{
 				$('.loggedIn').hide();
-				console.log(res);
 			}
 
 		});
@@ -88,14 +75,12 @@
 					$('.loggedIn').show();
 					$('.loggedOut').hide();
 					//get friend
-				$http.get("/user/friends").success(function(res){
-					console.log(res);
+				$http.get("/user/friends?user="+res.user.id).success(function(res){
 					if(res.err) return showErr(res.err);
 						if($rootScope.user){
 							$rootScope.user.fJSON = [];
 							$rootScope.user.friends = res;
 							for(var i=0;i<$rootScope.user.friends.length;i++){	
-								console.log($rootScope.user.friends[i]);
 								$http.get("/user/getOne?user="+$rootScope.user.friends[i].user).success(function(res){
 									//friend JSON object
 									$rootScope.user.fJSON.push(res);
@@ -114,7 +99,6 @@
 						});
 					};
 				}else{
-					console.log(res);
 					showErr(res.reason);
 				};
 			});
@@ -170,7 +154,6 @@
 		};
 		$scope.use.addFriendRequest = function(user){
 			//add the user: user to their friend request list
-			console.log("adding friend request");
 			$http.get("/user/addFriendRequest?friend="+user).success(function(res){
 				if(res.err){console.log(res.err);showErr(err.reason)};
 				if(res){
@@ -189,6 +172,35 @@
 						}
 					}
 				}
+			});
+		}
+		$scope.use.getPage = function(obj){
+			$rootScope.pag  = obj;
+			$rootScope.pag.request=false;
+			$rootScope.pag.friendsWith=false;
+			$http.get("/user/friends?user="+obj.id).success(function(res){
+				if(res.err) return showErr(res.err);
+				if($rootScope.user){
+					$rootScope.pag.f = res;
+					$rootScope.pag.friends = [];
+					for(var i=0;i<$rootScope.pag.f.length;i++){	
+						$http.get("/user/getOne?user="+$rootScope.pag.f[i].user).success(function(res){
+							//friend JSON object
+							$rootScope.pag.friends.push(res);
+						});
+					};
+					for(var i=0;i<res.length;i++){
+						if(res[i].user==$rootScope.user.id){
+							$rootScope.pag.friendsWith=true;
+						}
+					}
+				}
+				for(var i=0;i<$rootScope.user.friendRequests.length;i++){
+					if($rootScope.user.friendRequests[i]==$rootScope.user.id){
+						return $rootScope.pag.request=true;
+					}
+				}
+				$state.go("user");
 			});
 		}
 	}]);

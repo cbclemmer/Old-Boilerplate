@@ -1,5 +1,4 @@
 function showErr(s){
-	console.log(s);
 	$('#err').empty();
 	$('#err').hide();
 	$('#err').append(s);
@@ -10,7 +9,6 @@ function showErr(s){
 	});
 };
 function showInfo(s){
-	console.log(s);
 	$('#info').empty();
 	$('#info').hide();
 	$('#info').append(s);
@@ -24,12 +22,12 @@ $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
 	$(document).on('click', function(event) {
-	  if (!$(event.target).closest('#searchBar').length) {
-	    $("#searchBar").find("div").remove();
-	  }
+	  $('#searchBar div').hide();
+	  $('#err').hide();
+	  $('#info').hide();
+	  $('#topnav div').hide();
 	});
 	$("#search").keydown(function(){
-		console.log("searching");
 		if($('#search').val().length>0){
 			angular.element(document.getElementById('searchBar')).scope().search($('#search').val());
 		}else{
