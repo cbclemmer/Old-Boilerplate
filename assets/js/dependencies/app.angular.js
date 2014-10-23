@@ -27,6 +27,9 @@
 		}).state('settings', {
 			url: '/settings',
 			templateUrl: '/pages/settings',
+			controller: function($rootScope, $state){
+				if(!$rootScope.auth) $state.go("login");
+			}
 		});
 	});
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
@@ -166,6 +169,19 @@
 					showInfo("Logged Out!");
 				}else showErr("error logging out");
 			});
+		};
+		//change the password
+		this.cPassword = function(){
+			var t = $scope.temp = this.temp;
+			if(t.nPassword==t.cnPassword){
+				$http.get("/user/edit?type=cp&cp="+t.cPassword+"&np="+t.nPassword).success(function(res){
+					if(res.status){
+						showInfo("Password changed successfullu");
+					}else{
+						showErr(res.reson);
+					}
+				});
+			}
 		};
 		$scope.use.addFriend = function(user){
 			//hold the friend request for fast access

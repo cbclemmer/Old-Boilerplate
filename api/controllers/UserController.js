@@ -173,10 +173,31 @@ module.exports = {
 		},
 		//End friend sgement
 		edit: function(req, res, next){
-			User.edit(req.params.all(), function(err, user){
+			if(req.param("type")=="cp"){
+				User.findOne({id: req.session.user.id}, function(err, user){
+					if(err) return next(err);
+					if(!user) return console.log("Could not find user: "+req.session.user.id);
+					var bcrypt = require('bcrypt');
+					bcrypt.compare(req.param('cp'), user.password, function(err, obj){
+						if(obj){
+							bcrypt.hash(req.param("np"), 10, function(err, hash){
+								if(err) return cb(err);
+								user.password=hash;
+								User.update(user.id, user, function(err, user){
+									if(err) return next(err);
+									if(!user) return console.log("Could not update");
+									return res.json({status: true});
+								});
+							});
+						}else{return res.json({status: false, reason: "Wrong password"});}
+					});
+				});
+			}else{
+				/*User.edit(req.params.all(), function(err, user){
 				if(err) return res.json({'err': err});
 				return res.json(user);
-			});
+				});*/
+			}
 		},
 		destroy: function(req, res, next){
 			User.destroy(req.param('id'), function(err, user){
