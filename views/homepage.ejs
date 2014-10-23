@@ -31,6 +31,7 @@
             <div id="info"></div>
 			<div id="topNav" class="container">
 				<div><a ui-sref="feed">App</a></div>
+                <div class="loggedIn" style="width: 5%;"><img src="/images/settings.png" alt="settings" style="height: 35px;"></div>
 				<div class="loggedIn"><span ng-click="use.getPage(user)"><b>{{user.name}}</b> <span style="font-size: 17px;"><i>@{{user.username}}</i></span></span></div>
 				<div id="searchBar" ng-controller="searchController as s">
 						<input type="text" placeholder="Search..." id="search"/>

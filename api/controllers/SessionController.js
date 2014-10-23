@@ -27,6 +27,8 @@ module.exports = {
 					}else return res.json({'login':false, 'reason': 'Password is wrong'});
 				});
 			});
+		}else{
+			res.json({'login': false, 'reason': 'You are alreeady logged in'});
 		}
 	},
 	destroy: function(req, res, next){
