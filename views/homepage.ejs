@@ -31,10 +31,11 @@
             <div id="info"></div>
 			<div id="topNav" class="container">
 				<div><a ui-sref="feed">App</a></div>
-				<div class="loggedIn"><a ui-sref="user">{{user.name}}</a></div>
+				<div class="loggedIn"><span ng-click="use.getPage(user)"><b>{{user.name}}</b> <span style="font-size: 17px;"><i>@{{user.username}}</i></span></span></div>
 				<div id="searchBar" ng-controller="searchController as s">
 						<input type="text" placeholder="Search..." id="search"/>
-						<div ng-repeat="option in options" ng-click="s.getPage(option)" class="opt" style="display: block; float: left; width: 100%; padding: 0px 0px 5px;text-align: left;">{{option.type}}:  {{option.name}}</div>
+						<div ng-repeat="option in options" ng-click="s.getPage(option)" class="opt" style="display: block; float: left; width: 100%; padding: 0px 5px 5px;text-align: left;font-size: 15px;">
+                        <b>{{option.name}}</b> @{{option.username}}</div>
 				</div>
 				<div ng-click="use.logOut()" class="loggedIn" id="logout">Logout</div>
 			</div>

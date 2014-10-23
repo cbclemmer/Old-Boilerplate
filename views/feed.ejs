@@ -16,7 +16,7 @@
     <h5>Friends</h5>
     <ul>
         <li ng-repeat="friend in user.fJSON">
-            <span style="color: blue;cursor: pointer" ng-click="use.getPage(friend)"> {{friend.name}}</span> ({{friend.email}})
+            <span style="color: blue;cursor: pointer; font-size: 15px;" ng-click="use.getPage(friend)"> {{friend.name}}</span> <i>@{{friend.username}}</i>
         </li>
     </ul>
     <p ng-show="user.fJSON.length<1">Well, this is awkward</p>
