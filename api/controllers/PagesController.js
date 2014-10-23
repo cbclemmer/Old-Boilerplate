@@ -24,6 +24,10 @@ module.exports = {
 	},
 	feed: function(req, res, next){
 		return res.view("feed")
+	},
+	settings: function(req, res, next){
+		console.log("settings");
+		return res.view("settings");
 	}
 };
 

@@ -24,7 +24,10 @@
 			controller: function($rootScope, $state){
 				if(!$rootScope.auth) $state.go("login");
 			}
-		})
+		}).state('settings', {
+			url: '/settings',
+			templateUrl: '/pages/settings',
+		});
 	});
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
 		$scope.temp = {};
