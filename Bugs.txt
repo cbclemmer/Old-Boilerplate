@@ -1,0 +1,3 @@
+Bugs
+
+1 X When adding friend from friend requests it does not automitically show in friends

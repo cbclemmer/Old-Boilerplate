@@ -22,10 +22,10 @@ $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
 	$(document).on('click', function(event) {
-	  $('#searchBar div').hide();
 	  $('#err').hide();
 	  $('#info').hide();
-	  $('#topnav div').hide();
+	  $('.opt').hide();
+	  $('input').val("");
 	});
 	$("#search").keydown(function(){
 		if($('#search').val().length>0){

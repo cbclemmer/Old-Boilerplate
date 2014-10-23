@@ -27,8 +27,11 @@ module.exports = {
 		},
 		friendRequests: {
 			type: 'array'
+		},
+		requestsSent: {
+			type: 'array'
 		}
-  },
+  	},
 	beforeCreate: function(values, cb){
 		var bcrypt = require('bcrypt');
 		bcrypt.hash(values.password, 10, function(err, hash){

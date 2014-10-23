@@ -23,6 +23,7 @@ module.exports = {
 						req.session.auth = true;
 						user['password'] = "";
 						req.session.user = user;
+						console.log(use);
 						console.log("logging in");
 						return res.json({auth: true, user: user});
 					});

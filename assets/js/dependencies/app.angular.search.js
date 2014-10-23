@@ -32,9 +32,16 @@
 				}
 				for(var i=0;i<rs.user.friendRequests.length;i++){
 					if(rs.user.friendRequests[i]==rs.user.id){
-						return rs.pag.request=true;
+						rs.pag.request=true;
+						break;
 					}
 				}
+				for(var i;i<rs.user.requestsSent.length;i++){
+					if(rs.user.requestsSent[i]==rs.pag.id){
+						rs.pag.request = true;
+						break;
+					}
+				};
 				state.go("user");
 			});
 		}

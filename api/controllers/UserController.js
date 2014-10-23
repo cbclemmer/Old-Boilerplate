@@ -10,6 +10,7 @@ module.exports = {
 		create: function(req, res, next){
 			User.create(req.params.all(), function(err, user){
 				if(err) return res.json({'err': err});
+				user["password"] = "";
 				res.json(user);
 			});	
 		},
@@ -59,6 +60,17 @@ module.exports = {
 				console.log(user);
 				User.update(user.id, user, function(err, user){
 					if(err) return res.json({err: err});
+					User.findOne({id: req.param("request")}, function(err, user){
+						if(err) return next(err);
+						for(var i=0;i<user.requestsSent.length;i++){
+							user.requestsSent.splice(i,1);
+							break;
+						}
+						User.update(user.id, user, function(err, user){
+							if(err) return next(err);
+							res.json(true);
+						});
+					});
 					res.json(true);
 				});
 			});
@@ -104,12 +116,19 @@ module.exports = {
 				if(!dup){
 					user.friendRequests.push(req.session.user.id);
 					User.update(user.id, user, function(err, user){
-					if(err){
-						console.log(err);
-						return res.json({err: err});
-					}
-					res.json(true);	
-				});
+						if(err){
+							console.log(err);
+							return res.json({err: err});
+						}
+						User.findOne({id: req.session.user.id}, function(err, user){
+							if(!user.requestsSent) user.requestsSent = [];
+							user.requestsSent.push(req.param('friend'));
+							User.update(user.id, user, function(err){
+								if(err) return next(err);
+								res.json(true);
+							})
+						});
+					});
 				}else{
 					return res.json(false);
 				}
@@ -129,7 +148,18 @@ module.exports = {
 				};
 				User.update(user.id, user, function(err, user){
 					if(err) return res.json({err: err});
-					res.json(true);
+					User.findOne({id: req.param("request")}, function(err, user){
+						if(err) return next(err);
+						if(!user) return console.log("could not find user: "+req.session.user.id);
+						for(var i=0;i<user.requestsSent.length;i++){
+							user.requestsSent.splice(i,1);
+							break;
+						}
+						User.update(user.id, user, function(err, user){
+							if(err) return next(err);
+							res.json(true);
+						});
+					});
 				});
 			});
 			}

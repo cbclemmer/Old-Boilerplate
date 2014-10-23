@@ -33,6 +33,7 @@
 		$http.get("/user/get").success(function(res){
 			if(res.status){
 				$rootScope.user = res.user;
+				console.log(res);
 				$rootScope.auth = true;
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
@@ -54,6 +55,8 @@
 					}
 				});
 				$rootScope.user.frJSON = [];
+				if(!$rootScope.user.friendRequests) $rootScope.user.friendRequests = [];
+				if(!$rootScope.user.requestsSent) $rootScope.user.requestsSent = [];
 				if($rootScope.user.friendRequests.length>1){
 					//get friend request data
 					for(var i=0;i<$rootScope.user.friendRequests.length;i++){
@@ -72,6 +75,7 @@
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
 				if(res.auth){
+					console.log(res);
 					$scope.userCtrl.tLogin = {};
 					$rootScope.user = res.user;
 					$rootScope.page = $rootScope.user;
@@ -97,7 +101,9 @@
 						}
 					});
 					$rootScope.user.frJSON = [];
-					if($rootScope.user.friendRequests.length>0){
+					if(!$rootScope.user.friendRequests) $rootScope.user.friendRequests = [];
+					if(!$rootScope.user.requestsSent) $rootScope.user.requestsSent = [];
+					if($rootScope.user.friendRequests.length>0&&$rootScope.user.friendRequests[0]!=null){
 						//get friend request data
 						for(var i=0;i<$rootScope.user.friendRequests.length;i++){
 							$http.get("/user/getOne?user="+$rootScope.user.friendRequests[i]).success(function(res){
@@ -117,17 +123,18 @@
 			if(t.password==t.cPassword){
 			$http.get("/user/create?name="+t.name+"&email="+t.email+"&password="+t.password).success(function(res){
 				if(res.err) return showErr(res.err);
+				console.log(res);
 				$scope.userCtrl.temp = {};
 				$rootScope.user = res;
 				$rootScope.auth = true;
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
+				$rootScope.user.requestsSent = [];
+				$rootScope.user.friendRequests = [];
+				$rootScope.user.fJSON = [];
+				$rootScope.user.frJSON = [];
 				showInfo("Logged In!");
 				$state.go("feed");
-				$http.get("/user/getFriendRequests").success(function(res){
-					if(res.err) {console.log;return showErr(res.err);}
-					$rootScope.user.friendRequests = res;
-				});
 			});
 			}
 		};
@@ -150,7 +157,7 @@
 				if(res.err){console.log(err);showErr(err.reason)};
 				if(res){
 					$http.get("/user/getOne?user="+user).success(function(res){
-						$rootScope.user.friends.push(res);
+						$rootScope.user.fJSON.push(res);
 					});
 					for(var i=0;i<req.length;i++){
 						if(req[i]==user){
@@ -165,7 +172,10 @@
 			$http.get("/user/addFriendRequest?friend="+user).success(function(res){
 				if(res.err){console.log(res.err);showErr(err.reason)};
 				if(res){
-					$rootScope.page.request = true;
+					console.log("request add");
+					console.log(user);
+					$rootScope.user.requestsSent.push(user);
+					$rootScope.pag.request = true;
 				}
 			});
 		};
@@ -205,9 +215,16 @@
 				}
 				for(var i=0;i<$rootScope.user.friendRequests.length;i++){
 					if($rootScope.user.friendRequests[i]==$rootScope.user.id){
-						return $rootScope.pag.request=true;
+						$rootScope.pag.request=true;
+						break;
 					}
 				}
+				for(var i;i<$rootScope.user.requestsSent.length;i++){
+					if($rootScope.user.requestsSent[i]==$rootScope.pag.id){
+						$rootScope.pag.request = true;
+						break;
+					}
+				};
 				$state.go("user");
 			});
 		}
@@ -215,8 +232,10 @@
 			$http.get("/user/rFriend?user="+id).success(function(res){
 				if(res.err) return showErr(res.err);
 				if(res.status){
+					//delete the user from local vars
 					for(var i=0;i<$rootScope.user.fJSON.length;i++){
-						if($rootScope.user.fJSON.id==id){
+						if($rootScope.user.fJSON[i].id==id){
+							console.log("found");
 							$rootScope.user.fJSON.splice(i,1);
 							break;
 						}
