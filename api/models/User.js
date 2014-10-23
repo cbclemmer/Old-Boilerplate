@@ -9,6 +9,7 @@ module.exports = {
 	schema: true,
   attributes: {
 		name: 'string',
+		username: 'string',
 		email: {
 			type: 'email',
 			unique: true,

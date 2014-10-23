@@ -21,9 +21,11 @@ function showInfo(s){
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
+	$(document).on('click', function(){
+		$('#err').hide();
+		$('#info').hide();
+	});
 	$("#searchBar").click(function(event){
-	  $('#err').hide();
-	  $('#info').hide();
 	  $('.opt').hide();
 	  $('#search').val("");
 	});

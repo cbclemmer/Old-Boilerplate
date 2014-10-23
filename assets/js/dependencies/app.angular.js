@@ -121,20 +121,24 @@
 			var t = $scope.temp = this.temp;
 			//validate to make sure password and confirmation is the same
 			if(t.password==t.cPassword){
-			$http.get("/user/create?name="+t.name+"&email="+t.email+"&password="+t.password).success(function(res){
+			$http.get("/user/create?username="+t.username+"&name="+t.name+"&email="+t.email+"&password="+t.password).success(function(res){
 				if(res.err) return showErr(res.err);
-				console.log(res);
-				$scope.userCtrl.temp = {};
-				$rootScope.user = res;
-				$rootScope.auth = true;
-				$('.loggedIn').show();
-				$('.loggedOut').hide();
-				$rootScope.user.requestsSent = [];
-				$rootScope.user.friendRequests = [];
-				$rootScope.user.fJSON = [];
-				$rootScope.user.frJSON = [];
-				showInfo("Logged In!");
-				$state.go("feed");
+				if(res.status){
+					$scope.userCtrl.temp = {};
+					$rootScope.user = res.user;
+					$rootScope.auth = true;
+					$('.loggedIn').show();
+					$('.loggedOut').hide();
+					$rootScope.user.requestsSent = [];
+					$rootScope.user.friendRequests = [];
+					$rootScope.user.fJSON = [];
+					$rootScope.user.frJSON = [];
+					showInfo("Logged In!");
+					$state.go("feed");
+				}else{
+					if(res.reason=="username") showErr("Username already taken");
+					if(res.reason=="email") showErr("Email already taken");
+				}
 			});
 			}
 		};

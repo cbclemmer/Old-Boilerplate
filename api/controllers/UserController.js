@@ -8,11 +8,27 @@
 module.exports = {
 		//all asynchronous, no page loads ftw
 		create: function(req, res, next){
-			User.create(req.params.all(), function(err, user){
-				if(err) return res.json({'err': err});
-				user["password"] = "";
-				res.json(user);
-			});	
+			//make sure that the email is not already taken
+			User.findOne({email: req.param('email')}, function(err, user){
+				if(err) return next(err);
+				if(!user){
+					//make sure that the username is not already taken
+					User.findOne({username: req.param('username')}, function(err, user){
+						if(err) return next(err);
+						if(!user){
+							User.create(req.params.all(), function(err, user){
+								if(err) return res.json({'err': err});
+								user["password"] = "";
+								res.json({status: true, user: user});
+							});	
+						}else{
+							return res.json({status: false, reason: "username"});
+						}
+					});
+				}else{
+					return res.json({status: false, reason: "email"});
+				}
+			});
 		},
 		//get current user
 		get: function(req, res, next){
@@ -40,13 +56,9 @@ module.exports = {
 			User.findOne({id: req.session.user.id}, function(err, user){
 				if(err) return next(err);
 				if(!user) return console.log("Could not find user");
-				console.log(user);
 				for(var i=0;i<user.friendRequests.length;i++){
 					if(user.friendRequests[i]==req.param("request")){
-						console.log("match found");
 						var id = user.id.toString();
-						console.log(id);
-						console.log(req.param('request'));
 						Friend.create({user: id, owner: req.param("request")}, function(err, f){
 							if(err) return next(err);
 							Friend.create({user: req.param("request"), owner: id}, function(err, f){
@@ -57,7 +69,6 @@ module.exports = {
 						break;
 					}
 				};
-				console.log(user);
 				User.update(user.id, user, function(err, user){
 					if(err) return res.json({err: err});
 					User.findOne({id: req.param("request")}, function(err, user){
@@ -99,13 +110,10 @@ module.exports = {
 			});
 		},
 		addFriendRequest: function(req, res, next){
-			console.log("adding friend request");
 			//friend requests are all IDs
-			console.log(req.param('friend'));
 			User.findOne({id: req.param('friend')}, function(err, user){
 				if(err) return next(err);
 				if(!user) return console.log("user not found");
-				//console.log(user);
 				if(!user.friendRequests) user.friendRequests = [];
 				//search for duplicates
 				var dup = false;
@@ -135,7 +143,6 @@ module.exports = {
 			});
 		},
 		deleteRequest: function(req, res, next){
-			console.log("deleting request");
 			if(req.session.user){
 			User.findOne({id: req.session.user.id}, function(err, user){
 				if(err) return next(err);
