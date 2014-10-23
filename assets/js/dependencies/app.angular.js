@@ -78,7 +78,7 @@
 					console.log(res);
 					$scope.userCtrl.tLogin = {};
 					$rootScope.user = res.user;
-					$rootScope.page = $rootScope.user;
+					$rootScope.pag = $rootScope.user;
 					$rootScope.auth = true;
 					$('.loggedIn').show();
 					$('.loggedOut').hide();
@@ -121,20 +121,30 @@
 			var t = $scope.temp = this.temp;
 			//validate to make sure password and confirmation is the same
 			if(t.password==t.cPassword){
+			//create user
 			$http.get("/user/create?username="+t.username+"&name="+t.name+"&email="+t.email+"&password="+t.password).success(function(res){
 				if(res.err) return showErr(res.err);
 				if(res.status){
 					$scope.userCtrl.temp = {};
 					$rootScope.user = res.user;
 					$rootScope.auth = true;
-					$('.loggedIn').show();
-					$('.loggedOut').hide();
-					$rootScope.user.requestsSent = [];
-					$rootScope.user.friendRequests = [];
-					$rootScope.user.fJSON = [];
-					$rootScope.user.frJSON = [];
-					showInfo("Logged In!");
-					$state.go("feed");
+					//log in user
+					$http.get("/session/create?email="+t.email+"&password="+t.password).success(function(res){
+						if(res.auth){
+						console.log(res);
+						$scope.userCtrl.tLogin = {};
+						$rootScope.user = res.user;
+						$rootScope.auth = true;
+						$('.loggedIn').show();
+						$('.loggedOut').hide();
+						$rootScope.user.requestsSent = [];
+						$rootScope.user.friendRequests = [];
+						$rootScope.user.fJSON = [];
+						$rootScope.user.frJSON = [];
+						showInfo("Sign up successfull");
+						$state.go("feed");
+						}
+					});					
 				}else{
 					if(res.reason=="username") showErr("Username already taken");
 					if(res.reason=="email") showErr("Email already taken");
