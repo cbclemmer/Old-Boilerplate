@@ -1,0 +1,27 @@
+<div class="container" id="startLog" ng-controller="userController as userCtrl">
+<div style="display: inline-block;width: 40%;">
+<h3>Settings</h3>
+
+<ul id="settings">
+	<li>Change password</li>
+	<li>Change default post</li>
+	<li>Change privacy</li>
+</ul>
+</div>
+<div id="sContent" style="display: inline-block;width: 50%;">
+	<div id="cPassword">
+		<h3>Change Password</h3>
+		<form ng-submit="userCtrl.cPassword()">
+		<input type="password" placeholder="Current Password" ng-model="userCtrl.temp.cPassword"><br>
+		<input type="password" placeholder="New Password" ng-model="userCtrl.temp.nPassword"><br>
+		<input type="password" placeholder="Confirm Password" ng-model="userCtrl.temp.cnPassword"><br>
+		<input type="submit" value="Submit">
+		</form>
+	</div>
+	<div id="cdPost">
+	</div>
+	<div id="cPrivacy">
+		<input type="checkbox" name="private" ng-model="userCtrl.temp.private" ng-click="userCtrl.private(userCtrl.temp.private);" value="user.private"> Private
+	</div>
+</div>
+</div>
