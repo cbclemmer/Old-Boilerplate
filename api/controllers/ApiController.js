@@ -20,7 +20,7 @@ module.exports = {
 		search: function(req, res, next){
 			//s is query
 			var reg = new RegExp(req.param('s'), 'i');
-			var q = User.find({where: {username: reg}, limit: 10, sort: {name: 1}});
+			var q = User.find({where: {username: reg, private: false}, limit: 10, sort: {name: 1}});
 			q.exec(function(err, users){
 				if(err) return res.json({'err': err});
 				users.forEach(function(user){

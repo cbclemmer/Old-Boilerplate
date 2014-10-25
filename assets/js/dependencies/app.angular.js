@@ -183,6 +183,18 @@
 				});
 			}
 		};
+		this.private = function(p){
+			p=!p;
+			$http.get("/user/private?p="+p).success(function(res){
+				if(res.status){
+					if(res.p){
+						showInfo("Profile set to private");
+					}else{
+						showInfo("Profile set to public");
+					}
+				}
+			});
+		};
 		$scope.use.addFriend = function(user){
 			//hold the friend request for fast access
 			req = $rootScope.user.friendRequests;

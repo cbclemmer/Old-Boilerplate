@@ -45,6 +45,18 @@ module.exports = {
 				res.json(user);
 			});
 		},
+		private: function(req, res, next){
+			console.log(req.param("p"));
+			User.findOne({id: req.session.user.id}, function(err, user){
+				if(err) return next(err);
+				if(!user) return console.log("Could not find user(Private");
+				user.private=req.param("p");
+				User.update(user.id, user, function(err, user){
+					if(err) return next(err);
+					res.json({status: true, p: user[0].private});
+				});
+			});
+		},
 		//friends segment
 		friends: function(req,res, next){
 			Friend.find({owner: req.param('user')}, function(err, friends){

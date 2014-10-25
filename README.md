@@ -7,9 +7,9 @@ ___
 *strike through denotes not completed*
 
 ###Users
---* Users can have friends that can either be friended or ~~followed~~
---* ~~They can post either privately or publically~~
---* ~~The most default post is in markdown~~
+  * Users can have friends that can either be friended or ~~followed~~
+  * ~~They can post either privately or publically~~
+  * ~~The most default post is in markdown~~
 ___
 ###Relationships
---* ~~Different levels of relationships are possible~~
+  * ~~Different levels of relationships are possible~~

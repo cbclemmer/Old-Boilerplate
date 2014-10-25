@@ -15,12 +15,13 @@ function showInfo(s){
 	$('#info').show();
 	$('#info').css({marginTop: '-100px'});
 	$('#info').animate({marginTop: '10px'}, function(){
-			setTimeout(function(){$('#info').fadeOut('fast');}, 1500);
+		setTimeout(function(){$('#info').fadeOut('fast');}, 1500);
 	});
 }
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
+	$("#cPassword").hide();
 	$(document).on('click', function(){
 		$('#err').hide();
 		$('#info').hide();
