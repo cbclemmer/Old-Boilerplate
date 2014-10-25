@@ -1,15 +1,5 @@
-<div class="container" id="startLog" ng-controller="userController as userCtrl">
-<div style="display: inline-block;width: 40%;">
-<h3>Settings</h3>
-
-<ul id="settings">
-	<li>Change password</li>
-	<li>Change default post</li>
-	<li>Change privacy</li>
-</ul>
-</div>
-<div id="sContent" style="display: inline-block;width: 50%;">
-	<div id="cPassword">
+<div ng-controller="userController as userCtrl">
+	<div id="cPassword" class="container">
 		<h3>Change Password</h3>
 		<form ng-submit="userCtrl.cPassword()">
 		<input type="password" placeholder="Current Password" ng-model="userCtrl.temp.cPassword"><br>
@@ -18,10 +8,13 @@
 		<input type="submit" value="Submit">
 		</form>
 	</div>
-	<div id="cdPost">
+	<!-- change default post
+	<div id="cdPost" class="container">
+	</div>-->
+	<div id="cPrivacy" class="container">
+		<h3>Change Privacy</h3>
+		<p>This changes whether other people can search for your account</p>
+		<p><i>Only change this once per login</i></p>
+		<input type="checkbox" name="private" ng-model="userCtrl.temp.private" ng-click="userCtrl.private(userCtrl.temp.private);" id="privateChk"> Private
 	</div>
-	<div id="cPrivacy">
-		<input type="checkbox" name="private" ng-model="userCtrl.temp.private" ng-click="userCtrl.private(userCtrl.temp.private);" value="user.private"> Private
-	</div>
-</div>
 </div>

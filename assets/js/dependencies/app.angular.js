@@ -39,6 +39,11 @@
 		$http.get("/user/get").success(function(res){
 			if(res.status){
 				$rootScope.user = res.user;
+				if($rootScope.user.private&&document.getElementById("privateChk")) {
+					document.getElementById("privateChk").checked = true;
+				}else{
+					if(document.getElementById("privateChk")) document.getElementById("privateChk").checked = false;
+				}
 				console.log(res);
 				$rootScope.auth = true;
 				$('.loggedIn').show();
@@ -184,7 +189,8 @@
 			}
 		};
 		this.private = function(p){
-			p=!p;
+			if(document.getElementById("privateChk")) p = document.getElementById("privateChk").checked;
+			console.log(p);
 			$http.get("/user/private?p="+p).success(function(res){
 				if(res.status){
 					if(res.p){
