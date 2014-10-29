@@ -30,6 +30,12 @@
 			controller: function($rootScope, $state){
 				if(!$rootScope.auth) $state.go("login");
 			}
+		}).state('messages', {
+			url: '/messagess',
+			templateUrl: '/pages/messages',
+			controller: function($rootScope, $state){
+				if(!$rootScope.auth) $state.go("login");
+			}
 		});
 	});
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
@@ -39,7 +45,7 @@
 		$http.get("/user/get").success(function(res){
 			if(res.status){
 				$rootScope.user = res.user;
-				if($rootScope.user.private&&document.getElementById("privateChk")) {
+				if(Boolean($rootScope.user.private)&&document.getElementById("privateChk")) {
 					document.getElementById("privateChk").checked = true;
 				}else{
 					if(document.getElementById("privateChk")) document.getElementById("privateChk").checked = false;
