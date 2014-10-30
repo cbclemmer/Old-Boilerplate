@@ -1,6 +1,6 @@
 (function(){
 	//module defines controllers
-	var app = angular.module("app", ['ui.router', 'page', 'search']);
+	var app = angular.module("app", ['ui.router', 'page', 'search', "post"]);
 	app.config(function($stateProvider, $urlRouterProvider){
 		$urlRouterProvider.otherwise('/login');
 		$stateProvider
