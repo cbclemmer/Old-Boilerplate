@@ -19,6 +19,8 @@ module.exports = {
   	//screw you 'likes', we have hearts here :p(or whatever we decide to call them...)
   	hearts: 'integer',
   	//the objects contained in this post. Individual objects are still saved, but all the objects are stored in this container. Subject to change...
-  	objects: 'array'
+  	objekts: 'array',
+    //whether you can add another objekt to the post
+    closed: 'boolean'
   }
 };

@@ -1,18 +1,22 @@
 <div id="feed" ng-controller="postController as post">
     <h3>Feed</h3>
-    <form ng-submit="post.create()">
-        Type: 
-        <select ng-model="post.temp.type">
+
+        Type: <br>
+        <select ng-model="post.temp.objekts[post.current].type">
             <option value="short">Short</option>
         </select><br>
-        <textarea ng-model="post.temp.text"></textarea><br>
-    </form>
+        <textarea ng-model="post.temp.objekts[post.current].text"></textarea><br>
     <form ng-submit="post.addTag()">
-        <input type="text" placeholder="Add tag..." ng-model="post.temp.tag" />
+        <input type="text" placeholder="Add tag..." ng-model="post.tag" />
         <ul>
-            <li ng-repeat="tag in post.temp.tags">{{tag}}</li>
+            <li ng-repeat="tag in post.tags">{{tag}}</li>
         </ul>
     </form>
+    <h4>Preview</h4>
+    <div ng-repeat="obj in post.temp.objekts">
+        <h6>{{obj.type}}</h6>
+        <span ng-show="obj.type=='short'">{{obj.text}}</span>
+    </div>
     </form>
 </div>
 <div class="aside">

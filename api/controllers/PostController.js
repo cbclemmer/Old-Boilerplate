@@ -7,11 +7,26 @@
 
 module.exports = {
 	create: function(req, res, next){
-		Post.create(req.params.all(), function(err, post){
+		var obj = {};
+		var tags = req.param("tags").split(",");
+		var target = req.param("target");
+		obj["owner"] = req.session.user.id;
+		obj["target"] = target ? target : req.session.user.id;
+		obj["tags"] = tags;
+		obj["hearts"] = 0;
+		obj["objekts"] = [];
+		Post.create(obj, function(err, post){
 			if(err) return next(err);
-			if(!post) return json({err: "something went wrong"});
-			return res.json(post);
+			res.json(post);
 		});
+	},
+	objCreate: function(req. res. next){
+		var obj = req.params.all();
+		obj["owner"] = req.session.user.id;
+		Objekt.create(obj, function(err, obj){
+			if(err) return next(err);
+			res.json(obj);
+		})
 	},
 	feed: function(req, res, next){
 		var s = req.param("start");
