@@ -26,6 +26,10 @@ $(document).ready(function(){
 		$('#err').hide();
 		$('#info').hide();
 	});
+	//make sure the short text is only 140 characters long
+	$("#shortText").keypress(function(){
+		$("#shortText").val($("#shortText").val().substring(0,139));
+	});
 	$("#searchBar").click(function(event){
 	  $('.opt').hide();
 	  $('#search').val("");

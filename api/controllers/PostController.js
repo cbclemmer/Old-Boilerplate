@@ -20,13 +20,17 @@ module.exports = {
 			res.json(post);
 		});
 	},
-	objCreate: function(req. res. next){
+	objCreate: function(req, res, next){
 		var obj = req.params.all();
-		obj["owner"] = req.session.user.id;
-		Objekt.create(obj, function(err, obj){
-			if(err) return next(err);
-			res.json(obj);
-		})
+		if(obj.type=="short"){
+			obj["owner"] = req.param("post");
+			obj["order"] = 0;
+			Objekt.create(obj, function(err, obj){
+				if(err) return next(err);
+				Post.update()
+				res.json(obj);
+			});
+		}
 	},
 	feed: function(req, res, next){
 		var s = req.param("start");

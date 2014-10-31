@@ -1,17 +1,24 @@
 <div id="feed" ng-controller="postController as post">
     <h3>Feed</h3>
-
-        Type: <br>
-        <select ng-model="post.temp.objekts[post.current].type">
-            <option value="short">Short</option>
-        </select><br>
-        <textarea ng-model="post.temp.objekts[post.current].text"></textarea><br>
-    <form ng-submit="post.addTag()">
-        <input type="text" placeholder="Add tag..." ng-model="post.tag" />
-        <ul>
-            <li ng-repeat="tag in post.tags">{{tag}}</li>
-        </ul>
-    </form>
+    	Current: {{post.current}}
+    	<form ng-submit="post.addObj()">
+        	Type: <br>
+        	<select ng-model="post.temp.objekts[post.current].type">
+        	    <option value="short" selected="selected">Short</option>
+        	</select><br>
+        	<!-- for short -->
+        	<textarea ng-model="post.temp.objekts[post.current].text" id="shortText"></textarea><br>
+        	{{post.temp.objekts[post.current].text.length||0}}/140<br>
+        </form>
+        <button ng-click="post.lastObj()">last part</button>
+        <button ng-click="post.addObj()">add part</button>
+        <button ng-click="post.selfCreate()">Create Post</button>
+        <form ng-submit="post.addTag()">
+        	<input type="text" placeholder="Add tag..." ng-model="post.tag" />
+            <ul>
+                <li ng-repeat="tag in post.tags">{{tag}}</li>
+            </ul>
+        </form>
     <h4>Preview</h4>
     <div ng-repeat="obj in post.temp.objekts">
         <h6>{{obj.type}}</h6>
