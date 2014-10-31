@@ -14,10 +14,12 @@ module.exports = {
 		});
 	},
 	feed: function(req, res, next){
+		var s = req.param("start");
+		if(!req.param("start")) s = 0;
 		Friend.find({owner: req.session.user.id}, function(err, friends){
 			if(err) return next(err);
 			if(!friends) return res.json({err: "I don't know how to say this nicely but... you don't have any friends :("})
-			var q = Post.find({where: {owner: {$in: friends}, limit: 30, skip: req.param("start")});
+			var q = Post.find({where: {owner: {$in: friends}, limit: 30, skip: s}});
 			q.sort({createdAt: -1});
 			q.exec(function(err, posts){
 				if(err) return next(err);

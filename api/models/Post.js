@@ -8,7 +8,7 @@
 module.exports = {
 
   attributes: {
- 	//the person or group that posted
+ 	  //the person or group that posted
   	owner: 'string',
   	//the person or group that it is being posted to, same as owner if self post
   	target: 'string',
