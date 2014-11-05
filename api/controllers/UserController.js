@@ -30,9 +30,20 @@ module.exports = {
 				}
 			});
 		},
+		show: function(req, res, next){
+			if(req.param("id")!=undefined){
+				User.findOne(req.param("id"), function(err, user){
+					user["password"]= "";
+					user["createdAt"]="";
+					user["updatedAt"]="";
+					res.view("user/show", {user: user, cUser: req.session.user});
+				});
+			}else{
+				res.view("user/show", {user: req.session.user, cUser: req.session.user});
+			}
+		},
 		//get current user
 		get: function(req, res, next){
-			console.log(req.session.user);
 			if(req.session.auth) return res.json({'status': true, 'user': req.session.user});
 			else return res.json({"status": false});
 		},
@@ -47,7 +58,6 @@ module.exports = {
 			});
 		},
 		private: function(req, res, next){
-			console.log(req.param("p"));
 			User.findOne({id: req.session.user.id}, function(err, user){
 				if(err) return next(err);
 				if(!user) return console.log("Could not find user(Private");

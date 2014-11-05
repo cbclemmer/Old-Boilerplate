@@ -7,7 +7,6 @@
 
 module.exports = {
 	user: function(req, res, next){
-		console.log("showing user");
 		//make sure user is logged in
 		if(req.session.auth){
 			// what part to render

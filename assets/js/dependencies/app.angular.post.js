@@ -10,12 +10,6 @@
 		s.post.current = 0;
 		s.post.tags = [];
 		rs.posts = [];
-		//get posts for the feed
-		h.get("/post/feed?start="+s.postInc).success(function(res){
-			if(res.err) return showErr(res.err);
-			rs.posts.push(res);
-		});
-		//pagination
 		s.post.feed = function(){
 			h.get("post/feed?start="+s.postInc).success(function(res){
 				if(res.err) return showErr(res.err);

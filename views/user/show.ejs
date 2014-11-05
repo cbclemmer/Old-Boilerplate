@@ -1,34 +1,90 @@
-<div class="container" ng-show="pag">
-	<h2>{{pag.name}}</h2>
-	<div class="container pag.friends">
-		<div id="friendsWith" ng-controller="userController as use" ng-hide="pag.id==user.id">
-			<span ng-show="pag.friendsWith">Friends
-			<button ng-click="use.rFriend(pag.id)">Remove Friend</button>
-			</span>
-			<div ng-show="!pag.friendsWith">
-				<button ng-show="!pag.request" ng-click="use.addFriendRequest(pag.id)">Add Friend</button>
-				<span ng-show="pag.request">Request Sent</span>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your App Here!</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <!--STYLES END-->
+  </head>
+
+  <body>
+    <script type="text/javascript">
+	var user  = {
+		name: "<%=cUser.name %>",
+		username: "<%= cUser.username %>",
+		email: "<%= cUser.email %>",
+		admin: <%= cUser.admin %>,
+	};
+	var pag  = {
+		name: "<%=user.name%>",
+		username: "<%=user.username%>",
+		email: "<%=user.email%>",
+		admin: <%= user.admin %>
+	}
+    </script>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
+    <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/app.jquery.js"></script>
+    <script src="/js/dependencies/app.angular.js"></script>
+    <script src="/js/dependencies/app.angular.post.js"></script>
+    <script src="/js/dependencies/app.angular.search.js"></script>
+    <script src="/js/dependencies/app.angular.page.js"></script>
+    <script src="/js/dependencies/app.angular.user.js"></script>
+    <script src="/js/dependencies/app.angular.directives.js"></script>
+    <script src="/js/dependencies/bootstrap.min.js"></script>
+    <!--SCRIPTS END-->
+	<div ng-app="app" ng-controlller="userController as use">
+			<div id="err"></div>
+            <div id="info"></div>
+			<div id="topNav" class="container">
+				<div><a href="/#/feed">App</a></div>
+                <div class="loggedIn" style="width: 5%;"><a href="/#/settings"><img src="/images/settings.png" alt="settings" style="height: 35px;"></a></div>
+                <div class="loggedIn" style="width: 5%;"><a href="/#/messages"><img src="/images/messages.png" alt="messages" style="height: 35px;"></a></div>
+				<div class="loggedIn"><a href="/user/show/<%=cUser.id%>"><b><%=cUser.name%></b> <span style="font-size: 17px;"><i>@<%=cUser.username%></i></span></a></div>
+				<div id="searchBar" ng-controller="searchController as s">
+						<input type="text" placeholder="Search..." id="search"/>
+						<div ng-repeat="option in options" ng-click="s.getPage(option)" class="opt" style="display: block; float: left; width: 100%; padding: 0px 5px 5px;text-align: left;font-size: 15px;">
+                        <b>{{option.name}}</b> @{{option.username}}</div>
+				</div>
+				<div ng-click="use.logOut()" class="loggedIn" id="logout">Logout</div>
 			</div>
-		</div>
-		<div ng-show="user.id==pag.id">
-			<h4>Requests</h4>
-			<ul ng-controller="searchController as s">
-				<li ng-repeat="request in pag.friendRequests">
-				<span ng-click="s.getPage(request.id)">{{request.name}} ({{request.email}})</span>
-				<button ng-click="use.addFriend(request.email)">Confirm</button>&emsp;
-				<button ng-click="use.deleteFriendRequest(request.id)">Delete</button>
-				</li>
-			</ul>
-			<p ng-show="pag.friendRequests.length<1">No friend requests</p>
-		</div>
-		<div class="aside">
-		<div class="friends">
-		<h5>Friends</h5>
-		<ul>
-			<li ng-repeat="friend in pag.friends"><span style="color: blue;cursor: pointer" ng-click="use.getPage(friend)">{{friend.name}}</span></li>
-			<p ng-show="pag.friends.length<1">Well, this is awkward...</p>
-		</ul>
-		</div>
-		</div>
-	</div>
-</div>
+	   <div id="main">
+       		<div class="container" ng-show="pag">
+				<h2>{{pag.name}}</h2>
+				<div class="container pag.friends">
+					<div id="friendsWith" ng-controller="userController as use" ng-hide="pag.id==user.id">
+						<span ng-show="pag.friendsWith">Friends
+							<button ng-click="use.rFriend(pag.id)">Remove Friend</button>
+						</span>
+						<div ng-show="!pag.friendsWith">
+							<button ng-show="!pag.request" ng-click="use.addFriendRequest(pag.id)">Add Friend</button>
+							<span ng-show="pag.request">Request Sent</span>
+						</div>
+					</div>
+					<div class="aside">
+						<div class="friends">
+							<h5>Friends</h5>
+							<ul>
+								<li ng-repeat="friend in pag.friends"><span style="color: blue;cursor: pointer" ng-click="use.getPage(friend)">{{friend.name}}</span></li>
+								<p ng-show="pag.friends.length<1">Well, this is awkward...</p>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>     
+	   </div>
+    </div>
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+  </body>
+</html>

@@ -2,7 +2,7 @@
 	//module defines controllers
 	var app = angular.module("app", ['ui.router', 'page', 'search', 'post']);
 	app.config(function($stateProvider, $urlRouterProvider){
-		$urlRouterProvider.otherwise('/login');
+		if(user=="") $urlRouterProvider.otherwise('/login');
 		$stateProvider
 		.state('login', {
 			url: '/login', 
@@ -41,8 +41,9 @@
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
 		$scope.temp = {};
 		$scope.tLogin = {};
-		$rootScope.page = {};
-		$http.get("/user/get").success(function(res){
+		if(user!="") $rootScope.user = user;
+		if(pag!="") $rootScope.pag = pag;
+		if(!user){$http.get("/user/get").success(function(res){
 			if(res.status){
 				$rootScope.user = res.user;
 				if(Boolean($rootScope.user.private)&&document.getElementById("privateChk")) {
@@ -50,7 +51,6 @@
 				}else{
 					if(document.getElementById("privateChk")) document.getElementById("privateChk").checked = false;
 				}
-				console.log(res);
 				$rootScope.auth = true;
 				$('.loggedIn').show();
 				$('.loggedOut').hide();
@@ -87,7 +87,7 @@
 				$('.loggedIn').hide();
 			}
 
-		});
+		});};
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
@@ -169,7 +169,7 @@
 			});
 			}
 		};
-		this.logOut = function(){
+		$scope.use.logOut = function(){
 			$http.get("/session/destroy").success(function(res){
 				if(res.status){
 					$rootScope.auth = false;

@@ -33,6 +33,7 @@ var jsFilesToInject = [
   'js/dependencies/app.angular.post.js',
   'js/dependencies/app.angular.search.js',
   'js/dependencies/app.angular.page.js',
+  'js/dependencies/app.angular.user.js',
 	'js/dependencies/app.angular.directives.js',
 	'js/dependencies/bootstrap.min.js',
   // Dependencies like jQuery, or Angular are brought in here

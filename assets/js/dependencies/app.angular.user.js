@@ -1,6 +1,6 @@
 (function(){
-	var app = angular.module("userFriends", []);
-	app.controller("friendController", ['$http', '$scope', '$rootScope', function($http, s, rs){
+	var app = angular.module("user", []);
+	app.controller("userController", ['$http', '$scope', '$rootScope', function(h, s, rs){
 
 	}]);
 })();
