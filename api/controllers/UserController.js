@@ -71,8 +71,9 @@ module.exports = {
 		},
 		//friends segment
 		friends: function(req,res, next){
-			Friend.find({owner: req.param('user')}, function(err, friends){
+			Friend.find({where: {owner: req.param('user')}, limit: 100}, function(err, friends){
 				if(err) return next(err);
+				if(!friends) return res.json({err: "No friends"});
 				res.json(friends);
 			})
 		},

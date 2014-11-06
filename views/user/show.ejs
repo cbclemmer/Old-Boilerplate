@@ -12,21 +12,23 @@
     <link rel="stylesheet" href="/styles/main.css">
     <!--STYLES END-->
   </head>
-
   <body>
     <script type="text/javascript">
 	var user  = {
+		id: "<%=cUser.id%>",
 		name: "<%=cUser.name %>",
 		username: "<%= cUser.username %>",
 		email: "<%= cUser.email %>",
 		admin: <%= cUser.admin %>,
 	};
 	var pag  = {
+		type: "user",
+		id: "<%=user.id%>",
 		name: "<%=user.name%>",
 		username: "<%=user.username%>",
 		email: "<%=user.email%>",
 		admin: <%= user.admin %>
-	}
+	};
     </script>
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>

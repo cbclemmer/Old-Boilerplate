@@ -11,13 +11,6 @@
 				if($rootScope.auth) $state.go("feed");
 			}
 
-		}).state('user', {
-			url: '/user',
-			templateUrl: '/pages/user?p=0',
-			controller: function($rootScope, $state, $scope){
-				if(!$rootScope.auth) $state.go("login");
-				if(!$rootScope.pag||$rootScope.pag=={}) $state.go("feed");
-			}
 		}).state('feed', {
 			url: '/feed',
 			templateUrl: '/pages/feed',
@@ -42,10 +35,10 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		if(user!="") $rootScope.user = user;
-		if(pag!="") $rootScope.pag = pag;
-		if(!user){$http.get("/user/get").success(function(res){
+		$http.get("/user/get").success(function(res){
 			if(res.status){
-				$rootScope.user = res.user;
+				if(!user) $rootScope.user = res.user;
+				console.log($rootScope.user.id);
 				if(Boolean($rootScope.user.private)&&document.getElementById("privateChk")) {
 					document.getElementById("privateChk").checked = true;
 				}else{
@@ -87,7 +80,7 @@
 				$('.loggedIn').hide();
 			}
 
-		});};
+		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
