@@ -9,3 +9,6 @@ This application is meant to be used entirely separate from the top-level app an
 
 ##Things to do
 - Make sure that usernames have to be unique
+- add policy to make users and posts show able only to those who can view them
+- when a short post that is too long is created, delete the originating post
+- fix search

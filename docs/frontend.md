@@ -95,7 +95,7 @@ Server: `/post/userFeed`
 Parameters: `user, start  
 Result: `$rootScope.posts` is filled or appended
   
-**$scope.post.selfCreate**  
+**$scope.post.create**  
 Description: creates a post  
 Server: `/post/create`  
 Parameter(s): `$scope.post.tags`,  `$scope.objekts[i].type`  
