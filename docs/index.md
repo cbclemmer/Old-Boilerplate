@@ -12,3 +12,10 @@ This application is meant to be used entirely separate from the top-level app an
 - add policy to make users and posts show able only to those who can view them
 - when a short post that is too long is created, delete the originating post
 - fix search
+- redis
+- style the user/show page
+- make user/show just user.ejs
+- add markdown posting
+- add groups
+- delete post text after submitting
+- make privacy for users work
