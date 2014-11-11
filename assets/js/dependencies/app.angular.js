@@ -163,7 +163,7 @@
 			}
 		};
 		$scope.use.logOut = function(){
-			$http.get("/session/destroy").success(function(res){
+			$http.get("/session/destroy?load=f").success(function(res){
 				if(res.status){
 					$rootScope.auth = false;
 					$rootScope.user = {};
@@ -240,42 +240,6 @@
 						}
 					}
 				}
-			});
-		}
-		$scope.use.getPage = function(obj){
-			$rootScope.pag  = obj;
-			$rootScope.pag.request=false;
-			$rootScope.pag.friendsWith=false;
-			$http.get("/user/friends?user="+obj.id).success(function(res){
-				if(res.err) return showErr(res.err);
-				if($rootScope.user){
-					$rootScope.pag.f = res;
-					$rootScope.pag.friends = [];
-					for(var i=0;i<$rootScope.pag.f.length;i++){	
-						$http.get("/user/getOne?user="+$rootScope.pag.f[i].user).success(function(res){
-							//friend JSON object
-							$rootScope.pag.friends.push(res);
-						});
-					};
-					for(var i=0;i<res.length;i++){
-						if(res[i].user==$rootScope.user.id){
-							$rootScope.pag.friendsWith=true;
-						}
-					}
-				}
-				for(var i=0;i<$rootScope.user.friendRequests.length;i++){
-					if($rootScope.user.friendRequests[i]==$rootScope.user.id){
-						$rootScope.pag.request=true;
-						break;
-					}
-				}
-				for(var i;i<$rootScope.user.requestsSent.length;i++){
-					if($rootScope.user.requestsSent[i]==$rootScope.pag.id){
-						$rootScope.pag.request = true;
-						break;
-					}
-				};
-				$state.go("user");
 			});
 		}
 		$scope.use.rFriend = function(id){

@@ -100,8 +100,7 @@ button {
 #feed {
     margin-left: 10%;
     display: inline-block;
-    width: 60%;
-    margin-right: 10%;
+    width: 58%;
 }
 #fRequests {
     float: right;
@@ -122,4 +121,23 @@ button {
     font-style: italic;
     font-size: 12px;
     margin-left: 10px;
+}
+#tName {
+    width: 30%;
+    text-align: left;
+}
+#leftOpt {
+    display: none;
+    position: absolute;
+    width: 20%;
+    background: black;
+}
+@media screen and (max-width: 900px){
+    #leftOpt {
+        top: 50px;
+        display: inline-block;
+    }
+    .icon {
+        display: none;
+    }
 }

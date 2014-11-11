@@ -10,8 +10,10 @@ module.exports = {
 		var obj = {};
 		var tags = req.param("tags").split(",");
 		var target = req.param("target");
+		if(req.param("name")!=undefined||req.param("name")!="") obj["name"]=req.param("name");
 		obj["owner"] = req.session.user.id;
-		obj["target"] = target ? target : req.session.user.id;
+		obj["ownerName"] = req.session.user.username;
+		obj["target"] = (target&&target!="") ? target : req.session.user.id;
 		obj["tags"] = tags;
 		obj["hearts"] = 0;
 		obj["objekts"] = [];
@@ -27,8 +29,16 @@ module.exports = {
 			obj["order"] = 0;
 			Objekt.create(obj, function(err, obj){
 				if(err) return next(err);
-				Post.update()
-				res.json(obj);
+				Post.findOne({id: req.param("post")}, function(err, post){
+					if(err) return next(err);
+					if(!post) return res.json({err: "Could not find(objCreate)"});
+					post.objekts.push(obj);
+					Post.update({id: post.id}, post, function(err, post){
+						if(err) return next(err);
+						if(!post) return res.json({err: "Could not update(objCreate)"});
+						res.json(obj);
+					});
+				});
 			});
 		}
 	},
@@ -45,6 +55,17 @@ module.exports = {
 				if(!posts) return res.json({err: "could not find any posts"});
 				res.json(posts);
 			});	
+		});
+	},
+	userFeed: function(req, res, next){
+		var s  = (req.param("start")) ? parseInt(req.param("start")) : 0;
+		var q = Post.find({where: {target: req.param("user")}, skip: s, limit: 20});
+		q.sort({createdAt: -1});
+		q.exec(function(err, posts){
+			if(err) return next(err);
+			if(!posts) return res.json({err: "no posts could be found"});
+
+			res.json({posts: posts});
 		});
 	},
 	fill: function(req, res, next){

@@ -10,20 +10,33 @@
 		s.post.current = 0;
 		s.post.tags = [];
 		rs.posts = [];
+		if(pag){
+			h.get("/post/userFeed?start=0&user="+pag.id).success(function(res){
+				if(res.err) return showErr(res.err);
+				rs.posts = res.posts;
+			});
+		}
 		s.post.feed = function(){
-			h.get("post/feed?start="+s.postInc).success(function(res){
+			h.get("/post/feed?start="+s.postInc).success(function(res){
 				if(res.err) return showErr(res.err);
 				rs.posts.push(res);
 			});
 		};
-		s.post.selfCreate = function(){
+		s.post.userFeed = function(user, start){
+			start = (start==""||!start) ? 0 : start;
+			h.get("/post/userFeed?start="+start+"&user="+user).success(function(res){
+				if(res.err) return showErr(res.err);
+				$rootScope.posts  = ($rootScope.posts) ? $rootScope.p0osts.concat(res.posts) : res.posts;
+			});
+		};
+		s.post.create = function(target){
 			var temp = s.post.temp;
 			if(temp.objekts[0].text.length>0||temp.objekts[0].source.length>0){
 				var tags = "";
 				for(var i=0;i<s.post.tags.length;i++){
 					tags+=s.post.tags[i]+",";
 				}
-				h.put("/post/create?tags="+tags).success(function(res){
+				h.put("/post/create?tags="+tags+"&target="+target).success(function(res){
 					if(res.err) return showErr(res.err);
 					for(var i=0;i<temp.objekts.length;i++){
 						if(temp.objekts[i].type=="short"){

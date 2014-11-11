@@ -10,8 +10,6 @@ module.exports = {
   attributes: {
   	//the post that owns it
   	owner: 'string',
-  	//optional
-  	name: 'string',
   	//what kind: short, clear, markdown, image, video, link, etc.
   	type: 'string',
   	//in what order does it appear in the post

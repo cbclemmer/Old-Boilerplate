@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    //the url
+    slug: 'string',
+    //name of post
+    name: 'string',
  	  //the person or group that posted
   	owner: 'string',
   	//the person or group that it is being posted to, same as owner if self post

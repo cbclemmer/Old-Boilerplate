@@ -40,7 +40,9 @@ module.exports = {
 				if(err) return next(err);
 				req.session.user = {};
 				req.session.auth = false;
-				return res.json({status: true});
+				//check if logging out with or without a page load
+				if(req.param("load")=="f") {return res.json({status: true});}
+				else{res.redirect("/");}
 			});
 		});
 	},
