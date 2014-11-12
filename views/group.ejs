@@ -68,9 +68,9 @@
 	   <div id="main">
        		<div class="container" ng-show="pag">
 				<h2>{{pag.name}}</h2>
+				{{pag}}
 				<div class="container pag.friends">
 					<div id="addGroup" ng-controller="groupController as group">
-						{{pag}}
 						<button ng-click="group.join()" ng-show="!pag.joined">Join Group</button>
 						<span ng-show="pag.joined">Joined</span>
 					</div>

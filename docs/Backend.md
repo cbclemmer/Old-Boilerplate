@@ -23,3 +23,17 @@
 **Parameter(s):** `post` (what the objekts belong to)  
   
 ---
+
+## GroupController  
+###Create
+**Description:** makes a new group  
+**Parameter(s):** `name`, `handle`
+  
+###Get
+**Description:** gets the available JSON  
+**Parameter(s):** `id` or `handle`
+
+###Show
+**Description:** shows a group page  
+**Parameter(s):** `handle`  
+**Policies:** `showable`

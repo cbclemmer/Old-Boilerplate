@@ -46,6 +46,11 @@ and then goes to the `feed` UI
 **this.signup** signs the user up using `/user/create` from the parameters in:  
 `$scope.temp.username`, `$scope.temp.name`, `$scope.temp.email`, and `$scope.temp.password` after making sure `$scope.temp.password` and `$scope.temp.cPassword` are the same string for verification purposes(Not really important if verification is hacked...)  
   
+**this.nGroup**  
+Description: creates a new group  
+Server: `/group/create`  
+Parameters: `$rootScope.nGroup.name` and `$rootScope.nGroup.handle`  
+  
 **$scope.use.logOut** logs the user out using `/session/destroy?load=f`, no questions asked without refreshing page  
   
 **this.cPassword** changes the password in the settings page using `/user/private` from the parameters:  

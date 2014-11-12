@@ -38,6 +38,7 @@
 		if(pag!="") pag.joined=false;
 		if(user!="") $rootScope.user = user;
 		$http.get("/user/get").success(function(res){
+			console.log("this");
 			if(res.status){
 				if(!user) $rootScope.user = res.user;
 				console.log($rootScope.user.id);
@@ -92,6 +93,7 @@
 			}else{
 				$('.loggedIn').hide();
 			}
+			console.log($rootScope);
 			for(var i=0;i<$rootScope.user.groups.length;i++){
 				if($rootScope.user.groups[i]==pag.id){
 					pag.joined=true;

@@ -8,12 +8,8 @@ This application is meant to be used entirely separate from the top-level app an
 - [Frontend](frontend.html)
 
 ##Things to do
-- Make sure that usernames have to be unique
 - add policy to make users and posts show able only to those who can view them
-- when a short post that is too long is created, delete the originating post
-- fix search
 - redis
-- style the user/show page
 - make user/show just user.ejs
 - add markdown posting
 - add groups
@@ -22,3 +18,9 @@ This application is meant to be used entirely separate from the top-level app an
 - collect the first one 50 friend IDs
 - the first 30 posts
 - check box for if you want a slug
+- be able to delete posts and users
+- create some sort of admin page
+- make sure a group cannot take a user's username for it's handle and vise versa
+- make groups searchable
+- do settings for groups
+- add something to add yourself to a group depending on the privacy settingw
