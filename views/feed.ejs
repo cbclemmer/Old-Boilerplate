@@ -46,4 +46,19 @@
     </ul>
     <p ng-show="user.fJSON.length<1">Well, this is awkward</p>
 </div>
+<div id="groups">
+    <h5>Groups</h5>
+    <ul>
+        <li ng-repeat="group in user.gJSON">
+            <a href="/group/show/{{group.handle}}">{{group.name}} <i>@{{group.handle}}</i></a>
+        </li>
+        <li>
+        <form ng-submit="use.nGroup()">
+            <input type="text" ng-model="nGroup.name" placeholder="Name"><br>
+            <input type="text" ng-model="nGroup.handle" placeholder="Handle"><br>
+            <input type="submit" value="Create Group">
+        </form>
+        </li>
+    </ul>
+</div>
 </div>

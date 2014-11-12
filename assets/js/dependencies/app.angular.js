@@ -1,6 +1,6 @@
 (function(){
 	//module defines controllers
-	var app = angular.module("app", ['ui.router', 'page', 'search', 'post']);
+	var app = angular.module("app", ['ui.router', 'group', 'search', 'post']);
 	app.config(function($stateProvider, $urlRouterProvider){
 		if(user=="") $urlRouterProvider.otherwise('/login');
 		$stateProvider
@@ -34,6 +34,8 @@
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
 		$scope.temp = {};
 		$scope.tLogin = {};
+		$rootScope.nGroup = {};
+		if(pag!="") pag.joined=false;
 		if(user!="") $rootScope.user = user;
 		$http.get("/user/get").success(function(res){
 			if(res.status){
@@ -76,10 +78,34 @@
 						});
 					};
 				}
+				//get the group json
+				$rootScope.user.gJSON = [];
+				if(!$rootScope.user.groups) $rootScope.user.groups = [];
+				if($rootScope.user.groups.length>=1){
+					for(var i=0;i<$rootScope.user.groups.length;i++){
+						$http.get("/group/get?id="+$rootScope.user.groups[i]).success(function(res){
+							if(res.err) return showErr(res.err);
+							$rootScope.user.gJSON.push(res);
+						});
+					}
+				}
 			}else{
 				$('.loggedIn').hide();
 			}
-
+			for(var i=0;i<$rootScope.user.groups.length;i++){
+				if($rootScope.user.groups[i]==pag.id){
+					pag.joined=true;
+				}
+			}
+			if(pag!=""){
+				//member JSON
+				pag.mJSON = [];
+				for(var i=0;i<pag.members.length;i++){
+					$http.get("/user/getOne?user="+pag.members[i]).success(function(res){
+						pag.mJSON.push(res);
+					});
+				};
+			};
 		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
@@ -161,6 +187,15 @@
 				}
 			});
 			}
+		};
+		$scope.use.nGroup = function(){
+			var g = $rootScope.nGroup;
+			$http.get("/group/create?name="+g.name+"&handle="+g.handle).success(function(res){
+				if(res.err) return showErr(res.err);
+				$rootScope.nGroup = {};
+				showInfo("Group: "+g.name+" created");
+				return $rootScope.user.gJSON.push(res);
+			});
 		};
 		$scope.use.logOut = function(){
 			$http.get("/session/destroy?load=f").success(function(res){
@@ -260,4 +295,5 @@
 			});
 		}
 	}]);
+
 })();

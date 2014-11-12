@@ -35,6 +35,10 @@ module.exports = {
 		},
 		requestsSent: {
 			type: 'array'
+		},
+		//only first 30
+		groups: {
+			type: 'array'
 		}
   	},
 	beforeCreate: function(values, cb){
