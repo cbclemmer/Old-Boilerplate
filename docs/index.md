@@ -19,3 +19,6 @@ This application is meant to be used entirely separate from the top-level app an
 - add groups
 - delete post text after submitting
 - make privacy for users work
+- collect the first one 50 friend IDs
+- the first 30 posts
+- check box for if you want a slug

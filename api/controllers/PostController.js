@@ -27,20 +27,27 @@ module.exports = {
 		if(obj.type=="short"){
 			obj["owner"] = req.param("post");
 			obj["order"] = 0;
-			Objekt.create(obj, function(err, obj){
-				if(err) return next(err);
-				Post.findOne({id: req.param("post")}, function(err, post){
+			if(!(obj.text.length>139)){
+				Objekt.create(obj, function(err, obj){
 					if(err) return next(err);
-					if(!post) return res.json({err: "Could not find(objCreate)"});
-					post.objekts.push(obj);
-					Post.update({id: post.id}, post, function(err, post){
+					Post.findOne({id: req.param("post")}, function(err, post){
 						if(err) return next(err);
-						if(!post) return res.json({err: "Could not update(objCreate)"});
-						res.json(obj);
+						if(!post) return res.json({err: "Could not find(objCreate)"});
+						post.objekts.push(obj);
+						Post.update({id: post.id}, post, function(err, post){
+							if(err) return next(err);
+							if(!post) return res.json({err: "Could not update(objCreate)"});
+							return res.json(obj);
+						});
 					});
+				});	
+			}else{
+				Post.destroy({id: obj.owner}, function(err){
+					if(err) return next(err);
+					return res.json({err: "Post must be under 140 characters"});
 				});
-			});
-		}
+			}
+		};
 	},
 	feed: function(req, res, next){
 		var s = req.param("start");

@@ -75,7 +75,7 @@
 							<span ng-show="pag.request">Request Sent</span>
 						</div>
 					</div>
-					<div ng-controller="postController as post" style="margin-top: 50px;">
+					<div ng-controller="postController as post" style="margin-top: 50px;width: 80%;display:inline-table">
 					<form ng-submit="post.create(pag.id)">
 						<input type="text" ng-model="post.temp.objekts[0].text" placeholder="write to {{pag.name}}">
 						<input type="hidden" ng-model="post.temp.objekts[0].type" value="short">
@@ -83,7 +83,7 @@
 					</form>
 					<li ng-repeat="p in posts"><span ng-show="p.objekts[0].type=='short'"><a href="/user/show/{{p.owner}}">@{{p.ownerName}}</a>: {{p.objekts[0].text}}</span></li>
 					</div>
-					<div class="aside">
+					<div class="aside" style="width: 15%;display:inline-table">
 						<div class="friends">
 							<h5>Friends</h5>
 							<ul>
