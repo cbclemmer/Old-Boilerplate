@@ -135,6 +135,17 @@
 							});
 						};
 					}
+					//get the group json
+					$rootScope.user.gJSON = [];
+					if(!$rootScope.user.groups) $rootScope.user.groups = [];
+					if($rootScope.user.groups.length>=1){
+						for(var i=0;i<$rootScope.user.groups.length;i++){
+							$http.get("/group/get?id="+$rootScope.user.groups[i]).success(function(res){
+								if(res.err) return showErr(res.err);
+								$rootScope.user.gJSON.push(res);
+							});
+						}
+					}
 				}else{
 					showErr(res.reason);
 				};
@@ -181,6 +192,7 @@
 				if(res.err) return showErr(res.err);
 				$rootScope.nGroup = {};
 				showInfo("Group: "+g.name+" created");
+				$rootScope.user.gJSON.push(res);
 				return $rootScope.user.gJSON.push(res);
 			});
 		};

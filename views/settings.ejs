@@ -17,4 +17,21 @@
 		<p><i>Only change this once per login</i></p>
 		<input type="checkbox" name="private" ng-model="userCtrl.temp.private" ng-click="userCtrl.private(userCtrl.temp.private);" id="privateChk"> Private
 	</div>
+	<div ng-show="user.gAdmin.length>0" class="container" ng-controller="groupController as group">
+		<h2>Group Settings</h2>
+		Group: 
+		<select ng-model="userCtrl.temp.gAdmin" id="gSelect" ng-change="group.getAdmin(userCtrl.temp.gAdmin)">
+			<option ng-repeat="group in user.gAdmin" value="{{group}}">{{group}}</option>
+		</select>
+		<br>
+		Admins: 
+		<ul>
+			<li ng-repeat="admin in gAdmins">{{admin}}</li>
+		</ul>
+		<h3>Add Admin</h3>
+		<form ng-submit="group.addAdmin(group.aUsername, userCtrl.temp.gAdmin)">
+			@<input type="text" placeholder="username" ng-model="group.aUsername">
+			<input type="submit" value="Add">
+		</form>
+	</div>
 </div>

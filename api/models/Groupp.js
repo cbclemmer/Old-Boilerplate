@@ -10,6 +10,7 @@ module.exports = {
   attributes: {
   	name: 'string',
   	handle: 'string',
+		admin: 'array',
   	location: 'string',
   	//private, open, request etc.
   	type: 'string',

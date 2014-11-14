@@ -1,6 +1,7 @@
 (function(){
 	var app = angular.module("group", []);
 		app.controller("groupController", ['$http', '$scope', '$rootScope', function($http, s, rs){
+		if(user){
 			for(var i=0;i<user.groups.length;i++){
 				if(user.groups[i]==pag.id){
 					pag.joined=true;
@@ -15,13 +16,28 @@
 					});
 				};
 			};
-			s.group.join = function(){
-				$http.get("/group/join?group="+pag.id).success(function(res){
-					if(res.err) return showErr(res.err);
-					showInfo("Joined group: "+pag.name);
-					pag.joined=true;
-					pag.mJSON.push(user);
-				});
-			}
+		};
+		s.group.getAdmin = function(handle){
+			$http.get("/group/getAdmin?handle="+handle).success(function(res){
+				if(res.err) return showErr(res.err);
+				rs.gAdmins = res;
+			})
+		};
+		s.group.addAdmin = function(un, g){
+			$http.get("/group/addAdmin?u="+un+"&g="+g).success(function(res){
+				s.group.aUsername="";
+				if(res.err) return showErr(res.err);
+				rs.gAdmins.push(un);
+				showInfo("@"+un+" added as admin to "+g);
+			});
+		};
+		s.group.join = function(){
+			$http.get("/group/join?group="+pag.id).success(function(res){
+				if(res.err) return showErr(res.err);
+				showInfo("Joined group: "+pag.name);
+				pag.joined=true;
+				pag.mJSON.push(user);
+			});
+		}
 	}]);
 })();

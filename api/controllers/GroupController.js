@@ -10,14 +10,19 @@ module.exports = {
 		Groupp.findOne({handle: req.param("handle")}, function(err, groupp){
 			if(err) return next(err);
 			if(!groupp){
-				Groupp.create({name: req.param("name"), handle: req.param("handle"), members: [req.session.user.id]}, function(err, groupp){
+				Groupp.create({name: req.param("name"), handle: req.param("handle"), members: [req.session.user.id], admin: [req.session.user.username]}, function(err, groupp){
 					if(err) return next(err);
 					if(!groupp) return res.json({err: "Could not create groupp"});
 					User.findOne({id: req.session.user.id}, function(err, user){
 						if(err) return next(err);
 						if(!user.groups) user.groups = [];
+						if(!user.gAdmin) user.gAdmin = [];
 						user.groups.push(groupp.id);
+						user.gAdmin.push(groupp.handle);
+						if(!req.session.user.groups) req.session.user.groups = [];
+						if(!req.session.user.gAdmin) req.session.user.gAdmin = [];
 						req.session.user.groups.push(groupp.id);
+						req.session.user.gAdmin.push(groupp.handle);
 						User.update({id: user.id}, user, function(err, user){
 							if(err) return next(err);
 							return res.json(groupp);
@@ -41,9 +46,6 @@ module.exports = {
 				return res.json(groupp);
 			});
 		}
-	},
-	addMember: function(req, res, next){
-
 	},
 	join: function(req, res, next){
 		var id = req.session.user.id;
@@ -69,11 +71,53 @@ module.exports = {
 					user.groups.push(groupp);
 					Groupp.update({id: groupp.id}, groupp, function(err, groupp){
 						if(err) return next(err);
-						return res.json(groupp);
+						User.update({id: user.id}, user, function(err, user){
+							if(err) return next(err);
+							return res.json(groupp);
+						});
 					});
 				});
 			}
 		})
+	},
+	addAdmin: function(req, res, next){
+		//prcede variable
+		var p = false;
+		Groupp.findOne({handle: req.param("g")}, function(err, group){
+			if(err) return next(err);
+			if(!group) return res.json({err: "could not find group"});
+			for(var i=0;i<group.admin.length;i++){
+				if(group.admin[i]==req.session.user.username){
+					p = true;
+				}
+				if(group.admin[i]==req.param("u")){
+					return res.json({err: "User already admin"});
+				}
+			}
+			if(p){
+				User.findOne({username: req.param("u")}, function(err, user){
+					if(err) return next(err);
+					if(!user) return res.json({err: "User not found"});
+					group.admin.push(user.username);
+					if(!user.gAdmin) user.gAdmin = [];
+					user.gAdmin.push(group.handle);
+					Groupp.update({id: group.id}, group, function(err, group){
+						if(err) return next(err);
+						User.update({id: user.id}, user, function(err, user){
+							if(err) return next(err);
+							return res.json(group);
+						});
+					});
+				});
+			}
+		});
+	},
+	getAdmin: function(req, res, next){
+		Groupp.findOne({handle: req.param("handle")}, function(err, group){
+			if(err) return next(err);
+			if(!group) return res.json("could not find group");
+			return res.json(group.admin);
+		});
 	},
 	show: function(req, res, next){
 		Groupp.findOne({handle: req.param("id")}, function(err, groupp){

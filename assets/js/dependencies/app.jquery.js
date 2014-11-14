@@ -18,6 +18,10 @@ function showInfo(s){
 		setTimeout(function(){$('#info').fadeOut('fast');}, 1500);
 	});
 }
+console.log("yes");
+$("#gSelect").on("change", function(){
+	console.log("yes");
+});
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
@@ -36,6 +40,10 @@ $(document).ready(function(){
       angular.element($("#pUser")[0].parentElement).scope().post.create(pag.id);
     }
 	});
+	/*$("#gSelect").change(function(){
+		console.log("change");
+		angular.element($("#gSelect")).scope().group.getAdmin($("#gSelect").val());
+	});*/
 	$("#searchBar").click(function(event){
 	  $('.opt').hide();
 	  $('#search').val("");

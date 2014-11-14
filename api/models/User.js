@@ -39,8 +39,10 @@ module.exports = {
 		//only first 30
 		groups: {
 			type: 'array'
-		}
-  	},
+		},
+		//all the groups that the user is an admin of
+		gAdmin: 'array'
+  },
 	beforeCreate: function(values, cb){
 		var bcrypt = require('bcrypt');
 		bcrypt.hash(values.password, 10, function(err, hash){
