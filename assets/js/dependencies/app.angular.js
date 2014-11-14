@@ -38,10 +38,8 @@
 		if(pag!="") pag.joined=false;
 		if(user!="") $rootScope.user = user;
 		$http.get("/user/get").success(function(res){
-			console.log("this");
 			if(res.status){
 				if(!user) $rootScope.user = res.user;
-				console.log($rootScope.user.id);
 				if(Boolean($rootScope.user.private)&&document.getElementById("privateChk")) {
 					document.getElementById("privateChk").checked = true;
 				}else{
@@ -94,20 +92,7 @@
 				$('.loggedIn').hide();
 			}
 			console.log($rootScope);
-			for(var i=0;i<$rootScope.user.groups.length;i++){
-				if($rootScope.user.groups[i]==pag.id){
-					pag.joined=true;
-				}
-			}
-			if(pag!=""){
-				//member JSON
-				pag.mJSON = [];
-				for(var i=0;i<pag.members.length;i++){
-					$http.get("/user/getOne?user="+pag.members[i]).success(function(res){
-						pag.mJSON.push(res);
-					});
-				};
-			};
+
 		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;

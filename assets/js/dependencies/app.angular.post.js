@@ -43,6 +43,7 @@
 							h.put("/post/objCreate?text="+temp.objekts[i].text+"&type="+temp.objekts[i].type+"&post="+res.id).success(function(res){
 								if(res.err) return showErr(res.err);
 								showInfo("Post created");
+								s.post.temp.objekts[0].text = "";
 							});
 							break;
 						}

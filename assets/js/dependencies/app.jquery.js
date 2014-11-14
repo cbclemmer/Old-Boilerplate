@@ -30,6 +30,12 @@ $(document).ready(function(){
 	$("#shortText").keypress(function(){
 		$("#shortText").val($("#shortText").val().substring(0,139));
 	});
+	//when pressing enter at user/show post text area
+	$("#pUser").keypress(function(e){
+		if(e.keyCode==13){
+      angular.element($("#pUser")[0].parentElement).scope().post.create(pag.id);
+    }
+	});
 	$("#searchBar").click(function(event){
 	  $('.opt').hide();
 	  $('#search').val("");
