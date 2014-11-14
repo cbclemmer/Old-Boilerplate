@@ -68,7 +68,7 @@
 				$rootScope.user.frJSON = [];
 				if(!$rootScope.user.friendRequests) $rootScope.user.friendRequests = [];
 				if(!$rootScope.user.requestsSent) $rootScope.user.requestsSent = [];
-				if($rootScope.user.friendRequests.length>1){
+				if($rootScope.user.friendRequests.length>=1){
 					//get friend request data
 					for(var i=0;i<$rootScope.user.friendRequests.length;i++){
 						$http.get("/user/getOne?user="+$rootScope.user.friendRequests[i]).success(function(res){
@@ -80,9 +80,9 @@
 				//get the group json
 				$rootScope.user.gJSON = [];
 				if(!$rootScope.user.groups) $rootScope.user.groups = [];
-				if($rootScope.user.groups.length>=1){
+				if($rootScope.user.groups.length>0){
 					for(var i=0;i<$rootScope.user.groups.length;i++){
-						$http.get("/group/get?id="+$rootScope.user.groups[i]).success(function(res){
+						$http.get("/group/get?handle="+$rootScope.user.groups[i]).success(function(res){
 							if(res.err) return showErr(res.err);
 							$rootScope.user.gJSON.push(res);
 						});
@@ -192,6 +192,7 @@
 				if(res.err) return showErr(res.err);
 				$rootScope.nGroup = {};
 				showInfo("Group: "+g.name+" created");
+				if(!$rootScope.user.gJSON) $rootScope.user.gJSON = [];
 				$rootScope.user.gJSON.push(res);
 				return $rootScope.user.gJSON.push(res);
 			});
@@ -284,6 +285,7 @@
 					for(var i=0;i<$rootScope.user.fJSON.length;i++){
 						if($rootScope.user.fJSON[i].id==id){
 							console.log("found");
+							pag.friendsWith = false;
 							$rootScope.user.fJSON.splice(i,1);
 							break;
 						}

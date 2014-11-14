@@ -91,6 +91,7 @@ module.exports = {
 							});
 						});
 						user.friendRequests.splice(i, 1);
+						req.session.user.friendRequests.splice(i, 1);
 						break;
 					}
 				};

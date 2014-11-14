@@ -3,7 +3,7 @@
 		app.controller("groupController", ['$http', '$scope', '$rootScope', function($http, s, rs){
 		if(user){
 			for(var i=0;i<user.groups.length;i++){
-				if(user.groups[i]==pag.id){
+				if(user.groups[i]==pag.handle){
 					pag.joined=true;
 				}
 			}

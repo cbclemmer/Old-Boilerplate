@@ -17,11 +17,11 @@ module.exports = {
 						if(err) return next(err);
 						if(!user.groups) user.groups = [];
 						if(!user.gAdmin) user.gAdmin = [];
-						user.groups.push(groupp.id);
+						user.groups.push(groupp.handle);
 						user.gAdmin.push(groupp.handle);
 						if(!req.session.user.groups) req.session.user.groups = [];
 						if(!req.session.user.gAdmin) req.session.user.gAdmin = [];
-						req.session.user.groups.push(groupp.id);
+						req.session.user.groups.push(groupp.handle);
 						req.session.user.gAdmin.push(groupp.handle);
 						User.update({id: user.id}, user, function(err, user){
 							if(err) return next(err);
@@ -64,11 +64,11 @@ module.exports = {
 				groupp.members.push(id);
 				if(!req.session.user.groups) req.session.user.groups = [];
 				//console.log(req.session.user);
-				req.session.user.groups.push(groupp.id);
+				req.session.user.groups.push(groupp.handle);
 				User.findOne({id: id}, function(err, user){
 					if(err) return next(err);
 					if(!user.groups) user.groups = [];
-					user.groups.push(groupp);
+					user.groups.push(groupp.handle);
 					Groupp.update({id: groupp.id}, groupp, function(err, groupp){
 						if(err) return next(err);
 						User.update({id: user.id}, user, function(err, user){
