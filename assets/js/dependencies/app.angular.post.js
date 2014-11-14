@@ -26,7 +26,7 @@
 			start = (start==""||!start) ? 0 : start;
 			h.get("/post/userFeed?start="+start+"&user="+user).success(function(res){
 				if(res.err) return showErr(res.err);
-				$rootScope.posts  = ($rootScope.posts) ? $rootScope.p0osts.concat(res.posts) : res.posts;
+				$rootScope.posts  = ($rootScope.posts) ? $rootScope.posts.concat(res.posts) : res.posts;
 			});
 		};
 		s.post.create = function(target){
@@ -44,6 +44,8 @@
 								if(res.err) return showErr(res.err);
 								showInfo("Post created");
 								s.post.temp.objekts[0].text = "";
+								rs.posts.unshift(res[0]);
+								console.log(rs.posts);
 							});
 							break;
 						}

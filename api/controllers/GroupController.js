@@ -51,7 +51,7 @@ module.exports = {
 		var c =false;
 		Groupp.findOne({id: req.param("group")}, function(err, groupp){
 			if(err) return next(err);
-			if(!group) return res.json({err: "Group does not exist"});
+			if(!groupp) return res.json({err: "Group does not exist"});
 			for(var i=0;i<groupp.members.length;i++){
 				if(groupp.members[i]==id){
 					c=true;
@@ -60,9 +60,12 @@ module.exports = {
 			}
 			if(!c){
 				groupp.members.push(id);
+				if(!req.session.user.groups) req.session.user.groups = [];
+				//console.log(req.session.user);
 				req.session.user.groups.push(groupp.id);
 				User.findOne({id: id}, function(err, user){
 					if(err) return next(err);
+					if(!user.groups) user.groups = [];
 					user.groups.push(groupp);
 					Groupp.update({id: groupp.id}, groupp, function(err, groupp){
 						if(err) return next(err);

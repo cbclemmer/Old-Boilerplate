@@ -41,7 +41,7 @@
     <h5>Friends</h5>
     <ul>
         <li ng-repeat="friend in user.fJSON">
-            <a href="user/show?id={{friend.id}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>
+            <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>
         </li>
     </ul>
     <p ng-show="user.fJSON.length<1">Well, this is awkward</p>
@@ -50,7 +50,7 @@
     <h5>Groups</h5>
     <ul>
         <li ng-repeat="group in user.gJSON">
-            <a href="/group/show/{{group.handle}}">{{group.name}} <i>@{{group.handle}}</i></a>
+            <a href="/api/show/{{group.handle}}">{{group.name}} <i>@{{group.handle}}</i></a>
         </li>
         <li>
         <form ng-submit="use.nGroup()">

@@ -20,6 +20,7 @@
 					if(res.err) return showErr(res.err);
 					showInfo("Joined group: "+pag.name);
 					pag.joined=true;
+					pag.mJSON.push(user);
 				});
 			}
 	}]);

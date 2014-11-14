@@ -37,7 +37,7 @@ module.exports = {
 						Post.update({id: post.id}, post, function(err, post){
 							if(err) return next(err);
 							if(!post) return res.json({err: "Could not update(objCreate)"});
-							return res.json(obj);
+							return res.json(post);
 						});
 					});
 				});	

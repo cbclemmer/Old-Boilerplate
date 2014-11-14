@@ -18,10 +18,12 @@
 							rs.pag.friendsWith=true;
 						}
 					};
-					for(var i=0;i<rs.user.friendRequests.length;i++){
-						if(rs.user.friendRequests[i]==rs.user.id){
-							rs.pag.request=true;
-							break;
+					if(rs.user.friendRequests){
+						for(var i=0;i<rs.user.friendRequests.length;i++){
+							if(rs.user.friendRequests[i]==rs.user.id){
+								rs.pag.request=true;
+								break;
+							}
 						}
 					}
 					for(var i;i<rs.user.requestsSent.length;i++){
