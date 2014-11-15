@@ -8,9 +8,13 @@
 		<input type="submit" value="Submit">
 		</form>
 	</div>
-	<!-- change default post
-	<div id="cdPost" class="container">
-	</div>-->
+	<div ng-controller="settingsController as settings" class="container">
+	<h4>Who can post to me</h4>
+	<select ng-change="settings.crPost(set.rp)" ng-model="set.rp">
+		<option value="false">Only friends</option>
+		<option value="true">Anyone</option>
+	</select>
+	</div>
 	<div id="cPrivacy" class="container">
 		<h3>Change Privacy</h3>
 		<p>This changes whether other people can search for your account</p>

@@ -1,6 +1,6 @@
 (function(){
 	//module defines controllers
-	var app = angular.module("app", ['ui.router', 'group', 'search', 'post']);
+	var app = angular.module("app", ['ui.router', 'group', 'search', 'post', 'settings']);
 	app.config(function($stateProvider, $urlRouterProvider){
 		if(user=="") $urlRouterProvider.otherwise('/login');
 		$stateProvider

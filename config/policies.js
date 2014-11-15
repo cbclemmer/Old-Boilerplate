@@ -28,7 +28,11 @@ module.exports.policies = {
 
   // '*': true,
   PostController: {
-    objCreate: 'canAddObj'
+    objCreate: 'canAddObj',
+    create: 'canPost'
+  },
+  api: {
+    show: 'sessionAuth'
   }
   /***************************************************************************
   *                                                                          *

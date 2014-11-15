@@ -32,6 +32,7 @@ var jsFilesToInject = [
 	'js/dependencies/app.angular.js',
   'js/dependencies/app.angular.post.js',
   'js/dependencies/app.angular.search.js',
+  'js/dependencies/app.angular.settings.js',
   'js/dependencies/app.angular.group.js',
   'js/dependencies/app.angular.user.js',
 	'js/dependencies/app.angular.directives.js',

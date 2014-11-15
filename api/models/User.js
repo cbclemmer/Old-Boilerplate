@@ -41,7 +41,12 @@ module.exports = {
 			type: 'array'
 		},
 		//all the groups that the user is an admin of
-		gAdmin: 'array'
+		gAdmin: 'array',
+		//if anyone can post
+		randomPost: {
+			type: 'boolean',
+			defaultsTo: 'false'
+		}
   },
 	beforeCreate: function(values, cb){
 		var bcrypt = require('bcrypt');
