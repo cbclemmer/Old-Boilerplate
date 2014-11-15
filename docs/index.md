@@ -11,8 +11,6 @@ This application is meant to be used entirely separate from the top-level app an
 ###groups
 - Do private adding
 - be able to remove yourself from group
-- let the group type be selected from a dropdown in the settings tab
-- let a group have admins
 
 ###Posts
 - the keep first 30 post ids in the users JSON
