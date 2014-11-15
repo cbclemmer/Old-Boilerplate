@@ -9,8 +9,8 @@ This application is meant to be used entirely separate from the top-level app an
 
 ##Things to do
 ###groups
-- do settings for groups
 - add something to add yourself to a group depending on the privacy setting
+- be able to remove yourself from group
 - let the group type be selected from a dropdown in the settings tab
 - let a group have admins
 

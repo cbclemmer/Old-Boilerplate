@@ -20,18 +20,29 @@
 	<div ng-show="user.gAdmin.length>0" class="container" ng-controller="groupController as group">
 		<h2>Group Settings</h2>
 		Group: 
-		<select ng-model="userCtrl.temp.gAdmin" id="gSelect" ng-change="group.getAdmin(userCtrl.temp.gAdmin)">
+		<select ng-model="userCtrl.temp.gAdmin" id="gSelect" ng-change="group.get(userCtrl.temp.gAdmin)">
 			<option ng-repeat="group in user.gAdmin" value="{{group}}">{{group}}</option>
 		</select>
 		<br>
 		Admins: 
 		<ul>
-			<li ng-repeat="admin in gAdmins">{{admin}} <span ng-click="group.rAdmin(admin, userCtrl.temp.gAdmin)" style="color: blue;cursor: pointer">Remove</span></li>
+			<li ng-repeat="admin in groupJSON.admin">{{admin}} <span ng-click="group.rAdmin(admin, userCtrl.temp.gAdmin)" style="color: blue;cursor: pointer">Remove</span></li>
 		</ul>
-		<h3>Add Admin</h3>
+		<h4>Add Admin</h4>
 		<form ng-submit="group.addAdmin(group.aUsername, userCtrl.temp.gAdmin)">
 			@<input type="text" placeholder="username" ng-model="group.aUsername">
 			<input type="submit" value="Add">
 		</form>
+		<h4>Change acceptance type</h4>
+		<ul>
+			<li>Public: anyone can join</li>
+			<li>Private: must be invited, only name is searchable</li>
+			<li>Semi-private: ask for invitaions</li>
+		</ul>
+		<select ng-change="group.cType(groupJSON.type, groupJSON.handle)" ng-model="groupJSON.type">
+			<option value="public">Public</option>
+			<option value="semiprivate">Semi-Private</option>
+			<option value="private">Private</option>
+		</select>
 	</div>
 </div>

@@ -17,18 +17,24 @@
 				};
 			};
 		};
+		s.group.get = function(g){
+			$http.get("/group/get?handle="+g).success(function(res){
+				if(res.err) return showErr(res.err);
+				rs.groupJSON = res;
+			});
+		};
 		s.group.getAdmin = function(handle){
 			$http.get("/group/getAdmin?handle="+handle).success(function(res){
 				if(res.err) return showErr(res.err);
-				rs.gAdmins = res;
-			})
+				rs.groupJSON.gAdmins = res;
+			});
 		};
 		s.group.rAdmin = function(u, g){
 			$http.get("/group/rAdmin?u="+u+"&g="+g).success(function(res){
 				if(res.err) return showErr(res.err);
-				for(i=0;i<rs.gAdmins.length;i++){
-					if(rs.gAdmins[i]==u){
-						rs.gAdmins.splice(i, 1);
+				for(i=0;i<rs.groupJSON.admin.length;i++){
+					if(rs.groupJSON.admin[i]==u){
+						rs.groupJSON.admin.splice(i, 1);
 						showInfo("@"+u+" is no longer an admin for "+g);
 					}
 				}
@@ -38,7 +44,7 @@
 			$http.get("/group/addAdmin?u="+un+"&g="+g).success(function(res){
 				s.group.aUsername="";
 				if(res.err) return showErr(res.err);
-				rs.gAdmins.push(un);
+				rs.groupJSON.admin.push(un);
 				showInfo("@"+un+" added as admin to "+g);
 			});
 		};
@@ -48,6 +54,12 @@
 				showInfo("Joined group: "+pag.name);
 				pag.joined=true;
 				pag.mJSON.push(user);
+			});
+		};
+		s.group.cType = function(t, g){
+			$http.get("/group/cType?t="+t+"&g="+g).success(function(res){
+				if(res.err) return showErr(res.err);
+				showInfo(rs.groupJSON.handle+" changed to "+t);
 			});
 		}
 	}]);

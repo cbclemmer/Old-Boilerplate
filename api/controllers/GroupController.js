@@ -134,9 +134,6 @@ module.exports = {
 						for(var i=0;i<user.gAdmin.length;i++){
 							if(user.gAdmin[i]==groupp[0].handle){
 								if(user.id==req.session.user.id) req.session.user.gAdmin.splice(i, 1);
-								console.log("User.gAdmin splice");
-								console.log(i);
-								console.log(user);
 								user.gAdmin.splice(i, 1);
 								User.update({id: user.id}, user, function(err, user){
 									if(err) return next(err);
@@ -158,6 +155,17 @@ module.exports = {
 			if(!group) return res.json("could not find group");
 			return res.json(group.admin);
 		});
+	},
+	cType: function(req, res, next){
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			if(!groupp) return res.json({err: "Not a group"});
+			groupp.type = req.param("t");
+			Groupp.update({id: groupp.id}, groupp, function(err, groupp){
+				if(err) return next(err);
+				res.json({status: true});
+			});
+		})
 	},
 	show: function(req, res, next){
 		Groupp.findOne({handle: req.param("id")}, function(err, groupp){
