@@ -112,6 +112,46 @@ module.exports = {
 			}
 		});
 	},
+	rAdmin: function(req, res, next){
+		//the if it is a part of it
+		var b = false;
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			if(!groupp) return res.json({err: "could not find group"});
+			for(var i=0;i<groupp.admin.length;i++){
+				if(groupp.admin[i]==req.param("u")){
+					groupp.admin.splice(i, 1);
+					b = true;
+					break;
+				}
+			}
+			if(b){
+				Groupp.update({id: groupp.id}, groupp, function(err, groupp){
+					if(err) return next(err);
+					User.findOne({username: req.param("u")}, function(err, user){
+						if(err) return next(err);
+						if(!user) return res.json({err: "Username not found"});
+						for(var i=0;i<user.gAdmin.length;i++){
+							if(user.gAdmin[i]==groupp[0].handle){
+								if(user.id==req.session.user.id) req.session.user.gAdmin.splice(i, 1);
+								console.log("User.gAdmin splice");
+								console.log(i);
+								console.log(user);
+								user.gAdmin.splice(i, 1);
+								User.update({id: user.id}, user, function(err, user){
+									if(err) return next(err);
+									return res.json({status: true});
+								});
+								break;
+							}
+						}
+					});
+				});
+			}else{
+				return res.json({err: ("@"+req.param("u")+" is not an admin for group: "+req.param("g"))});
+			}
+		});
+	},
 	getAdmin: function(req, res, next){
 		Groupp.findOne({handle: req.param("handle")}, function(err, group){
 			if(err) return next(err);

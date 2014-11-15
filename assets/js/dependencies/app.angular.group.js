@@ -23,6 +23,17 @@
 				rs.gAdmins = res;
 			})
 		};
+		s.group.rAdmin = function(u, g){
+			$http.get("/group/rAdmin?u="+u+"&g="+g).success(function(res){
+				if(res.err) return showErr(res.err);
+				for(i=0;i<rs.gAdmins.length;i++){
+					if(rs.gAdmins[i]==u){
+						rs.gAdmins.splice(i, 1);
+						showInfo("@"+u+" is no longer an admin for "+g);
+					}
+				}
+			})
+		}
 		s.group.addAdmin = function(un, g){
 			$http.get("/group/addAdmin?u="+un+"&g="+g).success(function(res){
 				s.group.aUsername="";
