@@ -138,9 +138,9 @@
 					//get the group json
 					$rootScope.user.gJSON = [];
 					if(!$rootScope.user.groups) $rootScope.user.groups = [];
-					if($rootScope.user.groups.length>=1){
+					if($rootScope.user.groups.length>0){
 						for(var i=0;i<$rootScope.user.groups.length;i++){
-							$http.get("/group/get?id="+$rootScope.user.groups[i]).success(function(res){
+							$http.get("/group/get?handle="+$rootScope.user.groups[i]).success(function(res){
 								if(res.err) return showErr(res.err);
 								$rootScope.user.gJSON.push(res);
 							});

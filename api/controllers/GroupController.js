@@ -80,6 +80,56 @@ module.exports = {
 			}
 		})
 	},
+	//join by admin, for use with private and semiprivate groups
+	jAdmin: function(req, res, next){
+		var c = false;
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			if(!groupp) return res.json({err: "Could not find group"});
+			//make sure this user is an admin
+			for(var i=0;i<groupp.admin.length;i++){
+				if(groupp.admin[i]==req.session.user.username){
+					c = true;
+					break;
+				}
+			}
+			if(c){
+				for(var i=0;i<groupp.requests.length;i++){
+					//remove user from requests
+					if(groupp.requests[i]==req.param("u")){
+						groupp.requests.splice(i, 1);
+						break;
+					}
+				}
+				User.findOne({username: req.param("u")}, function(err, user){
+					c = true;
+					if(err) return next(err);
+					if(!user) return res.json({err: "Could not find user @"+req.param("u")});
+					//make sure that this user is not already a member
+					for(var i=0;i<groupp.members.length;i++){
+						if(groupp.members[i]==user.id){
+							console.log(groupp.members);
+							console.log(user.id);
+							var c =false;
+							break;
+						}
+					}
+					if(c){
+						groupp.members.push(user.id);
+						if(!user.groups) user.groups =[];
+						user.groups.push(groupp.handle);
+						Groupp.update({id: groupp.id}, groupp, function(err, groupp){
+							if(err) return next(err);
+							User.update({id: user.id}, user, function(err, user){
+								if(err) return next(err);
+								res.json({status: true});
+							});
+						});
+					}else{return res.json({err: "user is already a member"})}
+				});
+			}else{return res.json({err: "You do not have rights to add to this group"})}
+		});
+	},
 	addAdmin: function(req, res, next){
 		//prcede variable
 		var p = false;
@@ -156,16 +206,56 @@ module.exports = {
 			return res.json(group.admin);
 		});
 	},
-	cType: function(req, res, next){
+	cPrivacy: function(req, res, next){
 		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
 			if(err) return next(err);
 			if(!groupp) return res.json({err: "Not a group"});
-			groupp.type = req.param("t");
+			groupp.privacy = req.param("t");
 			Groupp.update({id: groupp.id}, groupp, function(err, groupp){
 				if(err) return next(err);
 				res.json({status: true});
 			});
 		})
+	},
+	addRequest: function(req, res, next){
+		//for continueing
+		var c = true;
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			if(!groupp) return res.json({err: "could not find group"});
+			if(groupp.privacy&&groupp.privacy=="semiprivate"){
+				if(!groupp.requests) groupp.requests = [];
+				for(var i = 0;i<groupp.requests.length;i++){
+					if(groupp.requests[i]==req.session.user.username){
+						c = false;
+						break;
+					}
+				}
+				if(c){
+					groupp.requests.push(req.session.user.username);
+					Groupp.update({id: groupp.id}, groupp, function(err, groupp){
+						if(err) return next(err);
+						res.json({status: true});
+					});
+				}else{return res.json({err: "already requested in"})}
+			}else{res.json({err: "This group is not semiprivate"})}
+		})
+	},
+	getRequest: function(req, res, next){
+		var c = false;
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			if(!groupp) return res.json({err: "Could not find group"});
+			if(groupp.requests){
+				for(var i=0;i<groupp.requests.length;i++){
+					if(groupp.requests[i]==req.session.user.username){
+						c=true;
+					}
+				}
+				if(c){return res.json({status: true});
+				}else{return res.json({status: false})}
+			}else{return res.json({status: false})}
+		});
 	},
 	show: function(req, res, next){
 		Groupp.findOne({handle: req.param("id")}, function(err, groupp){

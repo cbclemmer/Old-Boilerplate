@@ -16,6 +16,10 @@
 					});
 				};
 			};
+			$http.get("/group/getRequest?g="+pag.handle).success(function(res){
+				if(res.err) return showErr(res.err);
+				pag.request = res.status;
+			});
 		};
 		s.group.get = function(g){
 			$http.get("/group/get?handle="+g).success(function(res){
@@ -56,11 +60,30 @@
 				pag.mJSON.push(user);
 			});
 		};
-		s.group.cType = function(t, g){
-			$http.get("/group/cType?t="+t+"&g="+g).success(function(res){
+		s.group.cPrivacy = function(t, g){
+			$http.get("/group/cPrivacy?t="+t+"&g="+g).success(function(res){
 				if(res.err) return showErr(res.err);
 				showInfo(rs.groupJSON.handle+" changed to "+t);
 			});
+		};
+		//this is for semiprivate groups that use a friend reaquest like system
+		s.group.ask = function(g){
+			$http.get("/group/addRequest?g="+g).success(function(res){
+				if(res.err) return showErr(res.err);
+				pag.request=true;
+				showInfo("Added in");
+			})
+		};
+		s.group.jAdmin = function(g, u){
+			$http.get("/group/jAdmin?g="+g+"&u="+u).success(function(res){
+				if(res.err) return showErr(res.err);
+				for(var i=0;i<groupJSON.requests.length;i++){
+					if(groupJSON.requests[i]==u){
+						groupJSON.requests.splice(i,1);
+					}
+				}
+				showInfo("@"+u+" was addded to "+g);
+			})
 		}
 	}]);
 })();

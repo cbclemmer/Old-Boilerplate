@@ -31,6 +31,7 @@
 		id: "<%=group.id%>",
 		name: "<%=group.name%>",
 		handle: "<%=group.handle%>",
+		privacy: "<%=group.privacy%>",
 		members: [
 		<% _.each(group.members, function(member){ %>
 			"<%= member %>",
@@ -73,9 +74,12 @@
 	   <div id="main">
        		<div class="container" ng-show="pag">
 				<h2>{{pag.name}}</h2>
+				{{pag.privacy}}
 				<div class="container pag.friends">
 					<div id="addGroup" ng-controller="groupController as group">
-						<button ng-click="group.join()" ng-show="!pag.joined">Join Group</button>
+						<button ng-click="group.join()" ng-show="!pag.joined&&pag.privacy=='public'">Join Group</button>
+						<span ng-show="pag.request">Request sent</span>
+						<button ng-click="group.ask(pag.handle)" ng-show="!pag.joined&&pag.privacy=='semiprivate'&&!pag.request">Request in</button>
 						<span ng-show="pag.joined">Joined</span>
 					</div>
 					<div ng-controller="postController as post" style="margin-top: 50px;width: 80%;display:inline-table">

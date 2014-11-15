@@ -39,10 +39,20 @@
 			<li>Private: must be invited, only name is searchable</li>
 			<li>Semi-private: ask for invitaions</li>
 		</ul>
-		<select ng-change="group.cType(groupJSON.type, groupJSON.handle)" ng-model="groupJSON.type">
+		<select ng-change="group.cPrivacy(groupJSON.privacy, groupJSON.handle)" ng-model="groupJSON.privacy">
 			<option value="public">Public</option>
 			<option value="semiprivate">Semi-Private</option>
 			<option value="private">Private</option>
 		</select>
+		<div ng-show="groupJSON.privacy=='semiprivate'">
+			<h4>Page Requests</h4>
+			<ul>
+				<li ng-repeat="request in groupJSON.requests"><a href="/api/show/{{request}}">{{request}}</a>
+					<button ng-click="group.jAdmin(userCtrl.temp.gAdmin, request)">Add</button>
+					<button>Deny</button>
+				</li>
+			</ul>
+			<span ng-show="groupJSON.requests.length<1"><i>None</i></span>
+		</div>
 	</div>
 </div>
