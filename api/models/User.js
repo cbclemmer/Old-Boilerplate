@@ -46,6 +46,11 @@ module.exports = {
 		randomPost: {
 			type: 'boolean',
 			defaultsTo: 'false'
+		},
+		//changes the default post: true, public; false: private
+		dPublic: {
+			type: 'boolean',
+			defaultsTo: 'false'	
 		}
   },
 	beforeCreate: function(values, cb){

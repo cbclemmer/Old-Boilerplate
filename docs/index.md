@@ -34,7 +34,6 @@ This application is meant to be used entirely separate from the top-level app an
 - allow users to have different types(admin, teacher, boss etc.) and a heiarchy
 
 ###Frontend
-- delete post text after submitting
 - check box for if you want a slug
 - create some sort of admin page
 - change the private checkbox to a dropdown

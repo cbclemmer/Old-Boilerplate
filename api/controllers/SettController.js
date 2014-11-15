@@ -19,8 +19,23 @@ module.exports = {
 			User.update({id: user.id}, user, function(err, user){
 				if(err) return next(err);
 				return res.json({rp: s});
-			})
-		})
+			});
+		});
+	},
+	cdPost: function(req, res, next){
+		User.findOne({id: req.session.user.id}, function(err, user){
+			if(err) return next(err);
+			if(!user) return res.json("could not find user");
+			if(!user.dPublic) user.dPublic = false;
+			//s is the setting
+			var s = (req.param("s")=="true") ? true : false;
+			req.session.user.dPublic = s;
+			user.dPublic = s;
+			User.update({id: user.id}, user, function(err, user){
+				if(err) return next(err);
+				return res.json({rp: s});
+			});
+		});
 	}
 };
 
