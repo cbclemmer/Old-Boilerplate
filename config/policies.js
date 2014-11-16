@@ -29,9 +29,13 @@ module.exports.policies = {
   // '*': true,
   PostController: {
     objCreate: 'canAddObj',
-    create: 'canPost'
+    create: 'canPost',
+    userFeed: 'userFeed'
   },
   api: {
+    show: 'sessionAuth'
+  },
+  UserController: {
     show: 'sessionAuth'
   }
   /***************************************************************************

@@ -80,6 +80,17 @@ module.exports = {
 			}
 		})
 	},
+	leave: function(req, res, next){
+		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
+			if(err) return next(err);
+			for(var i=0;i<groupp.members.length;i++){
+				if(groupp.members[i]==req.session.user.id){
+					groupp.members.splice(i,1);
+					return res.json({status: true});
+				}
+			}
+		});
+	},
 	//join by admin, for use with private and semiprivate groups
 	jAdmin: function(req, res, next){
 		var c = false;

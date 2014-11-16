@@ -84,6 +84,12 @@
 				}
 				showInfo("@"+u+" was addded to "+g);
 			})
+		};
+		s.group.leave = function(g){
+			$http.get("/group/leave?g="+g).success(function(res){
+				if(res.err) return showErr(res.err);
+				pag.joined = false;
+			});
 		}
 	}]);
 })();

@@ -25,6 +25,10 @@ module.exports = {
   	//the objects contained in this post. Individual objects are still saved, but all the objects are stored in this container. Subject to change...
   	objekts: 'array',
     //whether you can add another objekt to the post
-    closed: 'boolean'
+    closed: 'boolean',
+    public: {
+      type: 'boolean',
+      defaultsTo: false
+    }
   }
 };

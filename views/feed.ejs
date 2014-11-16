@@ -6,6 +6,10 @@
         	<select ng-model="post.temp.objekts[post.current].type">
         	    <option value="short" selected="selected">Short</option>
         	</select><br>
+            <select ng-model="post.temp.vis">
+                <option value="true">Public</option>
+                <option value="false">Private</option>
+            </select><br>
         	<!-- for short -->
         	<textarea ng-model="post.temp.objekts[post.current].text" id="shortText"></textarea><br>
         	{{post.temp.objekts[post.current].text.length||0}}/140<br>
@@ -31,7 +35,9 @@
     <h5>Friend Requests</h5>
     <ul>
         <li ng-repeat="request in user.frJSON">
-            {{request.name}} ({{request.email}}) <button ng-click="use.addFriend(request.id)">Confirm</button> <button ng-click="use.deleteRequest(request.id)">Delete</button>
+            <a href="/api/show/{{request.username}}">{{request.name}}</a> ({{request.email}}) 
+            <button ng-click="use.addFriend(request.id)">Confirm</button> 
+            <button ng-click="use.deleteRequest(request.id)">Delete</button>
         </li>
     </ul>
     <p ng-show="user.frJSON.length<1">No friend requests</p>

@@ -36,6 +36,7 @@ module.exports = {
 					user["password"]= "";
 					user["createdAt"]="";
 					user["updatedAt"]="";
+					user["fr"] = user.friendRequests;
 					res.view("user/show", {user: user, cUser: req.session.user});
 				});
 			}else{
@@ -44,7 +45,7 @@ module.exports = {
 		},
 		//get current user
 		get: function(req, res, next){
-			if(req.session.auth) return res.json({'status': true, 'user': req.session.user});
+			if(req.session.auth){console.log(req.session.user); return res.json({'status': true, 'user': req.session.user});}
 			else return res.json({"status": false});
 		},
 		getOne: function(req, res, next){

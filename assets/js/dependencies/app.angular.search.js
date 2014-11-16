@@ -19,13 +19,17 @@
 						}
 					};
 					if(rs.user.friendRequests){
-						for(var i=0;i<rs.user.friendRequests.length;i++){
-							if(rs.user.friendRequests[i]==rs.user.id){
+						console.log("1");
+						for(var i=0;i<user.friendRequests.length;i++){
+							console.log("2");
+							if(user.friendRequests[i]==pag.id){
+								console.log("3");
 								rs.pag.request=true;
 								break;
 							}
 						}
 					}
+					if(!rs.user.requestsSent) rs.user.requestsSent = [];
 					for(var i;i<rs.user.requestsSent.length;i++){
 						if(rs.user.requestsSent[i]==rs.pag.id){
 							rs.pag.request = true;

@@ -82,6 +82,7 @@
 						<span ng-show="pag.request">Request sent</span>
 						<button ng-click="group.ask(pag.handle)" ng-show="!pag.joined&&pag.privacy=='semiprivate'&&!pag.request">Request in</button>
 						<span ng-show="pag.joined">Joined</span>
+						<button ng-show="pag.joined" ng-click="group.leave(pag.handle)">Leave</button>
 					</div>
 					<div ng-controller="postController as post" style="margin-top: 50px;width: 80%;display:inline-table">
 					<form ng-submit="post.create(pag.id)">

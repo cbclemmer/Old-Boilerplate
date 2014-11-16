@@ -7,6 +7,7 @@
 
 module.exports = {
 	create: function(req, res, next){
+		console.log(req.params.all());
 		var obj = {};
 		var tags = req.param("tags").split(",");
 		var target = req.param("target");
@@ -14,6 +15,7 @@ module.exports = {
 		obj["owner"] = req.session.user.id;
 		obj["ownerName"] = req.session.user.username;
 		obj["target"] = (target&&target!="") ? target : req.session.user.id;
+		obj["public"] = (req.param("vis")=="true") ? true : false;
 		obj["tags"] = tags;
 		obj["hearts"] = 0;
 		obj["objekts"] = [];
@@ -64,7 +66,8 @@ module.exports = {
 			});	
 		});
 	},
-	userFeed: function(req, res, next){
+	userFeed: function(req, res, next){},
+	privateFeed: function(req, res, next){
 		var s  = (req.param("start")) ? parseInt(req.param("start")) : 0;
 		var q = Post.find({where: {target: req.param("user")}, skip: s, limit: 20});
 		q.sort({createdAt: -1});
@@ -74,6 +77,16 @@ module.exports = {
 
 			res.json({posts: posts});
 		});
+	},
+	publicFeed: function(req, res, next){
+		var s  = (req.param("start")) ? parseInt(req.param("start")) : 0;
+		var q = Post.find({where: {target: req.param("user"), public: true}, skip: s, limit: 20});
+		q.sort({createdAt: -1});
+		q.exec(function(err, posts){
+			if(err) return next(err);
+			if(!posts) return res.json({err: "no posts could be found"});
+			res.json({posts: posts});
+		});	
 	},
 	fill: function(req, res, next){
 		var q = Objekt.find({owner: req.param("post")});

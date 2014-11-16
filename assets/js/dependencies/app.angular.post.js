@@ -2,14 +2,17 @@
 	var app = angular.module("post", ["ui.router"]);
 	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', function(rs, s, h, state){
 		//the post increment for pagination
-		s.postInc = 0;
+		if(!rs.user) rs.user = {};
 		s.post.temp = {};
 		s.post.temp.objekts = [];
 		s.post.temp.objekts[0] = {};
 		s.post.temp.objekts[0].type = "short";
+		if(!rs.user.dPublic) rs.user.dPublic = false;
+		s.post.temp.vis = rs.user.dPublic.toString();
 		s.post.current = 0;
-		s.post.tags = [];
 		rs.posts = [];
+		s.post.tags = [];
+		s.postInc = 0;
 		if(pag){
 			h.get("/post/userFeed?start=0&user="+pag.id).success(function(res){
 				if(res.err) return showErr(res.err);
@@ -36,7 +39,7 @@
 				for(var i=0;i<s.post.tags.length;i++){
 					tags+=s.post.tags[i]+",";
 				}
-				h.put("/post/create?tags="+tags+"&target="+target).success(function(res){
+				h.put("/post/create?tags="+tags+"&target="+target+"&vis="+temp.vis).success(function(res){
 					if(res.err) return showErr(res.err);
 					for(var i=0;i<temp.objekts.length;i++){
 						if(temp.objekts[i].type=="short"){
