@@ -81,14 +81,32 @@ module.exports = {
 		})
 	},
 	leave: function(req, res, next){
+		var c = false;
 		Groupp.findOne({handle: req.param("g")}, function(err, groupp){
 			if(err) return next(err);
 			for(var i=0;i<groupp.members.length;i++){
 				if(groupp.members[i]==req.session.user.id){
 					groupp.members.splice(i,1);
-					return res.json({status: true});
 				}
 			}
+			User.findOne({id: req.session.user.id}, function(err, user){
+				for(var i=0;i<user.groups.length;i++){
+					if(user.groups[i]==groupp.handle){
+						req.session.user.groups.splice(i, 1);
+						user.groups.splice(i, 1);
+						c =true;
+					};
+				};
+				if(c){
+					Groupp.update({id: groupp.id}, groupp, function(err, groupp){
+						if(err) return next(err);
+						User.update({id: user.id}, user, function(err, user){
+							if(err) return next(err);
+							return res.json({status: true});
+						});
+					});
+				};
+			});
 		});
 	},
 	//join by admin, for use with private and semiprivate groups

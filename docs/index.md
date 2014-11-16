@@ -10,11 +10,10 @@ This application is meant to be used entirely separate from the top-level app an
 ##Things to do
 ###groups
 - Do private adding
-- be able to remove yourself from group
 
 ###Posts
 - the keep first 30 post ids in the users JSON
-- allow self posts, to be either public or private. Targeted posts are always public
+- add public/private posting to targeted posts
 - change the public/private setting to default public/private post
 - restrict certain types of posts to certain users
 

@@ -7,7 +7,6 @@
 
 module.exports = {
 	create: function(req, res, next){
-		console.log(req.params.all());
 		var obj = {};
 		var tags = req.param("tags").split(",");
 		var target = req.param("target");
@@ -74,7 +73,6 @@ module.exports = {
 		q.exec(function(err, posts){
 			if(err) return next(err);
 			if(!posts) return res.json({err: "no posts could be found"});
-
 			res.json({posts: posts});
 		});
 	},
