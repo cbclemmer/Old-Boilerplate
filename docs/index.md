@@ -17,16 +17,12 @@ This application is meant to be used entirely separate from the top-level app an
 - change the public/private setting to default public/private post
 - restrict certain types of posts to certain users
 
-###policies
-- add policy to make users and posts show able only to those who can view them
-
 ###core
 - redis
 - make user/show just user.ejs
 
 ###Backend
 - add markdown posting
-- make privacy for users work
 - collect the first one 50 friend IDs
 - be able to delete posts and users
 - make sure a group cannot take a user's username for it's handle and vise versa
