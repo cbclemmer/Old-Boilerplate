@@ -31,9 +31,11 @@ $(document).ready(function(){
 		$('#info').hide();
 	});
 	//make sure the short text is only 140 characters long
-	$("#shortText").keypress(function(){
-		$("#shortText").val($("#shortText").val().substring(0,139));
-	});
+	/*$("#shortText").keypress(function(){
+		if(angular.element($("#pTypee")).scope().post.temp.objekts[(angular.element($("#pTypee")).scope().post.current)].type=="short"){
+			$("#shortText").val($("#shortText").val().substring(0,139));
+		}
+	});*/
 	//when pressing enter at user/show post text area
 	$("#pUser").keypress(function(e){
 		if(e.keyCode==13){

@@ -87,7 +87,15 @@
 						<input type="hidden" ng-model="post.temp.objekts[0].type" value="short">
 					</form>
 					<ul>
-						<li ng-repeat="p in posts"><span ng-show="p.objekts[0].type=='short'"><a href="/user/show/{{p.owner}}">@{{p.ownerName}}</a>: {{p.objekts[0].text}}</span> <i><span style="font-size: .7em" ng-show="p.public">Public</span><span style="font-size: .7em" ng-show="!p.public">Private</span></i></li>
+						<li ng-repeat="p in posts">
+							<a href="/user/show/{{p.owner}}">@{{p.ownerName}}</a>:
+							<span ng-show="!p.name">{{p.objekts[0].text}}</span>
+							<span ng-show="p.name">
+								<a href="/post/show/{{p.slug}}">{{p.name}}</a>
+							</span>
+							<i><span style="font-size: .7em" ng-show="p.public">Public</span>
+							<span style="font-size: .7em" ng-show="!p.public">Private</span></i>
+						</li>
 					</ul>
 					</div>
 					<div class="aside" style="width: 15%;display:inline-table">

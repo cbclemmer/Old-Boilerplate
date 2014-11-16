@@ -1,6 +1,7 @@
 (function(){
 	var app = angular.module("post", ["ui.router"]);
 	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', function(rs, s, h, state){
+		var socket  = io.connect();
 		//the post increment for pagination
 		if(!rs.user) rs.user = {};
 		s.post.temp = {};
@@ -39,7 +40,13 @@
 				for(var i=0;i<s.post.tags.length;i++){
 					tags+=s.post.tags[i]+",";
 				}
-				h.put("/post/create?tags="+tags+"&target="+target+"&vis="+temp.vis).success(function(res){
+				var obj = {
+					tags: tags,
+					target: target,
+					vis: temp.vis
+				}
+				if(temp.an) obj["name"] = temp.name;
+				socket.post("/post/create", obj, function(res){
 					if(res.err) return showErr(res.err);
 					for(var i=0;i<temp.objekts.length;i++){
 						if(temp.objekts[i].type=="short"){
@@ -52,15 +59,33 @@
 							});
 							break;
 						}
+						if(temp.objekts[i].type=="md"){
+							socket.post("/post/objCreate", {
+								text: temp.objekts[i].text,
+								type: temp.objekts[i].type,
+								order: i,
+								post: res[0].id
+							}, function(res){
+								if(res.err) return showErr(res.err);
+								showInfo("Post created");
+								s.post.temp.objekts = [];
+								s.post.temp.objekts[0] = {};
+								s.post.temp.objekts[0].type = "short";
+								rs.posts.unshift(res[0].name);
+							});
+							break;
+						}
 					}
 				});
 			}else{showErr("Please add content to post");}
 		};
 		s.post.lastObj = function(){
-			if(!s.post.temp.objekts[s.post.current].text&&!s.post.temp.objekts[s.post.current].source) {
-				s.post.temp.objekts.splice(s.post.current, 1);
-			}else{showErr("Must add text or source to current part");}
-			s.post.current--;
+			if(s.post.current!=0){
+				if(!s.post.temp.objekts[s.post.current].text&&!s.post.temp.objekts[s.post.current].source) {
+					s.post.temp.objekts.splice(s.post.current, 1);
+				}else{showErr("Must add text or source to current part");}
+				s.post.current--;
+			}
 		};
 		s.post.addObj = function(){
 			if((s.post.temp.objekts[s.post.current].text||s.post.temp.objekts[s.post.current].source)&&s.post.temp.objekts[s.post.current].type!="short"){
@@ -74,6 +99,20 @@
 		s.post.addTag = function(){
 			s.post.tags.push(s.post.tag);
 			s.post.tag = "";
+		};
+		//determines whether you should have a name for your post by seeing if one of them is markdown
+		s.post.an = function(){
+			var c = false;
+			for(var i=0;i<s.post.temp.objekts.length;i++){
+				if(s.post.temp.objekts[i].type=="md"){
+					c = true;
+				}
+			}
+			if(c){
+				s.post.temp.an = true;	
+			}else{
+				s.post.temp.an = false;	
+			}
 		}
 	}]);
 })();

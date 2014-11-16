@@ -3,13 +3,15 @@
     	Current: {{post.current}}
     	<form ng-submit="post.addObj()">
         	Type: <br>
-        	<select ng-model="post.temp.objekts[post.current].type">
+        	<select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
         	    <option value="short" selected="selected">Short</option>
+                <option value="md">Mark Down</option>
         	</select><br>
             <select ng-model="post.temp.vis">
                 <option value="true">Public</option>
                 <option value="false">Private</option>
             </select><br>
+            <input type="text" placeholder="name" ng-model="post.temp.name" ng-show="post.temp.an"><br>
         	<!-- for short -->
         	<textarea ng-model="post.temp.objekts[post.current].text" id="shortText"></textarea><br>
         	{{post.temp.objekts[post.current].text.length||0}}/140<br>
