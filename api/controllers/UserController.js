@@ -16,11 +16,16 @@ module.exports = {
 					User.findOne({username: req.param('username')}, function(err, user){
 						if(err) return next(err);
 						if(!user){
-							User.create(req.params.all(), function(err, user){
-								if(err) return res.json({'err': err});
-								user["password"] = "";
-								res.json({status: true, user: user});
-							});	
+							Groupp.findOne({handle: req.param("username")}, function(err, groupp){
+								if(err) return next(err);
+								if(!groupp){
+									User.create(req.params.all(), function(err, user){
+										if(err) return res.json({'err': err});
+										user["password"] = "";
+										res.json({status: true, user: user});
+									});	
+								}else{return res.json({err: "Username taken by a group"})}
+							});
 						}else{
 							return res.json({status: false, reason: "username"});
 						}

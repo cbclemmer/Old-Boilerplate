@@ -10,24 +10,29 @@ module.exports = {
 		Groupp.findOne({handle: req.param("handle")}, function(err, groupp){
 			if(err) return next(err);
 			if(!groupp){
-				Groupp.create({name: req.param("name"), handle: req.param("handle"), members: [req.session.user.id], admin: [req.session.user.username]}, function(err, groupp){
+				User.findOne({username: req.param("handle")}, function(err, user){
 					if(err) return next(err);
-					if(!groupp) return res.json({err: "Could not create groupp"});
-					User.findOne({id: req.session.user.id}, function(err, user){
-						if(err) return next(err);
-						if(!user.groups) user.groups = [];
-						if(!user.gAdmin) user.gAdmin = [];
-						user.groups.push(groupp.handle);
-						user.gAdmin.push(groupp.handle);
-						if(!req.session.user.groups) req.session.user.groups = [];
-						if(!req.session.user.gAdmin) req.session.user.gAdmin = [];
-						req.session.user.groups.push(groupp.handle);
-						req.session.user.gAdmin.push(groupp.handle);
-						User.update({id: user.id}, user, function(err, user){
+					if(!user){
+						Groupp.create({name: req.param("name"), handle: req.param("handle"), members: [req.session.user.id], admin: [req.session.user.username]}, function(err, groupp){
 							if(err) return next(err);
-							return res.json(groupp);
-						})
-					});
+							if(!groupp) return res.json({err: "Could not create groupp"});
+							User.findOne({id: req.session.user.id}, function(err, user){
+								if(err) return next(err);
+								if(!user.groups) user.groups = [];
+								if(!user.gAdmin) user.gAdmin = [];
+								user.groups.push(groupp.handle);
+								user.gAdmin.push(groupp.handle);
+								if(!req.session.user.groups) req.session.user.groups = [];
+								if(!req.session.user.gAdmin) req.session.user.gAdmin = [];
+								req.session.user.groups.push(groupp.handle);
+								req.session.user.gAdmin.push(groupp.handle);
+								User.update({id: user.id}, user, function(err, user){
+									if(err) return next(err);
+									return res.json(groupp);
+								});
+							});
+						});
+					}else{return res.json({err: "Handle must be unique for groups and users"})}
 				});
 			}else{return res.json({err: "Handle already taken"})}
 		});

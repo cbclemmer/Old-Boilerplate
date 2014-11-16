@@ -158,6 +158,7 @@
 			//create user
 			$http.get("/user/create?username="+t.username+"&name="+t.name+"&email="+t.email+"&password="+t.password).success(function(res){
 				if(res.err) return showErr(res.err);
+				if(res.err) return showErr(res.err);
 				if(res.status){
 					$scope.userCtrl.temp = {};
 					$rootScope.user = res.user;

@@ -18,14 +18,12 @@ This application is meant to be used entirely separate from the top-level app an
 - restrict certain types of posts to certain users
 
 ###core
-- redis
 - make user/show just user.ejs
 
 ###Backend
 - add markdown posting
 - collect the first one 50 friend IDs
 - be able to delete posts and users
-- make sure a group cannot take a user's username for it's handle and vise versa
 - allow users to have different types(admin, teacher, boss etc.) and a heiarchy
 
 ###Frontend
