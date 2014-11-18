@@ -99,8 +99,12 @@ button {
 }
 #feed {
     margin-left: 10%;
-    display: inline-block;
-    width: 58%;
+    display: inline-table;
+    width: 20%;
+}
+#preview{
+    width: 50%;
+    display: inline-table;
 }
 #fRequests {
     float: right;

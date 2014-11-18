@@ -15,8 +15,7 @@
         	<!-- for short -->
         	<!--<textarea  id="shortText"></textarea><br>-->
             <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
-            rows="6" cols="60">Type **Markdown** here.</textarea>
-            <div id="preview"> </div>
+            rows="6" cols="60">Preview **Markdown** here.</textarea><br>
             <script>
                 function Editor(input, preview) {
                     this.update = function () {
@@ -25,10 +24,10 @@
                     input.editor = this;
                 this.update();
                 }
-                var $ = function (id) { return document.getElementById(id); };
-                new Editor($("text-input"), $("preview"));
+                var $i = function (id) { return document.getElementById(id); };
+                new Editor($i("text-input"), $i("preview"));
             </script>
-        	{{post.temp.objekts[post.current].text.length||0}}/140<br>
+        	<span ng-show="post.temp.objekts[post.current].type=='short'">{{post.temp.objekts[post.current].text.length||0}}/140</span><br>
         </form>
         <button ng-click="post.lastObj()">last part</button>
         <button ng-click="post.addObj()">add part</button>
@@ -46,6 +45,7 @@
     </div>
     </form>
 </div>
+<div id="preview" style="display: none"></div>
 <div class="aside">
 <div id="fRequests">
     <h5>Friend Requests</h5>

@@ -103,6 +103,12 @@
 		};
 		//determines whether you should have a name for your post by seeing if one of them is markdown
 		s.post.an = function(){
+			//hides or shows the markdown preview
+			if(s.post.temp.objekts[s.post.current].type=="md"){
+				$("#preview").show();
+			}else{
+				$("#preview").hide();
+			}
 			var c = false;
 			for(var i=0;i<s.post.temp.objekts.length;i++){
 				if(s.post.temp.objekts[i].type=="md"){

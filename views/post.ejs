@@ -31,21 +31,8 @@
 		id: "<%=post.id%>",
 		name: "<%=post.name%>",
 		slug: "<%=post.slug%>",
-		public: "<%=post.public%>",
-		objekts: [
-		<% _.each(post.objekts, function(obj){ %>
-			{
-				type: "<%=obj.type%>",
-				order: "<%=obj.order%>",
-				/*text: "<%=obj.text%>",*/
-				source: "<%=obj.source%>"
-			},
-		<% }); %>
-		]
+		public: "<%=post.public%>"
 	};
-	for(var i=0;i<pag.objekts.length;i++){
-		
-	}
 	var posts = {
 		
 	};
@@ -89,17 +76,12 @@
       			<% _.each(post.objekts, function(obj){ %>
       				<div>
       					<% if(obj.type=="md"){ %>
-      					<textarea id="text-input"rows="1" cols="1" style="display: none;"><%=obj.text%></textarea>
+      					<textarea id="text-input" rows="1" cols="1" style="display: none;"><%=obj.text%></textarea>
             			<div id="preview"> </div>
             			<script>
-                   			preview.innerHTML = markdown.toHTML($("#text-input")[0].innerHTML);
+                        $("#preview").show();
+                   			$("#preview")[0].innerHTML = markdown.toHTML($("#text-input")[0].innerHTML);
             				</script>
-      						<!--<script>
-      							var s  = "<%=obj.text %>";
-      							s = s.replace(/(|)/g, "\n");
-      							console.log(s);
-      							document.write(marked(s));
-      					</script>-->
       					<% }; %>
       				</div>
       			<% }); %>
