@@ -120,6 +120,9 @@
 			}else{
 				s.post.temp.an = false;	
 			}
+		};
+		s.post.showEdit = function(){
+			$("#text-input").show();
 		}
 	}]);
 })();

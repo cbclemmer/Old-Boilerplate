@@ -70,9 +70,10 @@
 				</div>
 				<div class="loggedIn" id="logout"><a href="/session/destroy">Logout</a></div>
 			</div>
-		<div id="main">
+		<div id="main" ng-controller="postController as post">
       		<div class="container">
       			<h1><%=post.name%></h1>
+            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()">Edit</span>
       			<% _.each(post.objekts, function(obj){ %>
       				<div>
       					<% if(obj.type=="md"){ %>
