@@ -49,6 +49,7 @@
 				socket.post("/post/create", obj, function(res){
 					if(res.err) return showErr(res.err);
 					for(var i=0;i<temp.objekts.length;i++){
+						//temp.objekts[i].text = temp.objekts[i].text.replace(/(\r\n|\n|\r)/gm,"");
 						if(temp.objekts[i].type=="short"){
 							h.put("/post/objCreate?text="+temp.objekts[i].text+"&type="+temp.objekts[i].type+"&post="+res.id).success(function(res){
 								if(res.err) return showErr(res.err);

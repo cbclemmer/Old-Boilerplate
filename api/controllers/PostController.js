@@ -93,6 +93,20 @@ module.exports = {
 			});
 		}
 	},
+	show: function(req, res, next){
+		Post.findOne({slug: req.param("id")}, function(err, post){
+			if(err) return next(err);
+			if(!post) return res.view("404");
+			/*var markdown = require("markdown").markdown;
+			for(var i=0;i<post.objekts.length;i++){
+				if(post.objekts[i].type=="md"){
+					post.objekts[i].text = markdown.toHTML(post.objekts[i].text);
+					console.log(post.objekts[i].text);
+				}
+			}*/
+			res.view("post", {post: post, cUser: req.session.user});
+		});
+	},
 	feed: function(req, res, next){
 		var s = req.param("start");
 		if(!req.param("start")) s = 0;

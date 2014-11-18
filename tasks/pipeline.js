@@ -28,6 +28,8 @@ var jsFilesToInject = [
 	'js/dependencies/jquery.js',
 	'js/dependencies/angular.js',
 	'js/dependencies/angular.uirouter.js',
+  'js/dependencies/marked.js',
+  'js/dependencies/markdown.js',
 	'js/dependencies/app.jquery.js',
 	'js/dependencies/app.angular.js',
   'js/dependencies/app.angular.post.js',

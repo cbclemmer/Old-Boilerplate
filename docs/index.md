@@ -30,3 +30,4 @@ This application is meant to be used entirely separate from the top-level app an
 - check box for if you want a slug
 - create some sort of admin page
 - change the private checkbox to a dropdown
+- make sure you cannot have spaces in username or group handle
