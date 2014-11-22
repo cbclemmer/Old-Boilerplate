@@ -43,7 +43,6 @@
     <script src="/js/dependencies/jquery.js"></script>
     <script src="/js/dependencies/angular.js"></script>
     <script src="/js/dependencies/angular.uirouter.js"></script>
-    <script src="/js/dependencies/marked.js"></script>
     <script src="/js/dependencies/markdown.js"></script>
     <script src="/js/dependencies/app.jquery.js"></script>
     <script src="/js/dependencies/app.angular.js"></script>
@@ -71,13 +70,13 @@
 				<div class="loggedIn" id="logout"><a href="/session/destroy">Logout</a></div>
 			</div>
 		<div id="main" ng-controller="postController as post">
-      		<div class="container">
+      		<div class="container" id="pCont">
       			<h1><%=post.name%></h1>
-            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()">Edit</span>
+            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()" style="color:blue;cursor: pointer">Edit</span>
       			<% _.each(post.objekts, function(obj){ %>
       				<div>
       					<% if(obj.type=="md"){ %>
-      					<textarea id="text-input" rows="1" cols="1" style="display: none;"><%=obj.text%></textarea>
+      					<textarea id="text-input" rows="1" cols="1" style="display: none;position: fixed;width: 35%;margin-left: -40%;height: 500px"><%=obj.text%></textarea>
             			<div id="preview"> </div>
             			<script>
                         $("#preview").show();

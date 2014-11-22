@@ -122,6 +122,13 @@ module.exports = {
 			});	
 		});
 	},
+	get: function(req, res, next){
+		Post.findOne({slug: req.param("slug")}, function(err, post){
+			if(err) return next(err);
+			if(!post) return res.json({err: "could not find post"});
+			return res.json(post);
+		});
+	},
 	userFeed: function(req, res, next){},
 	privateFeed: function(req, res, next){
 		var s  = (req.param("start")) ? parseInt(req.param("start")) : 0;

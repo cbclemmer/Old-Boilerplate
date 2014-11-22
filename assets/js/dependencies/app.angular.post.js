@@ -123,6 +123,8 @@
 		};
 		s.post.showEdit = function(){
 			$("#text-input").show();
+			$("#pCont").css({marginLeft: "45%"});
+			$("#preview").css({width: "50%", display: "inline-table"})
 		}
 	}]);
 })();
