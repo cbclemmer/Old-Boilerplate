@@ -28,10 +28,6 @@
 	};
 	var pag  = {
 		type: "post",
-		id: "<%=post.id%>",
-		name: "<%=post.name%>",
-		slug: "<%=post.slug%>",
-		public: "<%=post.public%>"
 	};
 	var posts = {
 		
@@ -43,6 +39,7 @@
     <script src="/js/dependencies/jquery.js"></script>
     <script src="/js/dependencies/angular.js"></script>
     <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/ngSanitize.js"></script>
     <script src="/js/dependencies/markdown.js"></script>
     <script src="/js/dependencies/app.jquery.js"></script>
     <script src="/js/dependencies/app.angular.js"></script>
@@ -71,23 +68,18 @@
 			</div>
 		<div id="main" ng-controller="postController as post">
       		<div class="container" id="pCont">
-      			<h1><%=post.name%></h1>
-            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()" style="color:blue;cursor: pointer">Edit</span>
-      			<% _.each(post.objekts, function(obj){ %>
-      				<div>
-      					<% if(obj.type=="md"){ %>
-      					<textarea id="text-input" rows="1" cols="1" style="display: none;position: fixed;width: 35%;margin-left: -40%;height: 500px"><%=obj.text%></textarea>
-            			<div id="preview"> </div>
-            			<script>
-                        $("#preview").show();
-                   			$("#preview")[0].innerHTML = markdown.toHTML($("#text-input")[0].innerHTML);
-            				</script>
-      					<% }; %>
-      				</div>
-      			<% }); %>
+      			<h1>{{postt.name}}</h1>
+            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()" style="color:blue;cursor: pointer">Edit</span><br>
+            <div id="preview">
+            	<div ng-repeat="o in postt.objekts" ng-bind-html="o.text"></div>
+            </div>
+            <script>
+              var socket  = io.connect();
+              $("#preview").show();
+            </script>
       		</div>
 		</div>
-    </div>
+	</div>
     <!--TEMPLATES-->
     
     <!--TEMPLATES END-->

@@ -35,6 +35,7 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
+		console.log($rootScope);
 		if(pag!="") pag.joined=false;
 		if(user!="") $rootScope.user = user;
 		$http.get("/user/get").success(function(res){

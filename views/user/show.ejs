@@ -13,7 +13,25 @@
     <!--STYLES END-->
   </head>
   <body>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
+    <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/ngSanitize.js"></script>
+    <script src="/js/dependencies/markdown.js"></script>
+    <script src="/js/dependencies/app.jquery.js"></script>
+    <script src="/js/dependencies/app.angular.js"></script>
+    <script src="/js/dependencies/app.angular.post.js"></script>
+    <script src="/js/dependencies/app.angular.search.js"></script>
+    <script src="/js/dependencies/app.angular.settings.js"></script>
+    <script src="/js/dependencies/app.angular.group.js"></script>
+    <script src="/js/dependencies/app.angular.user.js"></script>
+    <script src="/js/dependencies/app.angular.directives.js"></script>
+    <script src="/js/dependencies/bootstrap.min.js"></script>
+    <!--SCRIPTS END-->
     <script type="text/javascript">
+    var socket  = io.connect();
 	var user  = {
 		id: "<%=cUser.id%>",
 		name: "<%=cUser.name %>",
@@ -38,22 +56,6 @@
 		
 	}
     </script>
-    <!--SCRIPTS-->
-    <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/js/dependencies/jquery.js"></script>
-    <script src="/js/dependencies/angular.js"></script>
-    <script src="/js/dependencies/angular.uirouter.js"></script>
-    <script src="/js/dependencies/markdown.js"></script>
-    <script src="/js/dependencies/app.jquery.js"></script>
-    <script src="/js/dependencies/app.angular.js"></script>
-    <script src="/js/dependencies/app.angular.post.js"></script>
-    <script src="/js/dependencies/app.angular.search.js"></script>
-    <script src="/js/dependencies/app.angular.settings.js"></script>
-    <script src="/js/dependencies/app.angular.group.js"></script>
-    <script src="/js/dependencies/app.angular.user.js"></script>
-    <script src="/js/dependencies/app.angular.directives.js"></script>
-    <script src="/js/dependencies/bootstrap.min.js"></script>
-    <!--SCRIPTS END-->
 	<div ng-app="app" ng-controlller="userController as use">
 			<div id="err"></div>
             <div id="info"></div>

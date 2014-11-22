@@ -1,7 +1,6 @@
 (function(){
-	var app = angular.module("post", ["ui.router"]);
-	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', function(rs, s, h, state){
-		var socket  = io.connect();
+	var app = angular.module("post", ["ui.router", "ngSanitize"]);
+	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', '$sanitize', function(rs, s, h, state, $sanitize){
 		//the post increment for pagination
 		if(!rs.user) rs.user = {};
 		s.post.temp = {};
@@ -14,6 +13,19 @@
 		rs.posts = [];
 		s.post.tags = [];
 		s.postInc = 0;
+		if(window.location.pathname.search("/post/show")!=-1){
+			var slug = window.location.href.replace("http://127.0.0.1:1337/post/show/", "");
+        	h.get("/post/get?slug="+ slug).success(function(res){
+        	  	if(res.err) return showErr(res.err);
+          		for(var i=0;i<res.objekts.length;i++){
+          			if(res.objekts[i].type="md"){
+          				res.objekts[i].text = markdown.toHTML(res.objekts[i].text);
+         	 		}
+          		}
+          	 	rs.postt = res;
+        	});
+		}
+        console.log(rs.postt);
 		if(pag){
 			h.get("/post/userFeed?start=0&user="+pag.id).success(function(res){
 				if(res.err) return showErr(res.err);
