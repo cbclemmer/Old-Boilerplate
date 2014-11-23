@@ -19,36 +19,19 @@ module.exports = {
 		obj["hearts"] = 0;
 		obj["objekts"] = [];
 		//if it is markdown create a slug
-		if(obj.name){
-			var n = obj.name;
-			n = n.replace(/^\s+|\s+$/g, ''); // trim
-			n = n.toLowerCase();
-  
-  			// remove accents, swap ñ for n, etc
-  			var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  			var to   = "aaaaeeeeiiiioooouuuunc------";
-  			for (var i=0, l=from.length ; i<l ; i++) {
-    			n = n.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-  			}
-
-  			n = n.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-    		.replace(/\s+/g, '-') // collapse whitespace and replace by -
-    		.replace(/-+/g, '-'); // collapse dashes
-    		var bcrypt = require('bcrypt');
-    		n = req.session.user.username+"-"+n;
-    		obj.slug = n;
-		}
+		if(obj.name) obj.slug = miscServ.slug(obj.name);
 		Post.create(obj, function(err, post){
 			if(err) return next(err);
 			//add a hash of id to the end of slug so you know it is unique
-			post.slug = post.slug+"-"+post.slug.hashCode();
+			if(post.slug) post.slug = post.slug+"-"+post.slug.hashCode();
 			Post.update({id: post.id}, post, function(err, post){
 				if(err) return next(err);
 				res.json(post);
-			})
+			});
 		});
 	},
 	objCreate: function(req, res, next){
+		var type = req.param("type") ? req.param("type") : "short";
 		var obj = {
 			owner: req.param("post"),
 			type: req.param("type"),
@@ -94,18 +77,7 @@ module.exports = {
 		}
 	},
 	show: function(req, res, next){
-		Post.findOne({slug: req.param("id")}, function(err, post){
-			if(err) return next(err);
-			if(!post) return res.view("404");
-			/*var markdown = require("markdown").markdown;
-			for(var i=0;i<post.objekts.length;i++){
-				if(post.objekts[i].type=="md"){
-					post.objekts[i].text = markdown.toHTML(post.objekts[i].text);
-					console.log(post.objekts[i].text);
-				}
-			}*/
-			res.view("post", {post: post, cUser: req.session.user});
-		});
+		res.view("post");
 	},
 	feed: function(req, res, next){
 		var s = req.param("start");

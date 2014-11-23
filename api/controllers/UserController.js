@@ -35,19 +35,6 @@ module.exports = {
 				}
 			});
 		},
-		show: function(req, res, next){
-			if(req.param("id")!=undefined){
-				User.findOne(req.param("id"), function(err, user){
-					user["password"]= "";
-					user["createdAt"]="";
-					user["updatedAt"]="";
-					user["fr"] = user.friendRequests;
-					res.view("user/show", {user: user, cUser: req.session.user});
-				});
-			}else{
-				res.view("user/show", {user: req.session.user, cUser: req.session.user});
-			}
-		},
 		//get current user
 		get: function(req, res, next){
 			if(req.session.auth){return res.json({'status': true, 'user': req.session.user});}

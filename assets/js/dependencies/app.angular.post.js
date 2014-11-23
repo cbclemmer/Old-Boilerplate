@@ -46,6 +46,7 @@
 		};
 		s.post.create = function(target){
 			var temp = s.post.temp;
+			if((!target||target=="")&&rs.pag) target = rs.pag.id;
 			if(temp.objekts[0].text.length>0||temp.objekts[0].source.length>0){
 				var tags = "";
 				for(var i=0;i<s.post.tags.length;i++){
@@ -62,7 +63,7 @@
 					for(var i=0;i<temp.objekts.length;i++){
 						//temp.objekts[i].text = temp.objekts[i].text.replace(/(\r\n|\n|\r)/gm,"");
 						if(temp.objekts[i].type=="short"){
-							h.put("/post/objCreate?text="+temp.objekts[i].text+"&type="+temp.objekts[i].type+"&post="+res.id).success(function(res){
+							h.put("/post/objCreate?text="+temp.objekts[i].text+"&type="+temp.objekts[i].type+"&post="+res[0].id).success(function(res){
 								if(res.err) return showErr(res.err);
 								showInfo("Post created");
 								s.post.temp.objekts[0].text = "";

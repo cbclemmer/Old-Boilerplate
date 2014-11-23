@@ -78,18 +78,20 @@ module.exports = {
 									return res.json({user: req.session.user, pag: pag});
 								}else{
 									user = req.session.user;
+									if(user.friendRequests){
 									for(var i=0;i<user.friendRequests.length;i++){
 										if(user.friendRequests[i]==pag.id){
 											pag.request = true;
 											break;
 										}
-									}
+									}}
+									if(user.requestsSent){
 									for(var i=0;i<user.requestsSent.length;i++){
 										if(user.requestsSent[i]==pag.id){
 											pag.request = true;
 											break;
 										}
-									}
+									}}
 									pag.friendsWith=false;
 									pag.friends = users;
 									pag.type = "user";

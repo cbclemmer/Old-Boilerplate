@@ -30,6 +30,10 @@
     <script src="/js/dependencies/app.angular.directives.js"></script>
     <script src="/js/dependencies/bootstrap.min.js"></script>
     <!--SCRIPTS END-->
+    <script type="text/javascript">
+    	var socket  = io.connect();
+        $("#preview").show();
+    </script>
 	<div ng-app="app" ng-controlller="userController as use">
 			<div id="err"></div>
             <div id="info"></div>

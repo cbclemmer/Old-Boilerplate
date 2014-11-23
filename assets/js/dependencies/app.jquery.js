@@ -29,22 +29,12 @@ $(document).ready(function(){
 		$('#err').hide();
 		$('#info').hide();
 	});
-	//make sure the short text is only 140 characters long
-	/*$("#shortText").keypress(function(){
-		if(angular.element($("#pTypee")).scope().post.temp.objekts[(angular.element($("#pTypee")).scope().post.current)].type=="short"){
-			$("#shortText").val($("#shortText").val().substring(0,139));
-		}
-	});*/
 	//when pressing enter at user/show post text area
 	$("#pUser").keypress(function(e){
 		if(e.keyCode==13){
-      angular.element($("#pUser")[0].parentElement).scope().post.create(pag.id);
+      angular.element($("#pUser")[0].parentElement).scope().post.create();
     }
 	});
-	/*$("#gSelect").change(function(){
-		console.log("change");
-		angular.element($("#gSelect")).scope().group.getAdmin($("#gSelect").val());
-	});*/
 	$("#searchBar").click(function(event){
 	  $('.opt').hide();
 	  $('#search').val("");
