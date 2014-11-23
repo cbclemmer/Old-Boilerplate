@@ -8,8 +8,12 @@
 module.exports = {
 		//all asynchronous, no page loads ftw
 		create: function(req, res, next){
+			var email = req.param("email");
+			if(email.search(" ")!=-1) return res.json({err: "email has spaces");
+			if(req.param("username").search(" ")!=-1) return res.json({err: "username has spaces"});
+			email = email.toLowerCase();
 			//make sure that the email is not already taken
-			User.findOne({email: req.param('email')}, function(err, user){
+			User.findOne({email: email}, function(err, user){
 				if(err) return next(err);
 				if(!user){
 					//make sure that the username is not already taken

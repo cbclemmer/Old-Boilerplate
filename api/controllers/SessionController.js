@@ -8,8 +8,9 @@
 module.exports = {
 	create: function(req, res, next){
 		var bcrypt = require('bcrypt');
+		var email = req.param("email").toLowerCase();
 		if(!req.session.auth){
-			User.findOne({email: req.param('email')}, function(err, user){
+			User.findOne({email: email}, function(err, user){
 				if(err) return res.json({'err': err});
 				if(!user) return res.json({'login': false, 'reason': 'No user by that email'});
 				bcrypt.compare(req.param('password'), user.password, function(err, obj){
