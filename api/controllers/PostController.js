@@ -20,6 +20,15 @@ module.exports = {
 		obj["objekts"] = [];
 		//if it is markdown create a slug
 		if(obj.name) obj.slug = miscServ.slug(obj.name, req.session.user.username);
+		obj.objekts = [];
+		objekts = req.param("objekts");
+		for(var i=0;i<objekts.length;i++){
+			obj.objekts[i] = {
+				text: objekts[i].text,
+				type: objekts[i].type,
+				order: i
+			}
+		}
 		Post.create(obj, function(err, post){
 			if(err) return next(err);
 			//add a hash of id to the end of slug so you know it is unique
@@ -29,52 +38,6 @@ module.exports = {
 				res.json(post);
 			});
 		});
-	},
-	objCreate: function(req, res, next){
-		var type = req.param("type") ? req.param("type") : "short";
-		var obj = {
-			owner: req.param("post"),
-			type: req.param("type"),
-			text: req.param("text"),
-		};
-		if(obj.type=="short"){
-			obj["order"] = 0;
-			if(!(obj.text.length>139)){
-				Objekt.create(obj, function(err, obj){
-					if(err) return next(err);
-					Post.findOne({id: req.param("post")}, function(err, post){
-						if(err) return next(err);
-						if(!post) return res.json({err: "Could not find(objCreate)"});
-						post.objekts.push(obj);
-						Post.update({id: post.id}, post, function(err, post){
-							if(err) return next(err);
-							if(!post) return res.json({err: "Could not update(objCreate)"});
-							return res.json(post);
-						});
-					});
-				});	
-			}else{
-				Post.destroy({id: obj.owner}, function(err){
-					if(err) return next(err);
-					return res.json({err: "Post must be under 140 characters"});
-				});
-			}
-		};
-		if(obj.type=="md"){
-			obj["order"] = req.param("order");
-			Objekt.create(obj, function(err, obj){
-				if(err) return next(err);
-				Post.findOne({id: obj.owner}, function(err, post){
-					if(err) return next(err);
-					if(!post) return res.json("Could not find post");
-					post.objekts.push(obj);
-					Post.update({id: post.id}, post, function(err, post){
-						if(err) return next(err);
-						res.json(post);
-					})
-				});
-			});
-		}
 	},
 	edit: function(req, res, next){
 		var p = req.params.all();

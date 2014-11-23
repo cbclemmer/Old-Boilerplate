@@ -9,7 +9,7 @@ module.exports = {
 		//all asynchronous, no page loads ftw
 		create: function(req, res, next){
 			var email = req.param("email");
-			if(email.search(" ")!=-1) return res.json({err: "email has spaces");
+			if(email.search(" ")!=-1) return res.json({err: "email has spaces"});
 			if(req.param("username").search(" ")!=-1) return res.json({err: "username has spaces"});
 			email = email.toLowerCase();
 			//make sure that the email is not already taken

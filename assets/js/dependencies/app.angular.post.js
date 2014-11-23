@@ -47,47 +47,28 @@
 		s.post.create = function(target){
 			var temp = s.post.temp;
 			if((!target||target=="")&&rs.pag) target = rs.pag.id;
+			//if the text is not blank
 			if(temp.objekts[0].text.length>0||temp.objekts[0].source.length>0){
 				var tags = "";
+				//get the tags
 				for(var i=0;i<s.post.tags.length;i++){
 					tags+=s.post.tags[i]+",";
 				}
 				var obj = {
 					tags: tags,
 					target: target,
-					vis: temp.vis
+					vis: temp.vis,
+					objekts: temp.objekts
 				}
 				if(temp.an) obj["name"] = temp.name;
 				socket.post("/post/create", obj, function(res){
 					if(res.err) return showErr(res.err);
-					for(var i=0;i<temp.objekts.length;i++){
-						//temp.objekts[i].text = temp.objekts[i].text.replace(/(\r\n|\n|\r)/gm,"");
-						if(temp.objekts[i].type=="short"){
-							h.put("/post/objCreate?text="+temp.objekts[i].text+"&type="+temp.objekts[i].type+"&post="+res[0].id).success(function(res){
-								if(res.err) return showErr(res.err);
-								showInfo("Post created");
-								s.post.temp.objekts[0].text = "";
-								rs.posts.unshift(res[0]);
-							});
-							break;
-						}
-						if(temp.objekts[i].type=="md"){
-							socket.post("/post/objCreate", {
-								text: temp.objekts[i].text,
-								type: temp.objekts[i].type,
-								order: i,
-								post: res[0].id
-							}, function(res){
-								if(res.err) return showErr(res.err);
-								showInfo("Post created");
-								s.post.temp.objekts = [];
-								s.post.temp.objekts[0] = {};
-								s.post.temp.objekts[0].type = "short";
-								rs.posts.unshift(res[0].name);
-							});
-							break;
-						}
-					}
+					showInfo("Post created");
+					s.post.temp.objekts = [];
+					s.post.temp.objekts[0] = {};
+					s.post.temp.objekts[0].type = "short";
+					s.post.temp.objekts[0].text = "";
+					rs.posts.unshift(res[0].name);
 				});
 			}else{showErr("Please add content to post");}
 		};
@@ -138,12 +119,17 @@
 			$("#editor").show();
 			//$("#editor").css({width: "48%", display: "inline-table"});
 			$("#preview").css({marginLeft: "85%"});
-            new Editor($i("text-input"),$("#preview").find("div")[0]);
+            rs.editor = new Editor($i("text-input"),$("#preview").find("div")[0]);
 		};
 		s.post.closeEdit = function(){
 			$("#pCont").css({marginLeft: "auto"});
 			$("#editor").hide();
 			$("#preview").css({marginLeft: "auto"});
+		}
+		//change which part you are editing
+		s.post.cEdit = function(order){
+			s.post.current  = order;
+			$("#text-input")[0].editor.change($i("text-input"),$("#preview").find("div")[order]);
 		}
 		s.post.edit = function(){
 			var obj  = rs.postt;
@@ -155,7 +141,9 @@
 			socket.post("/post/edit", obj, function(res){
 				if(res.err) return showErr(res.err);
 				showInfo("Changes saved Successfully");
-				$("#text-input")[0].editor.update()
+				for(var i=0;i<rs.postt.objekts.length;i++){
+					$("#preview").find("div")[i].innerHTML = markdown.toHTML(rs.postt.objekts[i].text);
+				}
 			});
 		};
 		s.post.destroy = function(id){
@@ -168,6 +156,6 @@
 					}
 				}
 			});
-		}
+		};
 	}]);
 })();

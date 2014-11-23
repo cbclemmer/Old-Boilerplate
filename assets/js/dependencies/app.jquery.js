@@ -2,11 +2,13 @@ function Editor(input, preview) {
     this.update = function () {
         preview.innerHTML = markdown.toHTML(input.value);
     };
+    this.change  =function(i, p) {
+    	preview = p;
+    	input = i;
+    }
 	input.editor = this;
     this.update();
-    }
-    var $i = function (id) { return document.getElementById(id); 
-};
+}
 function showErr(s){
 	$('#err').empty();
 	$('#err').hide();
@@ -30,6 +32,7 @@ function showInfo(s){
 console.log("yes");
 $("#gSelect").on("change", function(){
 });
+var $i = function (id) { return document.getElementById(id);};
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();

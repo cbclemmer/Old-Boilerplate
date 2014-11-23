@@ -72,7 +72,7 @@ button {
 #err {
     text-align: center;
     font-size: 25px;
-    position: absolute;
+    position: fixed;
     margin-left: 20%;
     width: 50%;
     color: white;
@@ -84,7 +84,7 @@ button {
 #info{
     text-align: center;
     font-size: 25px;
-    position: absolute;
+    position: fixed;
     margin-left: 20%;
     width: 50%;
     color: white;
