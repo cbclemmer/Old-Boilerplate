@@ -102,9 +102,36 @@ button {
     display: inline-table;
     width: 20%;
 }
+#editor {
+    display: inline-table;
+    width: 48%;
+    height: 700px;
+    position: fixed;
+}
+#editor ul{
+    width: 20%;
+    display: inline-block;
+}
+#editor ul li{
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+#mdEdit {
+    width: 70%;
+    display: inline-block;
+    margin-top: 20px;
+}
+#mdEdit textarea{
+    width: 100%;
+    height: 500px;
+}
 #preview{
     width: 50%;
     display: inline-table;
+}
+#preview img{
+    width: 100%;
 }
 #fRequests {
     float: right;

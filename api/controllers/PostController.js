@@ -19,7 +19,7 @@ module.exports = {
 		obj["hearts"] = 0;
 		obj["objekts"] = [];
 		//if it is markdown create a slug
-		if(obj.name) obj.slug = miscServ.slug(obj.name);
+		if(obj.name) obj.slug = miscServ.slug(obj.name, req.session.user.username);
 		Post.create(obj, function(err, post){
 			if(err) return next(err);
 			//add a hash of id to the end of slug so you know it is unique
@@ -76,6 +76,17 @@ module.exports = {
 			});
 		}
 	},
+	edit: function(req, res, next){
+		var p = req.params.all();
+		if(p.owner==req.session.user.id){
+			Post.update({id: p.id}, p, function(err, post){
+				if(err) return next(err);
+				return res.json({status: true});
+			});
+		}else{
+			return res.json({err: "This is not your post..."});
+		}
+	},
 	show: function(req, res, next){
 		res.view("post");
 	},
@@ -130,6 +141,21 @@ module.exports = {
 			if(!obj) return res.json({err: "could not get post"});
 			res.json(obj);
 		});
+	},
+	destroy: function(req, res, next){
+		Post.findOne({id: req.param("post")}, function(err, post){
+			if(err) return next(err);
+			if(!post) return res.json({err: "could not find post"});
+			if(post.owner==req.session.user.id){
+				Objekt.destroy({owner: post.id}, function(err, obj){
+					if(err) return next(err);
+					Post.destroy({id: post.id}, function(err, post){
+						if(err) return next(err);
+						res.json({status: true});
+					});
+				});
+			}
+		})
 	}
 };
 

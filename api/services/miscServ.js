@@ -1,5 +1,5 @@
 module.exports = {
-	slug: function(n){
+	slug: function(n, un){
 		n = n.replace(/^\s+|\s+$/g, ''); // trim
 		n = n.toLowerCase();
 		// remove accents, swap ñ for n, etc
@@ -11,8 +11,7 @@ module.exports = {
   		n = n.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
     	.replace(/\s+/g, '-') // collapse whitespace and replace by -
     	.replace(/-+/g, '-'); // collapse dashes
-    	var bcrypt = require('bcrypt');
-    	n = req.session.user.username+"-"+n;
+    	n = un+"-"+n;
     	return n;
 	}
 }

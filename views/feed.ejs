@@ -41,7 +41,7 @@
     <h4>Preview</h4>
     <div ng-repeat="obj in post.temp.objekts">
         <h6>{{obj.type}}</h6>
-        <span ng-show="obj.type=='short'">{{obj.text}}</span>
+        <span ng-show="obj.type=='short'||obj.type=='md'">{{obj.text}}</span>
     </div>
     </form>
 </div>

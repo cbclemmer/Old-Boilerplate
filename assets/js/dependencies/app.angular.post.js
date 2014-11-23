@@ -20,7 +20,7 @@
         	  	if(res.err) return showErr(res.err);
           		for(var i=0;i<res.objekts.length;i++){
           			if(res.objekts[i].type="md"){
-          				res.objekts[i].text = markdown.toHTML(res.objekts[i].text);
+          				res.objekts[i].html = markdown.toHTML(res.objekts[i].text);
          	 		}
           		};
           		h.get("/user/get").success(function(res){
@@ -134,8 +134,40 @@
 		};
 		s.post.showEdit = function(){
 			$("#text-input").show();
-			$("#pCont").css({marginLeft: "45%"});
-			$("#preview").css({width: "50%", display: "inline-table"})
+			$("#pCont").css({marginLeft: "5%"});
+			$("#editor").show();
+			//$("#editor").css({width: "48%", display: "inline-table"});
+			$("#preview").css({marginLeft: "85%"});
+            new Editor($i("text-input"),$("#preview").find("div")[0]);
+		};
+		s.post.closeEdit = function(){
+			$("#pCont").css({marginLeft: "auto"});
+			$("#editor").hide();
+			$("#preview").css({marginLeft: "auto"});
+		}
+		s.post.edit = function(){
+			var obj  = rs.postt;
+			for(var i=0;i<obj.objekts.length;i++){
+				if(obj.objekts[i].html&&obj.objekts[i].html!="") obj.objekts[i].html = "";
+				delete obj.objekts[i]["$$hashKey"];
+			}
+			//var obj = rs.postt.objekts
+			socket.post("/post/edit", obj, function(res){
+				if(res.err) return showErr(res.err);
+				showInfo("Changes saved Successfully");
+				$("#text-input")[0].editor.update()
+			});
+		};
+		s.post.destroy = function(id){
+			h.post("/post/destroy?post="+id).success(function(res){
+				if(res.err) return showErr(res.err);
+				for(var i=0;i<rs.posts.length;i++){
+					if(rs.posts[i].id==id){
+						rs.posts.splice(i, 1);
+						break;
+					}
+				}
+			});
 		}
 	}]);
 })();

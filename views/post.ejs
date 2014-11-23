@@ -48,9 +48,19 @@
 		<div id="main" ng-controller="postController as post">
       		<div class="container" id="pCont">
       			<h1>{{postt.name}}</h1>
-            <span ng-show="user.id==cUser.id" ng-click="post.showEdit()" style="color:blue;cursor: pointer">Edit</span><br>
+            <span ng-show="user.id==postt.owner" ng-click="post.showEdit()" style="color:blue;cursor: pointer">Edit</span><br>
+            <div id="editor">
+                <ul>
+                    <li ng-repeat="o in postt.objekts">{{o.order}}</li>
+                </ul>
+                <div id="mdEdit" ng-show="postt.objekts[post.current].type=='md'">
+                    <textarea ng-model="postt.objekts[post.current].text" id="text-input" oninput="this.editor.update()">{{post.objekt[post.current].text}}</textarea>
+                </div>
+                <div id="picEdit" ng-show="postt.objekts[postt.current].type=='pic'"></div>
+                <button ng-click="post.closeEdit()">Close</button>&emsp;<button ng-click="post.edit()">Save</button>
+            </div>
             <div id="preview">
-            	<div ng-repeat="o in postt.objekts" ng-bind-html="o.text"></div>
+            	<div ng-repeat="o in postt.objekts" ng-bind-html="o.html"></div>
             </div>
             <script>
               var socket  = io.connect();
