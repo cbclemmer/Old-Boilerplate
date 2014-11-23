@@ -8,14 +8,104 @@
 module.exports = {
 		// to get a single entity
 		get: function(req, res, next){
-			var q;
-			if(req.param('model')=='user'){
-				q=User.findOne(req.param('id'));
-				q.exec(function(err, obj){
-					if(err) return res.json({'err': err});
-					return res.json(obj);
+			var handle = req.param("handle")
+			if(handle=="show") handle = req.session.user.username;
+			//gets everything for the page show
+			var pag = {};
+			//check if the target is a user
+			User.findOne({username: handle}, function(err, user){
+				if(err) return next(err);
+				//if it is not
+				if(!user){
+					//check if group
+					Groupp.findOne({handle: handle}, function(err, groupp){
+						if(err) return next(err);
+						//if the handle is not a group either, throw an error
+						if(!groupp) return res.json({err: "Cannot find"});
+						pag = groupp;
+						User.find({id: {$in: groupp.members}}, function(err, users){
+							if(err) return next(err);
+							for(var i=0;i<users.length;i++){
+								users[i] = cleanService.cleanUser(users[i]);
+							}
+							var user = req.session.user;
+							for(var i=0;i<user.groups.length;i++){
+								if(user.groups[i]==groupp.handle){
+									pag.joined = true;
+									break;
+								}
+							}
+							for(var i=0;i<groupp.requests.length;i++){
+								if(groupp.requests[i]==user.username){
+									pag.request = true;
+									break;
+								}
+							}
+							pag.type="group";
+							pag.mJSON = users;
+							return res.json({user: req.session.user, pag: pag});
+						});
+					});
+					return;
+				}
+				//rid of excess fields
+				user = cleanService.cleanUser(user);
+				pag = user;
+				//find the friends of the user
+				Friend.find({where: {owner: user.id}, limit: 100}, function(err, friends){
+					if(err) return next(err);
+					//if he has friends
+					if(friends.length>0){
+						//get the full JSON of the users
+						var f = [];
+						for(var i=0;i<friends.length;i++){
+							f.push(friends[i].user);
+						}
+						User.find({id: {$in: f}}, function(err, users){
+							if(err) return next(err);
+							//clean the users
+							var u = [];
+							for(var i=0;i<users.length;i++){
+								users[i] = cleanService.cleanUser(users[i]);
+								u.push(users[i].id);
+							}
+							Friend.findOne({owner: req.session.user.id, user: pag.id}, function(err, friend){
+								if(err) return next(err);
+								if(friend){
+									pag.friendsWith=true;
+									pag.friends = users;
+									pag.type = "user";
+									return res.json({user: req.session.user, pag: pag});
+								}else{
+									user = req.session.user;
+									for(var i=0;i<user.friendRequests.length;i++){
+										if(user.friendRequests[i]==pag.id){
+											pag.request = true;
+											break;
+										}
+									}
+									for(var i=0;i<user.requestsSent.length;i++){
+										if(user.requestsSent[i]==pag.id){
+											pag.request = true;
+											break;
+										}
+									}
+									pag.friendsWith=false;
+									pag.friends = users;
+									pag.type = "user";
+									return res.json({user: req.session.user, pag: pag});
+								};
+							});
+						});
+						//return so you don't return the res twice... if that's possible?
+						return;
+					}
+					//if he has no friends  :(
+					pag.friends = [];
+					pag.type = "user";
+					return res.json({user: req.session.user, pag: pag});
 				});
-			}			
+			});
 		},
 		search: function(req, res, next){
 			//s is query

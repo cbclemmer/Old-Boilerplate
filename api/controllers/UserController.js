@@ -96,7 +96,7 @@ module.exports = {
 				if(err) return next(err);
 				if(!friends) return res.json({err: "No friends"});
 				res.json(friends);
-			})
+			});
 		},
 		addFriend: function(req, res, next){
 			User.findOne({id: req.session.user.id}, function(err, user){

@@ -22,7 +22,11 @@
           			if(res.objekts[i].type="md"){
           				res.objekts[i].text = markdown.toHTML(res.objekts[i].text);
          	 		}
-          		}
+          		};
+          		h.get("/user/get").success(function(res){
+          			if(res.err) return showErr(res.err);
+          			rs.user = res.user;
+          		});
           	 	rs.postt = res;
           	 	rs.pag = "post";
         	});

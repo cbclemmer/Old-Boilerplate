@@ -1,26 +1,6 @@
 (function(){
 	var app = angular.module("group", []);
 		app.controller("groupController", ['$http', '$scope', '$rootScope', function($http, s, rs){
-		if(user){
-			for(var i=0;i<user.groups.length;i++){
-				if(user.groups[i]==pag.handle){
-					pag.joined=true;
-				}
-			}
-			if(pag!=""&&pag.members){
-				//member JSON
-				pag.mJSON = [];
-				for(var i=0;i<pag.members.length;i++){
-					$http.get("/user/getOne?user="+pag.members[i]).success(function(res){
-						pag.mJSON.push(res);
-					});
-				};
-			};
-			$http.get("/group/getRequest?g="+pag.handle).success(function(res){
-				if(res.err) return showErr(res.err);
-				pag.request = res.status;
-			});
-		};
 		s.group.get = function(g){
 			$http.get("/group/get?handle="+g).success(function(res){
 				if(res.err) return showErr(res.err);

@@ -2,7 +2,7 @@
 	//module defines controllers
 	var app = angular.module("app", ['ui.router', 'group', 'search', 'post', 'settings']);
 	app.config(function($stateProvider, $urlRouterProvider){
-		if(user=="") $urlRouterProvider.otherwise('/login');
+		if(window.location.pathname.length<2) $urlRouterProvider.otherwise('/login');
 		$stateProvider
 		.state('login', {
 			url: '/login', 
@@ -35,9 +35,8 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
-		if(pag!="") pag.joined=false;
-		if(user!="") $rootScope.user = user;
-		$http.get("/user/get").success(function(res){
+		if(window.location.pathname.search("/api")==-1){
+			$http.get("/user/get").success(function(res){
 			if(res.status){
 				if(!user) $rootScope.user = res.user;
 				if(Boolean($rootScope.user.private)&&document.getElementById("privateChk")) {
@@ -92,6 +91,7 @@
 				$('.loggedIn').hide();
 			}
 		});
+		}
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){

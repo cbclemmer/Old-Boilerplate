@@ -20,7 +20,6 @@ function showInfo(s){
 }
 console.log("yes");
 $("#gSelect").on("change", function(){
-	console.log("yes");
 });
 $(document).ready(function(){
 	$('#err').hide();
