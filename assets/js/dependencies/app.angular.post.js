@@ -13,8 +13,9 @@
 		rs.posts = [];
 		s.post.tags = [];
 		s.postInc = 0;
+		//get the text of the posts
 		if(window.location.pathname.search("/post/show")!=-1){
-			var slug = window.location.href.replace("http://127.0.0.1:1337/post/show/", "");
+			var slug = window.location.pathname.split("/")[(window.location.pathname.split("/").length)-1];
         	h.get("/post/get?slug="+ slug).success(function(res){
         	  	if(res.err) return showErr(res.err);
           		for(var i=0;i<res.objekts.length;i++){
@@ -23,15 +24,9 @@
          	 		}
           		}
           	 	rs.postt = res;
+          	 	rs.pag = "post";
         	});
-		}
-        console.log(rs.postt);
-		if(pag){
-			h.get("/post/userFeed?start=0&user="+pag.id).success(function(res){
-				if(res.err) return showErr(res.err);
-				rs.posts = res.posts;
-			});
-		}
+		};
 		s.post.feed = function(){
 			h.get("/post/feed?start="+s.postInc).success(function(res){
 				if(res.err) return showErr(res.err);
@@ -68,7 +63,6 @@
 								showInfo("Post created");
 								s.post.temp.objekts[0].text = "";
 								rs.posts.unshift(res[0]);
-								console.log(rs.posts);
 							});
 							break;
 						}

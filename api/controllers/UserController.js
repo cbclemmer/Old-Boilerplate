@@ -54,14 +54,29 @@ module.exports = {
 			else return res.json({"status": false});
 		},
 		getOne: function(req, res, next){
-			User.findOne({id: req.param('user')}, function(err, user){
-				if(err) return next(err);
-				if(!user) return console.log("Could not find user(getOne: "+req.param('user')+")");
-				user['password']="";
-				user['createdAt']="";
-				user['updatedAt']="";
-				res.json(user);
-			});
+			if(req.param("user")){
+				User.findOne({id: req.param('user')}, function(err, user){
+					if(err) return next(err);
+					if(!user) return console.log("Could not find user(getOne: "+req.param('user')+")");
+					user['password']="";
+					user['createdAt']="";
+					user['updatedAt']="";
+					res.json(user);
+				});
+			}else if(req.param("username")){
+				if(req.param("username")!="show"){
+					User.findOne({username: req.param('username')}, function(err, user){
+						if(err) return next(err);
+						if(!user) return console.log("Could not find user(getOne: "+req.param('username')+")");
+						user['password']="";
+						user['createdAt']="";
+						user['updatedAt']="";
+						res.json(user);
+					});
+				}else{
+					return res.json(req.session.user);
+				}
+			}
 		},
 		private: function(req, res, next){
 			User.findOne({id: req.session.user.id}, function(err, user){

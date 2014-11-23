@@ -35,7 +35,6 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
-		console.log($rootScope);
 		if(pag!="") pag.joined=false;
 		if(user!="") $rootScope.user = user;
 		$http.get("/user/get").success(function(res){
@@ -92,14 +91,11 @@
 			}else{
 				$('.loggedIn').hide();
 			}
-			console.log($rootScope);
-
 		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
 				if(res.auth){
-					console.log(res);
 					$scope.userCtrl.tLogin = {};
 					$rootScope.user = res.user;
 					$rootScope.pag = $rootScope.user;
@@ -167,7 +163,6 @@
 					//log in user
 					$http.get("/session/create?email="+t.email+"&password="+t.password).success(function(res){
 						if(res.auth){
-						console.log(res);
 						$scope.userCtrl.tLogin = {};
 						$rootScope.user = res.user;
 						$rootScope.auth = true;
@@ -226,7 +221,6 @@
 		};
 		this.private = function(p){
 			if(document.getElementById("privateChk")) p = document.getElementById("privateChk").checked;
-			console.log(p);
 			$http.get("/user/private?p="+p).success(function(res){
 				if(res.status){
 					if(res.p){
