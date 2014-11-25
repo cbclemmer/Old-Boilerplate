@@ -1,6 +1,6 @@
 (function(){
-	var app = angular.module("post", ["ui.router", "ngSanitize"]);
-	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', '$sanitize', function(rs, s, h, state, $sanitize){
+	var app = angular.module("post", ["ui.router", "ngSanitize", "angularFileUpload"]);
+	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', '$sanitize', '$upload', function(rs, s, h, state, $sanitize,$upload){
 		//the post increment for pagination
 		if(!rs.user) rs.user = {};
 		s.post.temp = {};
@@ -103,7 +103,7 @@
 			}
 			var c = false;
 			for(var i=0;i<s.post.temp.objekts.length;i++){
-				if(s.post.temp.objekts[i].type=="md"){
+				if(s.post.temp.objekts[i].type=="md"||s.post.temp.objekts[i].type=="pic"){
 					c = true;
 				}
 			}
@@ -113,6 +113,26 @@
 				s.post.temp.an = false;	
 			}
 		};
+		s.onFileSelect = function($files) {
+    		//$files: an array of files selected, each file has name, size, and type.
+    		console.log($files);
+    		for (var i = 0; i < $files.length; i++) {
+      			var file = $files[i];
+      			s.upload = $upload.upload({
+        			url: '/post/upload', 
+        			data: {myObj: (s.post.temp.name+"_"+i)},
+        			file: file, 
+      			}).progress(function(evt) {
+        			console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      			}).success(function(data, status, headers, config) {
+      				console.log(data);
+      				console.log(status);
+      				console.log(headers);
+      				console.log(config);
+        			//s.post.objekts[cp].source = data;
+    	  		});
+    		}
+  		};
 		s.post.showEdit = function(){
 			$("#text-input").show();
 			$("#pCont").css({marginLeft: "5%"});

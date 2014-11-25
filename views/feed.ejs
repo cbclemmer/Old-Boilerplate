@@ -1,11 +1,12 @@
 <div id="feed" ng-controller="postController as post">
     <h3>Feed</h3>
     	Current: {{post.current}}
-    	<form ng-submit="post.addObj()">
+    	<form ng-submit="post.addObj()" enctype="multipart/form-data">
         	Type: <br>
         	<select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
         	    <option value="short" selected="selected">Short</option>
                 <option value="md">Mark Down</option>
+                <option value="pic">Picture</option>
         	</select><br>
             <select ng-model="post.temp.vis">
                 <option value="true">Public</option>
@@ -15,7 +16,8 @@
         	<!-- for short -->
         	<!--<textarea  id="shortText"></textarea><br>-->
             <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
-            rows="6" cols="60">Preview **Markdown** here.</textarea><br>
+            rows="6" cols="60" ng-hide="post.temp.objekts[post.current].type=='pic'">Preview **Markdown** here.</textarea><br>
+            <input type="file" ng-file-select="onFileSelect($files)" ng-show="post.temp.objekts[post.current].type=='pic'" name="picture" enctype="multipart/form-data">
             <script>
                 function Editor(input, preview) {
                     this.update = function () {
@@ -46,6 +48,7 @@
     </form>
 </div>
 <div id="preview" style="display: none"></div>
+<di
 <div class="aside">
 <div id="fRequests">
     <h5>Friend Requests</h5>

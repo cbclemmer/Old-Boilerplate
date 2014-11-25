@@ -105,6 +105,13 @@ module.exports = {
 			res.json(obj);
 		});
 	},
+	upload: function(req, res, next){
+		req.file("file").upload({dirname: "../../pics/md"}, function(err, file){
+			if(err) return next(err);
+			console.log(file);
+			return res.json(file[0].fd);
+		});
+	},
 	destroy: function(req, res, next){
 		Post.findOne({id: req.param("post")}, function(err, post){
 			if(err) return next(err);
