@@ -122,7 +122,10 @@
       			var file = $files[i];
       			s.upload = $upload.upload({
         			url: '/pic/upload', 
-        			data: {name: (s.post.picName||s.post.temp.name+"_"+i)},
+        			data: {
+        					name: (s.post.picName||s.post.temp.name+"_"+i),
+        					public: s.post.temp.vis
+        					},
         			file: file, 
       			}).progress(function(evt) {
         			//console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));

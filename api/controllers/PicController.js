@@ -11,7 +11,9 @@ module.exports = {
 			if(err) return next(err);
 			var c = file[0].fd.split("/");
 			var name = (req.param("name")) ? req.param("name") : "untitled";
-			Pic.create({name: name, source: c[c.length-1], owner: req.session.user.id}, function(err, pic){
+			var obj = {name: name, source: c[c.length-1], owner: req.session.user.id, public: req.param("public")};
+			console.log(obj);
+			Pic.create(obj, function(err, pic){
 				if(err) return next(err);
 				return res.json(c[c.length-1]);
 			});

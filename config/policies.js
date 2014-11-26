@@ -37,6 +37,9 @@ module.exports.policies = {
   },
   UserController: {
     show: 'sessionAuth'
+  },
+  PicController: {
+    getOne: 'canSeePic'
   }
   /***************************************************************************
   *                                                                          *
