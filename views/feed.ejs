@@ -17,7 +17,11 @@
         	<!--<textarea  id="shortText"></textarea><br>-->
             <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
             rows="6" cols="60" ng-hide="post.temp.objekts[post.current].type=='pic'">Preview **Markdown** here.</textarea><br>
-            <input type="file" ng-file-select="onFileSelect($files)" ng-show="post.temp.objekts[post.current].type=='pic'" name="picture" enctype="multipart/form-data">
+            <span ng-show="post.temp.objekts[post.current].type=='pic'">
+                <input type="text" placeholder="name for picture(optional)" ng-model="post.picName">
+                <input type="file" ng-file-select="onFileSelect($files)" name="picture" enctype="multipart/form-
+            data">
+            </span>
             <script>
                 function Editor(input, preview) {
                     this.update = function () {
@@ -44,6 +48,10 @@
     <div ng-repeat="obj in post.temp.objekts">
         <h6>{{obj.type}}</h6>
         <span ng-show="obj.type=='short'||obj.type=='md'">{{obj.text}}</span>
+        <span ng-show="obj.type=='pic'">
+            <span ng-hide="obj.source.length">Empty</span>
+            <span ng-show="obj.source.length">{{obj.source}}</span>
+        </span>
     </div>
     </form>
 </div>

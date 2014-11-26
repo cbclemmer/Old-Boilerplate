@@ -19,8 +19,10 @@
         	h.get("/post/get?slug="+ slug).success(function(res){
         	  	if(res.err) return showErr(res.err);
           		for(var i=0;i<res.objekts.length;i++){
-          			if(res.objekts[i].type="md"){
+          			if(res.objekts[i].type=="md"){
           				res.objekts[i].html = markdown.toHTML(res.objekts[i].text);
+         	 		}else if(res.objekts[i].type=="pic"){
+         	 			res.objekts[i].html = "<img src='/pic/getOne/"+res.objekts[i].source+"'><br>"
          	 		}
           		};
           		h.get("/user/get").success(function(res){
@@ -119,17 +121,15 @@
     		for (var i = 0; i < $files.length; i++) {
       			var file = $files[i];
       			s.upload = $upload.upload({
-        			url: '/post/upload', 
-        			data: {myObj: (s.post.temp.name+"_"+i)},
+        			url: '/pic/upload', 
+        			data: {name: (s.post.picName||s.post.temp.name+"_"+i)},
         			file: file, 
       			}).progress(function(evt) {
-        			console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+        			//console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       			}).success(function(data, status, headers, config) {
       				console.log(data);
-      				console.log(status);
-      				console.log(headers);
-      				console.log(config);
-        			//s.post.objekts[cp].source = data;
+      				data = data.slice(1,(data.length-1));
+      				s.post.temp.objekts[s.post.current].source = data;
     	  		});
     		}
   		};

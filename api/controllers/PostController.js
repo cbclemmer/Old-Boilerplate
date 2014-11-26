@@ -24,9 +24,15 @@ module.exports = {
 		objekts = req.param("objekts");
 		for(var i=0;i<objekts.length;i++){
 			obj.objekts[i] = {
-				text: objekts[i].text,
 				type: objekts[i].type,
 				order: i
+			}
+			if(objekts[i].text){
+				obj.objekts[i].text = objekts[i].text;
+			}else if(objekts[i].source){
+				obj.objekts[i].source = objekts[i].source;
+			}else{
+				return res.json({err: "Post cannot be blank"});
 			}
 		}
 		Post.create(obj, function(err, post){
@@ -103,13 +109,6 @@ module.exports = {
 			if(err) return next(err);
 			if(!obj) return res.json({err: "could not get post"});
 			res.json(obj);
-		});
-	},
-	upload: function(req, res, next){
-		req.file("file").upload({dirname: "../../pics/md"}, function(err, file){
-			if(err) return next(err);
-			console.log(file);
-			return res.json(file[0].fd);
 		});
 	},
 	destroy: function(req, res, next){
