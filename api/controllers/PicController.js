@@ -10,7 +10,8 @@ module.exports = {
 		req.file("file").upload({dirname: "../../pics/md"}, function(err, file){
 			if(err) return next(err);
 			var c = file[0].fd.split("/");
-			Pic.create({name: req.param("name"), source: c[c.length-1], owner: req.session.user.id}, function(err, pic){
+			var name = (req.param("name")) ? req.param("name") : "untitled";
+			Pic.create({name: name, source: c[c.length-1], owner: req.session.user.id}, function(err, pic){
 				if(err) return next(err);
 				return res.json(c[c.length-1]);
 			});

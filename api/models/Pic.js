@@ -10,7 +10,10 @@ module.exports = {
   attributes: {
   	name: 'string',
   	source: 'string',
-  	owner: 'string'
+  	owner: 'string',
+  	public: {
+  		type: 'boolean',
+  		defaultsTo: false
+  	}
   }
 };
-

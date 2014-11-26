@@ -50,7 +50,7 @@
 			var temp = s.post.temp;
 			if((!target||target=="")&&rs.pag) target = rs.pag.id;
 			//if the text is not blank
-			if(temp.objekts[0].text.length>0||temp.objekts[0].source.length>0){
+			if((temp.objekts[0].text&&temp.objekts[0].text.length>0)||(temp.objekts[0].source&&temp.objekts[0].source.length>0)){
 				var tags = "";
 				//get the tags
 				for(var i=0;i<s.post.tags.length;i++){
