@@ -13,5 +13,16 @@ module.exports = {
     	.replace(/-+/g, '-'); // collapse dashes
     	n = un+"-"+n;
     	return n;
+	},
+	upload: function(file, dir, cb){
+		/*
+			The current directories are:
+				prof: profile pics
+				md: for markdown posts
+		*/
+		file.upload({dirname: ("./pics/"+dir)}, function(err, file){
+			if(err) return next(err);
+			return cb(true);
+		});
 	}
 }

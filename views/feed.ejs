@@ -1,11 +1,12 @@
 <div id="feed" ng-controller="postController as post">
     <h3>Feed</h3>
     	Current: {{post.current}}
-    	<form ng-submit="post.addObj()">
+    	<form ng-submit="post.addObj()" enctype="multipart/form-data">
         	Type: <br>
         	<select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
         	    <option value="short" selected="selected">Short</option>
                 <option value="md">Mark Down</option>
+                <option value="pic">Picture</option>
         	</select><br>
             <select ng-model="post.temp.vis">
                 <option value="true">Public</option>
@@ -15,7 +16,12 @@
         	<!-- for short -->
         	<!--<textarea  id="shortText"></textarea><br>-->
             <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
-            rows="6" cols="60">Preview **Markdown** here.</textarea><br>
+            rows="6" cols="60" ng-hide="post.temp.objekts[post.current].type=='pic'">Preview **Markdown** here.</textarea><br>
+            <span ng-show="post.temp.objekts[post.current].type=='pic'">
+                <input type="text" placeholder="name for picture(optional)" ng-model="post.picName">
+                <input type="file" ng-file-select="onFileSelect($files)" name="picture" enctype="multipart/form-
+            data">
+            </span>
             <script>
                 function Editor(input, preview) {
                     this.update = function () {
@@ -42,10 +48,15 @@
     <div ng-repeat="obj in post.temp.objekts">
         <h6>{{obj.type}}</h6>
         <span ng-show="obj.type=='short'||obj.type=='md'">{{obj.text}}</span>
+        <span ng-show="obj.type=='pic'">
+            <span ng-hide="obj.source.length">Empty</span>
+            <span ng-show="obj.source.length">{{obj.source}}</span>
+        </span>
     </div>
     </form>
 </div>
 <div id="preview" style="display: none"></div>
+<di
 <div class="aside">
 <div id="fRequests">
     <h5>Friend Requests</h5>

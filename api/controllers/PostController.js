@@ -24,9 +24,15 @@ module.exports = {
 		objekts = req.param("objekts");
 		for(var i=0;i<objekts.length;i++){
 			obj.objekts[i] = {
-				text: objekts[i].text,
 				type: objekts[i].type,
 				order: i
+			}
+			if(objekts[i].text){
+				obj.objekts[i].text = objekts[i].text;
+			}else if(objekts[i].source){
+				obj.objekts[i].source = objekts[i].source;
+			}else{
+				return res.json({err: "Post cannot be blank"});
 			}
 		}
 		Post.create(obj, function(err, post){
