@@ -116,7 +116,7 @@ module.exports = {
 			if(err) return next(err);
 			if(!post) return res.json({err: "could not find post"});
 			if(post.owner==req.session.user.id){
-				Objekt.destroy({owner: post.id}, function(err, obj){
+				Pic.destroy({owner: post.id}, function(err, obj){
 					if(err) return next(err);
 					Post.destroy({id: post.id}, function(err, post){
 						if(err) return next(err);

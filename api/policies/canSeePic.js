@@ -5,7 +5,7 @@ module.exports = function(req, res, next){
 		if(!pic) {
 			console.log("picture not found: "+req.param("id"));
 			var fs = require('fs');
-			var stream = fs.createReadStream(__dirname+"/censor.jpg");
+			var stream = fs.createReadStream(__dirname+"/404.png");
 			return stream.pipe(res);
 		}
 		//check if the pic is public
