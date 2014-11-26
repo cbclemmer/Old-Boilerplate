@@ -66,12 +66,12 @@
 				socket.post("/post/create", obj, function(res){
 					if(res.err) return showErr(res.err);
 					showInfo("Post created");
-					s.post.temp.objekts = [];
-					s.post.temp.objekts[0] = {};
-					s.post.temp.objekts[0].type = "short";
-					s.post.temp.objekts[0].text = "";
-					rs.posts.unshift(res[0].name);
 				});
+				s.post.temp.objekts = [];
+				s.post.temp.objekts[0] = {};
+				s.post.temp.objekts[0].type = "short";
+				s.post.temp.objekts[0].text = "";
+				rs.posts.unshift(res[0].name);
 			}else{showErr("Please add content to post");}
 		};
 		s.post.lastObj = function(){

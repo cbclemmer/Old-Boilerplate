@@ -33,7 +33,6 @@
                 var $i = function (id) { return document.getElementById(id); };
                 new Editor($i("text-input"), $i("preview"));
             </script>
-        	<span ng-show="post.temp.objekts[post.current].type=='short'">{{post.temp.objekts[post.current].text.length||0}}/140</span><br>
         </form>
         <button ng-click="post.lastObj()">last part</button>
         <button ng-click="post.addObj()">add part</button>

@@ -38,7 +38,7 @@ module.exports = {
 		Post.create(obj, function(err, post){
 			if(err) return next(err);
 			//add a hash of id to the end of slug so you know it is unique
-			if(post.slug) post.slug = post.slug+"-"+post.slug.hashCode();
+			if(post.slug) post.slug = post.slug+"-"+post.id;
 			Post.update({id: post.id}, post, function(err, post){
 				if(err) return next(err);
 				res.json(post);
