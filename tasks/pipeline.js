@@ -32,6 +32,7 @@ var jsFilesToInject = [
   'js/dependencies/angular-file-upload-shim.js',
   'js/dependencies/angular-file-upload.js',
   'js/dependencies/upload.js',
+  'js/dependencies/angular-sails.min.js',
   'js/dependencies/markdown.js',
 	'js/dependencies/app.jquery.js',
   'js/dependencies/app.socket.js',

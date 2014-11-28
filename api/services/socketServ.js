@@ -1,6 +1,8 @@
 module.exports = {
-	post: function(sock, post){
-		console.log("telling the sockets");
+	nPost: function(sock, post){
 		sails.sockets.broadcast(post.target, 'nPost', post);
 	},
+	dPost: function(sock, post){
+		sails.sockets.broadcast(post.target, 'dPost', post);
+	}
 }

@@ -1,6 +1,6 @@
 (function(){
-	var app = angular.module("post", ["ui.router", "ngSanitize", "angularFileUpload"]);
-	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', '$sanitize', '$upload', function(rs, s, h, state, $sanitize,$upload){
+	var app = angular.module("post", ["ui.router", "ngSanitize", 'ngSails', "angularFileUpload"]);
+	app.controller("postController", ['$rootScope', '$scope', '$http', '$state', '$sanitize', '$upload', "$sails", function(rs, s, h, state, $sanitize,$upload, $sails){
 		//the post increment for pagination
 		if(!rs.user) rs.user = {};
 		s.post.temp = {};
@@ -14,9 +14,16 @@
 		s.post.tags = [];
 		s.postInc = 0;
 		//if a new post is made then add to the list
-		io.socket.on("nPost", function(data){
-			if(rs.posts.length>30){
-				rs.posts.unshift(data);
+		$sails.on("nPost", function(data){
+			rs.posts.unshift(data);
+			$("#pUser").val("");
+		});
+		$sails.on("dPost", function(data){
+			for(var i=0;i<rs.posts.length;i++){
+				if(rs.posts[i].id==data.id){
+					rs.posts.splice(i, 1);
+					break;
+				}
 			}
 		});
 		//get the text of the posts
@@ -77,7 +84,7 @@
 				s.post.temp.objekts[0] = {};
 				s.post.temp.objekts[0].type = "short";
 				s.post.temp.objekts[0].text = "";
-				rs.posts.unshift(res[0].name);
+				//rs.posts.unshift(res[0].name);
 			}else{showErr("Please add content to post");}
 		};
 		s.post.lastObj = function(){
@@ -178,12 +185,6 @@
 		s.post.destroy = function(id){
 			h.post("/post/destroy?post="+id).success(function(res){
 				if(res.err) return showErr(res.err);
-				for(var i=0;i<rs.posts.length;i++){
-					if(rs.posts[i].id==id){
-						rs.posts.splice(i, 1);
-						break;
-					}
-				}
 			});
 		};
 	}]);

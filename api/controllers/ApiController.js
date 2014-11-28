@@ -8,6 +8,12 @@
 module.exports = {
 		// to get a single entity
 		get: function(req, res, next){
+			var rooms = sails.sockets.socketRooms(req.socket);
+			if(rooms.lenght>0){
+				for(var i=0;i<rooms.length;i++){
+					sails.sockets.leave(req.socket, rooms[i]);
+				}
+			}
 			var handle = req.param("handle");
 			if(handle=="show") handle = req.session.user.username;
 			//gets everything for the page show
@@ -43,6 +49,8 @@ module.exports = {
 							}
 							pag.type="group";
 							pag.mJSON = users;
+							console.log("1");
+							sails.sockets.join(req.socket, pag.id);
 							return res.json({user: req.session.user, pag: pag});
 						});
 					});
@@ -75,6 +83,7 @@ module.exports = {
 									pag.friendsWith=true;
 									pag.friends = users;
 									pag.type = "user";
+									sails.sockets.join(req.socket, pag.id);
 									return res.json({user: req.session.user, pag: pag});
 								}else{
 									user = req.session.user;
@@ -95,6 +104,7 @@ module.exports = {
 									pag.friendsWith=false;
 									pag.friends = users;
 									pag.type = "user";
+									sails.sockets.join(req.socket, pag.id);
 									return res.json({user: req.session.user, pag: pag});
 								};
 							});
@@ -105,6 +115,8 @@ module.exports = {
 					//if he has no friends  :(
 					pag.friends = [];
 					pag.type = "user";
+					console.log("4");
+					sails.sockets.join(req.socket, pag.id);
 					return res.json({user: req.session.user, pag: pag});
 				});
 			});
@@ -144,8 +156,6 @@ module.exports = {
 			});
 		},
 		show: function(req, res, next){
-			//unsubscribe from all rooms
-			console.log(req.isSocket);
 			if(req.param("id")!=undefined){
 				User.findOne({username: req.param("id")}, function(err, user){
 					if(err) return next(err);

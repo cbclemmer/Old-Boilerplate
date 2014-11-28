@@ -42,11 +42,8 @@ module.exports = {
 			Post.update({id: post.id}, post, function(err, post){
 				if(err) return next(err);
 				var n = (post.name==""||!post.name) ? "short" : post.name;
-				socketServ.post(req.socket, post);
-				miscServ.cAction(post.owner, "post", n, post.public, function(act){
-					//sails.sockets.blast("message", {message: "post created by someone"}, req.socket);
-					return res.json(post);
-				});
+				socketServ.nPost(req.socket, post[0]);
+				return res.json(post);
 			});
 		});
 	},
@@ -125,6 +122,7 @@ module.exports = {
 					if(err) return next(err);
 					Post.destroy({id: post.id}, function(err, post){
 						if(err) return next(err);
+						socketServ.dPost(req.socket, post[0]);
 						res.json({status: true});
 					});
 				});

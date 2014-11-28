@@ -1,6 +1,6 @@
 (function(){
 	//module defines controllers
-	var app = angular.module("app", ['ui.router', 'group', 'search', 'post', 'settings']);
+	var app = angular.module("app", ['ui.router', 'ngSails', 'group', 'search', 'post', 'settings']);
 	app.config(function($stateProvider, $urlRouterProvider){
 		if(window.location.pathname.length<2) $urlRouterProvider.otherwise('/login');
 		$stateProvider
@@ -31,7 +31,7 @@
 			}
 		});
 	});
-	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', function($http, $scope, $rootScope, $state){
+	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', , "$sails", function($http, $scope, $rootScope, $state, $sails){
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
@@ -92,6 +92,9 @@
 			}
 		});
 		}
+		$sails.on("cUser", function(data){
+			$
+		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){

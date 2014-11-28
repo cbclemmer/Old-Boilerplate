@@ -9,7 +9,7 @@
 			//if it is a user or group page
 			if(rs.pag.type=="api"){
 				var handle = window.location.pathname.split("/")[(window.location.pathname.split("/").length)-1];
-				h.get("/api/get?handle="+handle).success(function(res){
+				io.socket.get("/api/get?handle="+handle, function(res){
 					if(res.err) return showErr(res.err);
 					console.log(res);
 					rs.user = res.user;
