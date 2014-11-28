@@ -8,7 +8,7 @@
 module.exports = {
 		// to get a single entity
 		get: function(req, res, next){
-			var handle = req.param("handle")
+			var handle = req.param("handle");
 			if(handle=="show") handle = req.session.user.username;
 			//gets everything for the page show
 			var pag = {};
@@ -144,6 +144,8 @@ module.exports = {
 			});
 		},
 		show: function(req, res, next){
+			//unsubscribe from all rooms
+			console.log(req.isSocket);
 			if(req.param("id")!=undefined){
 				User.findOne({username: req.param("id")}, function(err, user){
 					if(err) return next(err);
@@ -151,17 +153,16 @@ module.exports = {
 						return Groupp.findOne({handle: req.param("id")}, function(err, groupp){
 							if(err) return next(err);
 							if(!groupp) return res.view("user/show", {user: req.session.user, cUser: req.session.user});
-							return res.view('group', {group: groupp, cUser: req.session.user});
+							return res.view('group');
 						});
 					}
 					user["password"]= "";
 					user["createdAt"]="";
 					user["updatedAt"]="";
-					res.view("user/show", {user: user, cUser: req.session.user});
+					res.view("user/show");
 				});
 			}else{
-				res.view("user/show", {user: req.session.user, cUser: req.session.user});
+				res.view("user/show");
 			}
 		}
 };
-

@@ -24,5 +24,18 @@ module.exports = {
 			if(err) return next(err);
 			return cb(true);
 		});
+	},
+	cAction: function(owner, type, text, public, cb){
+		Action.create({owner:owner, type: type, text: text, public: public}, function(err, act){
+			if(err) return next(err);
+			return cb(act);
+		});
+	},
+	unFromID: function(id){
+		User.findOne({id: id}, function(err, user){
+			if(err) return next(err);
+			if(!user) return {err: "could not find user"};
+			return {un: user.username};
+		})
 	}
 }

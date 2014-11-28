@@ -41,7 +41,12 @@ module.exports = {
 			if(post.slug) post.slug = post.slug+"-"+post.id;
 			Post.update({id: post.id}, post, function(err, post){
 				if(err) return next(err);
-				res.json(post);
+				var n = (post.name==""||!post.name) ? "short" : post.name;
+				socketServ.post(req.socket, post);
+				miscServ.cAction(post.owner, "post", n, post.public, function(act){
+					//sails.sockets.blast("message", {message: "post created by someone"}, req.socket);
+					return res.json(post);
+				});
 			});
 		});
 	},

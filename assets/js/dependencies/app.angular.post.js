@@ -13,6 +13,12 @@
 		rs.posts = [];
 		s.post.tags = [];
 		s.postInc = 0;
+		//if a new post is made then add to the list
+		io.socket.on("nPost", function(data){
+			if(rs.posts.length>30){
+				rs.posts.unshift(data);
+			}
+		});
 		//get the text of the posts
 		if(window.location.pathname.search("/post/show")!=-1){
 			var slug = window.location.pathname.split("/")[(window.location.pathname.split("/").length)-1];
@@ -63,7 +69,7 @@
 					objekts: temp.objekts
 				}
 				if(temp.an) obj["name"] = temp.name;
-				socket.post("/post/create", obj, function(res){
+				io.socket.post("/post/create", obj, function(res){
 					if(res.err) return showErr(res.err);
 					showInfo("Post created");
 				});
@@ -161,7 +167,7 @@
 				delete obj.objekts[i]["$$hashKey"];
 			}
 			//var obj = rs.postt.objekts
-			socket.post("/post/edit", obj, function(res){
+			io.socket.post("/post/edit", obj, function(res){
 				if(res.err) return showErr(res.err);
 				showInfo("Changes saved Successfully");
 				for(var i=0;i<rs.postt.objekts.length;i++){
