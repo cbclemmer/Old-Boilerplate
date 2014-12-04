@@ -31,7 +31,7 @@
 			}
 		});
 	});
-	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', , "$sails", function($http, $scope, $rootScope, $state, $sails){
+	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', '$sails', function($http, $scope, $rootScope, $state, $sails){
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
@@ -92,8 +92,19 @@
 			}
 		});
 		}
-		$sails.on("cUser", function(data){
-			$
+		$sails.on("online", function(data){
+			//this is a boolean variable on: true=online; false=offline
+			for(var i=0;i<$rootScope.user.fJSON.length;i++){
+				if($rootScope.user.fJSON[i].id==data.id){
+					$rootScope.user.fJSON[i].online = data.online;
+					break;
+				}
+			}
+		});
+		$sails.on("aFr", function(data){
+			console.log(data);
+			if(!$rootScope.user.frJSON) $rootScope.user.frJSON = [];
+			$rootScope.user.frJSON.unshift(data.ask);
 		});
 		this.login = function(){
 			var l = $scope.tLogin = this.tLogin;
@@ -253,7 +264,7 @@
 		};
 		$scope.use.addFriendRequest = function(user){
 			//add the user: user to their friend request list
-			$http.get("/user/addFriendRequest?friend="+user).success(function(res){
+			$http.get("/user/addFriendRequest?friend="+user+"&socket="+io.socket.socket.sessionid).success(function(res){
 				if(res.err){console.log(res.err);showErr(err.reason)};
 				if(res){
 					console.log("request add");

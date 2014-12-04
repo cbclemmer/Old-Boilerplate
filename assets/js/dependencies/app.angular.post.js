@@ -174,7 +174,7 @@
 				delete obj.objekts[i]["$$hashKey"];
 			}
 			//var obj = rs.postt.objekts
-			io.socket.post("/post/edit", obj, function(res){
+			$sails.post("/post/edit", obj, function(res){
 				if(res.err) return showErr(res.err);
 				showInfo("Changes saved Successfully");
 				for(var i=0;i<rs.postt.objekts.length;i++){

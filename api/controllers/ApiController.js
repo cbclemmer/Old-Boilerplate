@@ -8,6 +8,7 @@
 module.exports = {
 		// to get a single entity
 		get: function(req, res, next){
+			//remove the user from all rooms
 			var rooms = sails.sockets.socketRooms(req.socket);
 			if(rooms.lenght>0){
 				for(var i=0;i<rooms.length;i++){
@@ -29,12 +30,14 @@ module.exports = {
 						//if the handle is not a group either, throw an error
 						if(!groupp) return res.json({err: "Cannot find"});
 						pag = groupp;
+						//get the members of the group
 						User.find({id: {$in: groupp.members}}, function(err, users){
 							if(err) return next(err);
 							for(var i=0;i<users.length;i++){
 								users[i] = cleanService.cleanUser(users[i]);
 							}
 							var user = req.session.user;
+							if(!user.groups) user.groups = [];
 							for(var i=0;i<user.groups.length;i++){
 								if(user.groups[i]==groupp.handle){
 									pag.joined = true;
@@ -50,7 +53,12 @@ module.exports = {
 							pag.type="group";
 							pag.mJSON = users;
 							console.log("1");
-							sails.sockets.join(req.socket, pag.id);
+							if(pag.joined){
+								//listen for private posts
+								sails.sockets.join(req.socket, "post"+pag.id+"private");
+							}else{
+								sails.sockets.join(req.socket, "post"+pag.id);
+							}
 							return res.json({user: req.session.user, pag: pag});
 						});
 					});
@@ -80,12 +88,15 @@ module.exports = {
 							Friend.findOne({owner: req.session.user.id, user: pag.id}, function(err, friend){
 								if(err) return next(err);
 								if(friend){
+									//if ffriends with user
 									pag.friendsWith=true;
 									pag.friends = users;
 									pag.type = "user";
-									sails.sockets.join(req.socket, pag.id);
+									//join private channel
+									sails.sockets.join(req.socket, "post"+pag.id+"private");
 									return res.json({user: req.session.user, pag: pag});
 								}else{
+									//if not
 									user = req.session.user;
 									if(user.friendRequests){
 									for(var i=0;i<user.friendRequests.length;i++){
@@ -104,7 +115,8 @@ module.exports = {
 									pag.friendsWith=false;
 									pag.friends = users;
 									pag.type = "user";
-									sails.sockets.join(req.socket, pag.id);
+									//join public channel
+									sails.sockets.join(req.socket, "post"+pag.id);
 									return res.json({user: req.session.user, pag: pag});
 								};
 							});
@@ -115,8 +127,8 @@ module.exports = {
 					//if he has no friends  :(
 					pag.friends = [];
 					pag.type = "user";
-					console.log("4");
-					sails.sockets.join(req.socket, pag.id);
+					//join public channel
+					sails.sockets.join(req.socket, "post"+pag.id);
 					return res.json({user: req.session.user, pag: pag});
 				});
 			});

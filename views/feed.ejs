@@ -73,7 +73,9 @@
     <h5>Friends</h5>
     <ul>
         <li ng-repeat="friend in user.fJSON">
-            <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>
+            <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>&emsp;
+            <span ng-show="friend.online">Online</span>
+            <span ng-hide="friend.online">Offline</span>
         </li>
     </ul>
     <p ng-show="user.fJSON.length<1">Well, this is awkward</p>

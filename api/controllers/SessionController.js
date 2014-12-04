@@ -23,6 +23,7 @@ module.exports = {
 							req.session.auth = true;
 							user['password'] = "";
 							req.session.user = user;
+							sails.sockets.blast("online", {id: user.id, online: true});
 							return res.json({auth: true, user: user});
 						});
 					}else return res.json({'login':false, 'reason': 'Password is wrong'});
@@ -39,6 +40,7 @@ module.exports = {
 			user.online=false;
 			User.update(id, user, function(err, use){
 				if(err) return next(err);
+				sails.sockets.blast("online", {id: id, online: false});
 				req.session.user = {};
 				req.session.auth = false;
 				//check if logging out with or without a page load

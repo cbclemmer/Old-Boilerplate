@@ -149,17 +149,21 @@ module.exports = {
 		},
 		addFriendRequest: function(req, res, next){
 			//friend requests are all IDs
+			console.log("this");
 			User.findOne({id: req.param('friend')}, function(err, user){
 				if(err) return next(err);
 				if(!user) return console.log("user not found");
 				if(!user.friendRequests) user.friendRequests = [];
 				//search for duplicates
 				var dup = false;
+				console.log("this");
 				for(var i=0;i<user.friendRequests.length;i++){
 					if(user.friendRequests[i]==req.session.user.id) return dup = true;
 				}
+				console.log("this");
 				//if there isn't already a request active
 				if(!dup){
+					console.log("this");
 					user.friendRequests.push(req.session.user.id);
 					User.update(user.id, user, function(err, user){
 						if(err){
@@ -169,13 +173,16 @@ module.exports = {
 						User.findOne({id: req.session.user.id}, function(err, user){
 							if(!user.requestsSent) user.requestsSent = [];
 							user.requestsSent.push(req.param('friend'));
-							User.update(user.id, user, function(err){
+							User.update(user.id, user, function(err, use){
 								if(err) return next(err);
-								res.json(true);
-							})
+								console.log("this");
+								socketServ.addFr(cleanService.cleanUser(req.session.user), cleanService.cleanUser(user), req.param("socket"));
+								return res.json(true);
+							});
 						});
 					});
 				}else{
+					console.log("that");
 					return res.json(false);
 				}
 			});
