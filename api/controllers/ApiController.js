@@ -44,6 +44,7 @@ module.exports = {
 									break;
 								}
 							}
+							if(!groupp.requests) groupp.requests = [];
 							for(var i=0;i<groupp.requests.length;i++){
 								if(groupp.requests[i]==user.username){
 									pag.request = true;
