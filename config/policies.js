@@ -36,10 +36,14 @@ module.exports.policies = {
     show: 'sessionAuth'
   },
   UserController: {
-    show: 'sessionAuth'
+    show: 'sessionAuth',
+    resetpass: 'checkifreset'
   },
   PicController: {
     getOne: 'canSeePic'
+  },
+  pages: {
+    resetpass: 'checkifreset'
   }
   /***************************************************************************
   *                                                                          *

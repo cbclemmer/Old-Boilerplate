@@ -34,14 +34,6 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
-		if(window.location.pathname.search("/resetpass")!=-1){
-			var code = getUrlParameters("auth", "", false);
-			var email = getUrlParameters("email", "", false);
-			$sails.post("/user/checkifreset", {code: code, email: email}, function(res){
-				if(res.err)	return showerr(res.err);
-				if(!res.status) return window.location.replace("/");
-			});
-		}
 		if(window.location.pathname.search("/api")==-1){
 			$http.get("/user/get").success(function(res){
 			if(res.status){
@@ -318,5 +310,22 @@
 				showInfo("Email is submitted successfully");
 			});
 		};
+		$scope.use.resetpass = function(pass, cpass){
+			var auth = getUrlParameters("auth", "", false);
+			var email = getUrlParameters("email", "", false);
+			if(pass==cpass){
+				var obj = {
+					pass: pass,
+					auth: auth,
+					email: email
+				}
+				$sails.post("/user/resetpass", obj);
+			}else{
+				showErr("Passwords do not match");
+			}
+		};
+		$sails.on("passreset", function(data) {
+		    showInfo("Password reset successfully, please return to home to login");
+		});
 	}]);
 })();

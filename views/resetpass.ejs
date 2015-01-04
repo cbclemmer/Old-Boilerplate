@@ -44,10 +44,11 @@
 		<div id="startLog" ng-controller="userController as use" style="margin-right: 30%;">
 		    <div>
 		        <p>Please input a new password</p>
-      		    <form ng-submit="use.requestpass(use.pass, use.cpass)">
+      		    <form ng-submit="use.resetpass(use.pass, use.cpass)">
       		        <input type="password" placeholder="Password" ng-model="use.pass"><br>
       		        <input type="password" placeholder="Confirm password" ng-model="use.cpass"><br>
 			    	<input type="submit" value="submit" />
+			    	<a href="/">Home</a>
       		    </form>
       		</div>
 		</div>

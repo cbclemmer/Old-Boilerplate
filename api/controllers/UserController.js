@@ -275,17 +275,19 @@ module.exports = {
 				}
 			});
 		},
-		checkifreset: function (req, res, next) {
-			console.log("email: "+email+"\ncode: "+code);
-			Resetpass.findOne({email: email, id: code}, function(err, rese){
-				if(err)	 return next(err);
-				if(!rese) return res.json({status: false});
-				var i = Math.floor((Math.floor(new Date().getTime() / 1000) - Math.floor(rese.createdAt.getTime() / 1000)) / 60);
-				if(i < 1440){
+		resetpass: function(req, res, next){
+			var bcrypt = require("bcrypt");
+			bcrypt.hash(req.param("pass"), 10, function(err, hash) {
+				if(err) return next(err);
+				User.update({email: req.param("email")}, {password: hash}, function(err, user){
+					if(err) return next(err);
+					var sock = sails.sockets.id(req.socket);
+					sails.sockets.emit(sock, 'passreset', {status: true});
+					Resetpass.destroy({email: req.param("email")}, function(err){
+						if(err) return next(err);
+					});
 					return res.json({status: true});
-				}else{
-					return res.json({status: false});
-				}
+				});
 			});
 		}
 };
