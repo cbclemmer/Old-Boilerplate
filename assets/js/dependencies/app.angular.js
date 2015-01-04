@@ -10,7 +10,6 @@
 			controller: function($rootScope){
 				if($rootScope.auth) $state.go("feed");
 			}
-
 		}).state('feed', {
 			url: '/feed',
 			templateUrl: '/pages/feed',
@@ -286,7 +285,7 @@
 					}
 				}
 			});
-		}
+		};
 		$scope.use.rFriend = function(id){
 			$http.get("/user/rFriend?user="+id).success(function(res){
 				if(res.err) return showErr(res.err);
@@ -304,7 +303,12 @@
 				}
 				showErr("Something went terribly wrong");
 			});
-		}
+		};
+		$scope.use.requestReset = function(id){
+			$sails.get("/user/resetRequest").success(function(res){
+				if(res.err) return showErr(res.err);
+				showInfo("Email is submitted successfully");
+			});
+		};
 	}]);
-
 })();

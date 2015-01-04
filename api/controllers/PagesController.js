@@ -29,6 +29,9 @@ module.exports = {
 	},
 	messages: function(req, res, next){
 		return res.view("messages");
+	},
+	forgotpass: function(req, res, next){
+		return res.view("forgotpass");
 	}
 };
 

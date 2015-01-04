@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your App Here!</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <!--STYLES END-->
+  </head>
+  <body>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
+    <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/ngSanitize.js"></script>
+    <script src="/js/dependencies/angular-file-upload-shim.js"></script>
+    <script src="/js/dependencies/angular-file-upload.js"></script>
+    <script src="/js/dependencies/upload.js"></script>
+    <script src="/js/dependencies/angular-sails.min.js"></script>
+    <script src="/js/dependencies/markdown.js"></script>
+    <script src="/js/dependencies/app.jquery.js"></script>
+    <script src="/js/dependencies/app.socket.js"></script>
+    <script src="/js/dependencies/app.angular.js"></script>
+    <script src="/js/dependencies/app.angular.post.js"></script>
+    <script src="/js/dependencies/app.angular.search.js"></script>
+    <script src="/js/dependencies/app.angular.settings.js"></script>
+    <script src="/js/dependencies/app.angular.group.js"></script>
+    <script src="/js/dependencies/app.angular.user.js"></script>
+    <script src="/js/dependencies/app.angular.directives.js"></script>
+    <script src="/js/dependencies/bootstrap.min.js"></script>
+    <!--SCRIPTS END-->
+	<div ng-app="app" ng-controlller="userController as use">
+			<div id="err"></div>
+            <div id="info"></div>
+			<div id="topNav" class="container">
+				<div><a href="/#/feed">App</a></div>
+			</div>
+		<div id="startLog" ng-controller="userController as use" style="margin-right: 30%;">
+		    <div>
+		        <p>Please input your email and a link to reset your password will be sent to you.</p>
+      		    <form ng-submit="use.requestReset()">
+      		        <input type="email" ng-model="use.email" placeholder="email" /><br>
+			    	<input type="submit" value="submit" />
+      		    </form>
+      		</div>
+		</div>
+	</div>
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+  </body>
+</html>

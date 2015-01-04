@@ -187,5 +187,36 @@ module.exports = {
 			}else{
 				res.view("user/show");
 			}
+		},
+		sLoad: function(req, res, next){
+			/*Appp.findOne({id: req.param("app")}, function(err, app){
+				if(err) return next(err);
+				if(!app) return next("App does not exist");
+				*/
+				console.log("loading for "+req.ip);
+				var 	scripts = [
+				 	'104.131.176.87:8080/js/dependencies/sails.io.js',
+					'104.131.176.87:8080/js/dependencies/jquery.js',
+					'104.131.176.87:8080/js/dependencies/angular.js',
+					'104.131.176.87:8080/js/dependencies/angular.uirouter.js',
+  					'104.131.176.87:8080/js/dependencies/ngSanitize.js',
+  					'104.131.176.87:8080/js/dependencies/angular-file-upload-shim.js',
+  					'104.131.176.87:8080/js/dependencies/angular-file-upload.js',
+  					'104.131.176.87:8080/js/dependencies/upload.js',
+  					'104.131.176.87:8080/js/dependencies/angular-sails.min.js',
+  					'104.131.176.87:8080/js/dependencies/markdown.js',
+					'104.131.176.87:8080/js/dependencies/app.jquery.js',
+	 				'104.131.176.87:8080/js/dependencies/app.socket.js',
+					'104.131.176.87:8080/js/dependencies/app.angular.js',
+  					'104.131.176.87:8080/js/dependencies/app.angular.post.js',
+  					'104.131.176.87:8080/js/dependencies/app.angular.search.js',
+  					'104.131.176.87:8080/js/dependencies/app.angular.settings.js',
+  					'104.131.176.87:8080/js/dependencies/app.angular.group.js',
+  					'104.131.176.87:8080/js/dependencies/app.angular.user.js',
+					'104.131.176.87:8080/js/dependencies/app.angular.directives.js',
+					'104.131.176.87:8080/js/dependencies/bootstrap.min.js',	
+				]
+				return res.json({s: scripts});
+			//});
 		}
 };
