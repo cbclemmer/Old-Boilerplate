@@ -250,4 +250,42 @@ module.exports = {
 				res.json({'status': true});
 			});
 		},
+		resetRequest: function(req, res, next){
+			//set the email to an accessable variable
+			var email = req.param("email");
+			//see of there is a reset by that email
+			Resetpass.findOne({email: email}, function(err, rese){
+				if(err) return next(err);
+				//if there isn't continue to next part
+				if(!rese){
+					nodemailer.newReset(email, res);
+				}else{
+					//if there is see if a request has been made in the last 60 seconds
+					var i = Math.floor(new Date().getTime() / 1000) - Math.floor(rese.createdAt.getTime() / 1000);
+					if(i < 60){
+						//if there has then stop and send an error
+						return res.json({err: "You sent a request "+i+" seconds ago please wait at least one minute between requests"});
+					}else{
+						//if there hasn't destroy the last reset and clear for making a new one
+						Resetpass.destroy({id: rese.id},function(err, resee){
+							if(err) return next(err);
+							nodemailer.newReset(email, res);
+						});
+					}
+				}
+			});
+		},
+		checkifreset: function (req, res, next) {
+			console.log("email: "+email+"\ncode: "+code);
+			Resetpass.findOne({email: email, id: code}, function(err, rese){
+				if(err)	 return next(err);
+				if(!rese) return res.json({status: false});
+				var i = Math.floor((Math.floor(new Date().getTime() / 1000) - Math.floor(rese.createdAt.getTime() / 1000)) / 60);
+				if(i < 1440){
+					return res.json({status: true});
+				}else{
+					return res.json({status: false});
+				}
+			});
+		}
 };

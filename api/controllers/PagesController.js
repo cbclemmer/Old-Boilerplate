@@ -32,6 +32,9 @@ module.exports = {
 	},
 	forgotpass: function(req, res, next){
 		return res.view("forgotpass");
+	},
+	resetpass: function(req, res, next){
+		return res.view("resetpass");
 	}
 };
 

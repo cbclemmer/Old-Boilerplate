@@ -34,6 +34,14 @@
 		$scope.temp = {};
 		$scope.tLogin = {};
 		$rootScope.nGroup = {};
+		if(window.location.pathname.search("/resetpass")!=-1){
+			var code = getUrlParameters("auth", "", false);
+			var email = getUrlParameters("email", "", false);
+			$sails.post("/user/checkifreset", {code: code, email: email}, function(res){
+				if(res.err)	return showerr(res.err);
+				if(!res.status) return window.location.replace("/");
+			});
+		}
 		if(window.location.pathname.search("/api")==-1){
 			$http.get("/user/get").success(function(res){
 			if(res.status){
@@ -304,8 +312,8 @@
 				showErr("Something went terribly wrong");
 			});
 		};
-		$scope.use.requestReset = function(id){
-			$sails.get("/user/resetRequest").success(function(res){
+		$scope.use.requestReset = function(email){
+			$sails.get("/user/resetRequest?email="+email).success(function(res){
 				if(res.err) return showErr(res.err);
 				showInfo("Email is submitted successfully");
 			});
