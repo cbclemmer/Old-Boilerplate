@@ -168,6 +168,38 @@ module.exports = {
 				});
 			});
 		},
+		asearch: function(req, res, next){
+			//s is query
+			var reg = new RegExp(req.param('s'), 'i');
+			var crit = req.param('crit');
+			var obj = {};
+			obj[crit] = reg;
+			var q = User.find({where: obj, limit: 10});
+			if(crit=='username') crit = 'handle';
+			obj[crit] = reg;
+			var q2 = Groupp.find({where: obj, limit: 10});
+			q.exec(function(err, users){
+				if(err) return next(err);
+				var results = [];
+				if(users){
+					for(var i=0;i<users.length;i++){
+						users[i].password = "";
+						results.push(users[i]);
+					}
+				}
+				if(crit!='email'){
+					q2.exec(function(err, groups){
+						if(err) return next(err);
+						if(groups){
+							for(var i=0;i<groups.length;i++){
+								results.push(groups[i]);
+							}
+						}
+						res.json(results);
+					});
+				}else{return res.json(results);}
+			});
+		},
 		show: function(req, res, next){
 			if(req.param("id")!=undefined){
 				User.findOne({username: req.param("id")}, function(err, user){

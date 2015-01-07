@@ -16,17 +16,21 @@ module.exports = {
 				bcrypt.compare(req.param('password'), user.password, function(err, obj){
 					if(err) return res.json({'err': err});
 					if(obj){
-						//log in
-						user.online = true;
-						User.update(user.id, user, function(err, use){
-							if(err) return res.json({'err': err});
-							req.session.auth = true;
-							user['password'] = "";
-							req.session.user = user;
-							sails.sockets.blast("online", {id: user.id, online: true});
-							return res.json({auth: true, user: user});
-						});
-					}else return res.json({'login':false, 'reason': 'Password is wrong'});
+						if(user.confirmed){
+							//log in
+							user.online = true;
+							User.update(user.id, user, function(err, use){
+								if(err) return res.json({'err': err});
+								req.session.auth = true;
+								user['password'] = "";
+								req.session.user = user;
+								sails.sockets.blast("online", {id: user.id, online: true});
+								return res.json({auth: true, user: user});
+							});
+						}else{
+							nodemailer.sendConfirm(email, function(conf){});
+							return res.json({'login': false, 'reason': "please confirm your email before logging in"});}
+					}else{return res.json({'login':false, 'reason': 'Password is wrong'});}
 				});
 			});
 		}else{

@@ -35,6 +35,12 @@ module.exports = {
 	},
 	resetpass: function(req, res, next){
 		return res.view("resetpass");
+	},
+	confirm: function(req, res, next){
+		return res.view("confirm");
+	},
+	admin: function(req, res, next){
+		return res.view("admin");
 	}
 };
 

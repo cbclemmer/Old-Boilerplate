@@ -84,4 +84,11 @@ $(document).ready(function(){
 			$('#searchBar').find("div").remove();
 		}
 	});
+	$("#asearch").keydown(function(){
+		if($('#asearch').val().length>0){
+			angular.element(document.getElementById('admin')).scope().asearch($('#asearch').val(), $("#asearchcrit").val());
+		}else{
+			$('#searchBar').find("div").remove();
+		}
+	});
 });

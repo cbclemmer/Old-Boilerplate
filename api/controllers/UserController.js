@@ -26,8 +26,11 @@ module.exports = {
 									User.create(req.params.all(), function(err, user){
 										if(err) return res.json({'err': err});
 										user["password"] = "";
-										res.json({status: true, user: user});
-									});	
+										nodemailer.sendConfirm(user.email, function(conf){
+											if(conf.err) return res.json({status: false, reason: "Could not send confirmation email"});
+											res.json({status: true, user: user});
+										});
+									});
 								}else{return res.json({err: "Username taken by a group"})}
 							});
 						}else{

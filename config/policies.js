@@ -37,13 +37,16 @@ module.exports.policies = {
   },
   UserController: {
     show: 'sessionAuth',
-    resetpass: 'checkifreset'
+    resetpass: 'checkifreset',
+    destroy: 'adminoruser'
   },
   PicController: {
     getOne: 'canSeePic'
   },
   pages: {
-    resetpass: 'checkifreset'
+    resetpass: 'checkifreset',
+    confirm: 'confirmmail',
+    admin: 'admin'
   }
   /***************************************************************************
   *                                                                          *

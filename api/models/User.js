@@ -51,7 +51,12 @@ module.exports = {
 		dPublic: {
 			type: 'boolean',
 			defaultsTo: 'false'	
-		}
+		},
+		confirmed: {
+			type: 'boolean',
+			defaultsTo: 'false'
+		},
+		confirmationCode: 'string'
   },
 	beforeCreate: function(values, cb){
 		var bcrypt = require('bcrypt');

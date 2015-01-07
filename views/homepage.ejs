@@ -57,7 +57,11 @@
 						<div ng-repeat="option in options" ng-click="s.getPage(option)" class="opt" style="display: block; float: left; width: 100%; padding: 0px 5px 5px;text-align: left;font-size: 15px;">
                         <a href="/api/show/{{option.handle}}"><b>{{option.name}}</b> @{{option.handle}}</a></div>
 				</div>
-                <div class="loggedIn" id="tName" style="width: 30%;text-align:left"><a href="/api/show"><b>{{user.name}}</b> <span style="font-size: 17px;"><i>@{{user.username}}</i></span></a></div>
+                <div class="loggedIn" id="tName" style="width: 30%;text-align:left"><a href="/api/show">
+                    <b>{{user.name}}</b> 
+                    <span style="font-size: 17px;"><i>@{{user.username}}</i></span></a>
+                    <span ng-show="user.admin" style="font-size: .5em"><a href="/pages/admin">Admin</a></span>
+                </div>
                 <div ng-click="use.logOut()" class="loggedIn" id="logout"><img src="/images/logout.png" alt="logout" style="height: 35px;"></div>
 			</div>
 	   <div id="main">

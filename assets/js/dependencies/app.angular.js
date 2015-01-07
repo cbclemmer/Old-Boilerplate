@@ -171,24 +171,7 @@
 				if(res.err) return showErr(res.err);
 				if(res.status){
 					$scope.userCtrl.temp = {};
-					$rootScope.user = res.user;
-					$rootScope.auth = true;
-					//log in user
-					$http.get("/session/create?email="+t.email+"&password="+t.password).success(function(res){
-						if(res.auth){
-						$scope.userCtrl.tLogin = {};
-						$rootScope.user = res.user;
-						$rootScope.auth = true;
-						$('.loggedIn').show();
-						$('.loggedOut').hide();
-						$rootScope.user.requestsSent = [];
-						$rootScope.user.friendRequests = [];
-						$rootScope.user.fJSON = [];
-						$rootScope.user.frJSON = [];
-						showInfo("Sign up successfull");
-						$state.go("feed");
-						}
-					});					
+					showInfo("your confirmation email has been sent, please confirm to log in");
 				}else{
 					if(res.reason=="username") showErr("Username already taken");
 					if(res.reason=="email") showErr("Email already taken");
@@ -327,5 +310,17 @@
 		$sails.on("passreset", function(data) {
 		    showInfo("Password reset successfully, please return to home to login");
 		});
+		$scope.use.destroy = function(id){
+			$http.get('/user/destroy?id='+id).success(function(res){
+				if(res.err)	 return showErr(res.err);
+				showInfo("User: "+id+" deleted successfully");
+				for(var i=0;i<rs.results.length;i++){
+					if(rs.results[i].id==id){
+						rs.results.splice(i, 1);
+						break;
+					}
+				}
+			});
+		}
 	}]);
 })();

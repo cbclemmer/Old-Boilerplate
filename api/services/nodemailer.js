@@ -2,14 +2,6 @@ module.exports = {
     sendMail: function(email, subject, content, cb){
          var nodemailer = require('nodemailer');
     
-        // create reusable transporter object using SMTP transport
-        /*var transporter = nodemailer.createTransport({
-            service: 'Mailgun',
-            auth: {
-                user: 'postmaster@sandboxfd071613656042beac84c011bfee9c3b.mailgun.org',
-                pass: '919b33cf420231986a035ebae69ed03b'
-            }
-        });*/
         var transporter = nodemailer.createTransport({
             service: 'Mailgun',
             auth: {
@@ -54,5 +46,17 @@ module.exports = {
 				});
 			});
 		});
+    },
+    sendConfirm: function(email, cb){
+        var string = require("randomstring").generate();
+        var href = "http://104.131.176.87:1337/pages/confirm?email="+email+"&conf="+string;
+        var text = "Thank you for registering with the app, please click <a href='"+href+"'>here</a> to confirm your email address";
+        User.update({email: email}, {confirmationCode: string}, function(err, user){
+            if(err) return next(err);
+            nodemailer.sendMail(email, "Confirm Email", text, function(err, info){
+                if(err) return cb({err: "error occured"});
+                return cb({status: info});
+            });
+        });
     }
 }

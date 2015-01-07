@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your App Here!</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <!--STYLES END-->
+  </head>
+  <body>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/jquery.js"></script>
+    <script src="/js/dependencies/angular.js"></script>
+    <script src="/js/dependencies/angular.uirouter.js"></script>
+    <script src="/js/dependencies/ngSanitize.js"></script>
+    <script src="/js/dependencies/angular-file-upload-shim.js"></script>
+    <script src="/js/dependencies/angular-file-upload.js"></script>
+    <script src="/js/dependencies/upload.js"></script>
+    <script src="/js/dependencies/angular-sails.min.js"></script>
+    <script src="/js/dependencies/markdown.js"></script>
+    <script src="/js/dependencies/app.jquery.js"></script>
+    <script src="/js/dependencies/app.socket.js"></script>
+    <script src="/js/dependencies/app.angular.js"></script>
+    <script src="/js/dependencies/app.angular.post.js"></script>
+    <script src="/js/dependencies/app.angular.search.js"></script>
+    <script src="/js/dependencies/app.angular.settings.js"></script>
+    <script src="/js/dependencies/app.angular.group.js"></script>
+    <script src="/js/dependencies/app.angular.user.js"></script>
+    <script src="/js/dependencies/app.angular.directives.js"></script>
+    <script src="/js/dependencies/bootstrap.min.js"></script>
+    <!--SCRIPTS END-->
+	<div ng-app="app" ng-controlller="userController as use">
+		<div id="err"></div>
+        <div id="info"></div>
+		<div id="topNav" class="container">
+			<div><a href="/#/feed">App</a></div>
+			<div>Admin</div>
+		</div>
+        <div class="container" id="admin" ng-controller="searchController as as">
+            <h3>Search for People and Groups</h3>
+            <input type="text" placeholder="search..." style="width: 70%" id="asearch">
+            Search by: 
+            <select style="width: 20%;" id="asearchcrit">
+                <option value="name">Name</option>
+                <option value="username">Username</option>
+                <option value="email">Email</option>
+            </select>
+            <div>
+                <table>
+                    <tr>
+                        <td>Name&emsp;</td>
+                        <td>Username&emsp;</td>
+                        <td>Email&emsp;</td>
+                    </tr>
+                    <tr ng-repeat="res in results" data-id="{{res.id}}">
+                        <td>{{res.name}}&emsp;</td>
+                        <td>{{res.username}}&emsp;</td>
+                        <td>{{res.email}}&emsp;</td>
+                        <td>
+                            <span style="color: blue;cursor: pointer" ng-click="as.destroy(res.id)">
+                                Delete
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+	</div>
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+  </body>
+</html>

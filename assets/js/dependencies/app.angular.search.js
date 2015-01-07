@@ -1,6 +1,7 @@
 (function(){
 	var app = angular.module("search", ['ui.router']);
 	app.controller("searchController", ['$http', '$scope', '$rootScope', '$state', function(h, scope, rs, state){
+		if(!scope.as) scope.as = {};
 		if(window.location.pathname.search("/show")!=-1) {
 			rs.pag = {};
 			//determine what dynamic page you are on
@@ -30,5 +31,23 @@
 			});
 		};
 		rs.search = this;
+		scope.asearch = function(s, crit){
+			h.get('/api/asearch?s='+s+'&crit='+crit).success(function(res){
+				if(res.err) return showErr(res.err);
+				rs.results = res;
+			});
+		};
+		scope.as.destroy = function(id){
+			h.get('/user/destroy?id='+id).success(function(res){
+				if(res.err)	 return showErr(res.err);
+				showInfo("User: "+id+" deleted successfully");
+				for(var i=0;i<rs.results.length;i++){
+					if(rs.results[i].id==id){
+						rs.results.splice(i, 1);
+						break;
+					}
+				}
+			});
+		}
 	}]);
 })();
