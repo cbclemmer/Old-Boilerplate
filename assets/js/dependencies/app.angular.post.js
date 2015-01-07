@@ -189,5 +189,12 @@
 				if(res.err) return showErr(res.err);
 			});
 		};
+		s.post.delTag = function(tag){
+			for(var i=0;i<s.post.tags.length;i++){
+				if(s.post.tags[i]==tag){
+					s.post.tags.splice(i, 1);
+				}
+			}
+		}
 	}]);
 })();

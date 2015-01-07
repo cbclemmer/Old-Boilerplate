@@ -41,7 +41,7 @@
         <form ng-submit="post.addTag()">
         	<input type="text" placeholder="Add tag..." ng-model="post.tag" />
             <ul>
-                <li ng-repeat="tag in post.tags">{{tag}}</li>
+                <li ng-repeat="tag in post.tags">{{tag}} <span style="color: red;cursor: pointer" ng-click="post.delTag(tag)">X</span></li>
             </ul>
         </form>
     <h4>Preview</h4>
