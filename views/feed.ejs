@@ -13,6 +13,7 @@
                 <option value="false">Private</option>
             </select><br>
             <input type="text" placeholder="name" ng-model="post.temp.name" ng-show="post.temp.an"><br>
+            <span ng-show="post.temp.objekts[post.current].type=='pic'&&post.progress>0">Progress: {{post.progress}}%</span>
         	<!-- for short -->
         	<!--<textarea  id="shortText"></textarea><br>-->
             <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"

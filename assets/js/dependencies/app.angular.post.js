@@ -141,7 +141,8 @@
         					},
         			file: file, 
       			}).progress(function(evt) {
-        			//console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+        			s.post.progress = parseInt(100.0 * evt.loaded / evt.total);
+        			console.log("progress: "+ s.post.progress);
       			}).success(function(data, status, headers, config) {
       				console.log(data);
       				data = data.slice(1,(data.length-1));
