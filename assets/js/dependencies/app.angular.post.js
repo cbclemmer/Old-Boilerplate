@@ -98,7 +98,7 @@
 		s.post.addObj = function(){
 			if((s.post.temp.objekts[s.post.current].text||s.post.temp.objekts[s.post.current].source)&&s.post.temp.objekts[s.post.current].type!="short"){
 				s.post.temp.objekts[s.post.current+1] = {};
-				s.post.temp.objekts[s.post.current+1].type = "short";
+				s.post.temp.objekts[s.post.current+1].type = "md";
 				s.post.current++;
 			}else{
 				showErr("Must add text or source to current part");
@@ -154,11 +154,11 @@
 			$("#pCont").css({marginLeft: "5%"});
 			$("#editor").show();
 			//$("#editor").css({width: "48%", display: "inline-table"});
-			$("#preview").css({marginLeft: "85%"});
+			$("#preview").css({marginLeft: "50%"});
             rs.editor = new Editor($i("text-input"),$("#preview").find("div")[0]);
 		};
 		s.post.closeEdit = function(){
-			$("#pCont").css({marginLeft: "auto"});
+			$("#pCont").css({marginLeft: "10%"});
 			$("#editor").hide();
 			$("#preview").css({marginLeft: "auto"});
 		}

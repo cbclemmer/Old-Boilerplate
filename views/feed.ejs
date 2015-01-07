@@ -4,8 +4,8 @@
     	<form ng-submit="post.addObj()" enctype="multipart/form-data">
         	Type: <br>
         	<select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
-        	    <option value="short" selected="selected">Short</option>
-                <option value="md">Mark Down</option>
+        	    <option value="short" selected="selected" ng-show="!post.temp.an||(post.current==0)">Short</option>
+        	    <option value="md">Mark Down</option>
                 <option value="pic">Picture</option>
         	</select><br>
             <select ng-model="post.temp.vis">
