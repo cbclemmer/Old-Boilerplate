@@ -52,10 +52,10 @@ module.exports = {
 		if(p.owner==req.session.user.id){
 			Post.update({id: p.id}, p, function(err, post){
 				if(err) return next(err);
-				return res.json({status: true});
+				return sails.sockets.emit(sails.sockets.id(req.socket), "pEdit", {status: true});
 			});
 		}else{
-			return res.json({err: "This is not your post..."});
+			return sails.sockets.emit(sails.sockets.id(req.socket), "pEdit", {err: "This is not your post..."});
 		}
 	},
 	show: function(req, res, next){

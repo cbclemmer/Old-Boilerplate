@@ -174,14 +174,15 @@
 				delete obj.objekts[i]["$$hashKey"];
 			}
 			//var obj = rs.postt.objekts
-			$sails.post("/post/edit", obj, function(res){
-				if(res.err) return showErr(res.err);
-				showInfo("Changes saved Successfully");
-				for(var i=0;i<rs.postt.objekts.length;i++){
-					$("#preview").find("div")[i].innerHTML = markdown.toHTML(rs.postt.objekts[i].text);
-				}
-			});
+			$sails.post("/post/edit", obj);
 		};
+		$sails.on("pEdit", function(res){
+		    if(res.err) return showErr(res.err);
+			showInfo("Changes saved Successfully");
+			for(var i=0;i<rs.postt.objekts.length;i++){
+				$("#preview").find("div")[i].innerHTML = markdown.toHTML(rs.postt.objekts[i].text);
+			}
+		});
 		s.post.destroy = function(id){
 			h.post("/post/destroy?post="+id).success(function(res){
 				if(res.err) return showErr(res.err);
