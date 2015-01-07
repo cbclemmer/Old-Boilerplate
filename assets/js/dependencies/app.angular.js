@@ -189,7 +189,7 @@
 				$rootScope.user.gJSON.push(res);
 				return $rootScope.user.gJSON.push(res);
 			});
-		};
+		}; 
 		$scope.use.logOut = function(){
 			$http.get("/session/destroy?load=f").success(function(res){
 				if(res.status){
