@@ -38,7 +38,7 @@ module.exports = {
 		Post.create(obj, function(err, post){
 			if(err) return next(err);
 			//add a hash of id to the end of slug so you know it is unique
-			if(post.slug) post.slug = post.slug+"-"+post.id;
+			if(post.slug) post.slug = post.slug+"-"+require("randomstring").generate();
 			Post.update({id: post.id}, post, function(err, post){
 				if(err) return next(err);
 				var n = (post.name==""||!post.name) ? "short" : post.name;
