@@ -47,6 +47,53 @@ module.exports = {
 			});
 		});
 	},
+	showcom: function(req, res, next){
+		Comment.find({where: {owner: req.param("id")}, limit: 100}, function(err, comm){
+			if(err) return next(err);
+			if(!comm) return res.json({comments: []});
+			return res.json({comments: comm});
+		});
+	},
+	ncomment: function(req, res, next){
+		Post.findOne({id: req.param("id")}, function(err, post){
+			if(err) return next(err);
+			if(!post) return sails.sockets.emit(sails.sockets.id(req.socket), "nComment", {err: "Could not find post"});
+			var obj = {
+				owner: post.id,
+				user: req.session.user.id,
+				username: req.session.user.username,
+				content: req.param("comment"),
+				hearts: 0
+			}
+			Comment.create(obj, function(err, comment){
+				if(err)	 return next(err);
+				var i = (post.numComments) ? post.numComments+1 : 1;
+				Post.update({id: post.id}, {numComments: i}, function(err, post){
+					if(err)	 return next(err);
+					return sails.sockets.emit(sails.sockets.id(req.socket), "nComment", comment);
+				});
+			});
+		});
+	},
+	delcomment: function(req, res, next){
+		Comment.findOne({id: req.param("id")}, function(err, comm){
+			if(err) return next(err);
+			if(!comm) return res.json({err: "Could not find comment"});
+			if(comm.user==req.session.user.id||req.session.user.admin){
+				Comment.destroy({id: comm.id}, function(err){
+					if(err) return next(err);
+					Post.findOne({id: comm.owner}, function(err, post){
+						if(err) return next(err);
+						var i = ((post.numComments-1)<0) ? 0 : (post.numComments-1);
+						Post.update({id: post.id}, {numComments: i}, function(err, postt){
+							if(err) return next(err);
+							return res.json({status: true});
+						});
+					});
+				});
+			}
+		});
+	},
 	edit: function(req, res, next){
 		var p = req.params.all();
 		if(p.owner==req.session.user.id){

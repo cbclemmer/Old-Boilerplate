@@ -14,6 +14,8 @@ module.exports = {
     name: 'string',
  	  //the person or group that posted
   	owner: 'string',
+  	//username of the person that owns it
+  	ownerName: 'string',
   	//the person or group that it is being posted to, same as owner if self post
   	target: 'string',
   	//primary type of post determined by first type inputed, can be edited, can be sorted
@@ -29,6 +31,7 @@ module.exports = {
     public: {
       type: 'boolean',
       defaultsTo: false
-    }
+    },
+    numComments: 'integer'
   }
 };

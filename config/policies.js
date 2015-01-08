@@ -30,7 +30,10 @@ module.exports.policies = {
   PostController: {
     objCreate: 'canAddObj',
     create: 'canPost',
-    userFeed: 'userFeed'
+    userFeed: 'userFeed',
+    showcom: 'canSeePost',
+    ncomment: 'canSeePost',
+    delComment: 'adminoruser'
   },
   api: {
     show: 'sessionAuth'

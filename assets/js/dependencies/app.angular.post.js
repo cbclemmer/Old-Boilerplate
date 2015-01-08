@@ -195,6 +195,58 @@
 					s.post.tags.splice(i, 1);
 				}
 			}
+		};
+		s.post.showCom = function(id){
+			h.get("/post/showcom?id="+id).success(function(res){
+					console.log(res);
+					if(res.err) showErr(res.err);
+					for(var i=0;i<rs.posts.length;i++){
+						if(rs.posts[i].id==id){
+							if(res.comments.length>0){
+								rs.posts[i].comments=res.comments;
+							}
+							rs.posts[i].open = true;
+						}
+					}
+			});
+		};
+		s.post.nComment = function(comm, id){
+			$sails.post("/post/ncomment", {comment: comm, id: id});
+		};
+		$sails.on("nComment", function(data){
+			if(data.err) showErr(data.err);
+			for(var i=0;i<rs.posts.length;i++){
+				if(rs.posts[i].id==data.owner){
+					rs.posts[i].comments.push(data);
+					s.post.temp.comment[rs.posts[i].id] = "";
+					rs.posts[i].numComments++;
+					break;
+				}
+			}
+		});
+		s.post.delComment = function(id, owner){
+			h.post("/post/delcomment?id="+id).success(function(res){
+				if(res.err) return showErr(res.err);
+				for(var i=0;i<rs.posts.length;i++){
+					if(rs.posts[i].id==owner){
+						for(var ii=0;ii<rs.posts[i].comments.length;ii++){
+							if(rs.posts[i].comments[ii].id==id){
+								rs.posts[i].comments.splice(ii, 1);
+								rs.posts[i].numComments--;
+								break;
+							}
+						}
+						break;
+					}
+				}
+			});
+		};
+		s.post.hideComments = function(id){
+			for(var i=0;i<rs.posts.length;i++){
+				if(rs.posts[i].id==id){
+					rs.posts[i].open = false;
+				}
+			}
 		}
 	}]);
 })();

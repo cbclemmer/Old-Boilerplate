@@ -3,7 +3,7 @@ module.exports = function(req, res, next){
         if(err)  return next(err);
         if(!user) return;
         if(user.admin || user.id == req.param("id")){
-           return next(); 
+           return next();
         }else{
             return res.redirect("/");
         }

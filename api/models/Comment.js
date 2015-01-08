@@ -10,6 +10,9 @@ module.exports = {
   attributes: {
   	//the post that owns it
   	owner: 'string',
+  	//the user that posted it
+  	user: 'string',
+  	username: 'string',
   	content: 'string',
   	//parent comment,if highest level comment this is blank
   	parent: 'string',
