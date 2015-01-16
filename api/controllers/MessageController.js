@@ -33,5 +33,20 @@ module.exports = {
 			if(!messages) return res.json({err: "Could not find the messages"});
 			return res.json(messages);
 		});
+	},
+	//this checks to see if a conversation is already started, if it is, it returns the ID
+	conv: function(req, res, next){
+		Conversation.findOne({users: {$in: [req.param("id")]}}, function(err, conv){
+			if(err) return next(err);
+			if(!conv){
+				var arr = [req.param("id"), req.session.user.id];
+				Conversation.create({users: arr}, function(err, conv){
+					if(err) return next(err);
+					return res.json(conv);
+				});
+			}else{
+				return res.json(conv);
+			}
+		});
 	}
 };

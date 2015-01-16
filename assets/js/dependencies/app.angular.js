@@ -1,6 +1,6 @@
 (function(){
 	//module defines controllers
-	var app = angular.module("app", ['ui.router', 'ngSails', 'group', 'search', 'post', 'settings']);
+	var app = angular.module("app", ['ui.router', 'ngSails', 'group', 'search', 'post', 'settings', 'message']);
 	app.config(function($stateProvider, $urlRouterProvider){
 		if(window.location.pathname.length<2) $urlRouterProvider.otherwise('/login');
 		$stateProvider

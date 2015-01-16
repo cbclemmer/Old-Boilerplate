@@ -1,3 +1,25 @@
-<div>
-	This is the messages page
+<div ng-controller="messageController as mess" class="container" ng-init="mess.temp={}">
+    <div id="mSearchDiv" ng-controller="searchController as s">
+		<input type="text" placeholder="Search..." id="mSearch" ng-model="mess.temp.search" ng-keydown="mSearch(mess.temp.search)"/>
+		<div ng-repeat="option in mOptions track by $index" ng-click="s.getPage(option)" class="opt" style="display: block; float: left; width: 100%; padding: 0px 5px 5px;text-align: left;font-size: 15px;">
+            <span ng-click="mess.conv(option.id)"><b>{{option.name}}</b> @{{option.username}}</span>
+        </div>
+	</div>
+	<div>
+		Friends List: 
+	   <div ng-repeat="friend in user.fJSON" ng-click="conv(friend.id)">{{friend.name}} @{{friend.username}}<br></div>
+	</div>
+	<div>
+		Conversations:
+		<div ng-repeat="conv in mess.conversations"></div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<div ng-show="mess.conv" ng-init="mess.conv = {}">
+		<div ng-repeat="mes in mess.conv.messages">@{{mes.ownername}}: <br></div>
+		<form ng-submit="mess.nMessage(mess.temp.message)">
+			<input type="text" placeholder="Message" ng-model="mess.temp.message" />
+		</form>
+	</div>
 </div>

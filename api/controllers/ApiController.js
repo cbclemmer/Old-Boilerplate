@@ -200,6 +200,28 @@ module.exports = {
 				}else{return res.json(results);}
 			});
 		},
+		mSearch: function(req, res, next){
+			if(req.param("s")=="") return res.json({results: []});
+			var results = [];
+			var reg = new RegExp(req.param('s'), 'i');
+			User.find({where: {username: reg}, limit: 20}, function(err, users){
+				if(err)	return next(err);
+				for(var i=0;i<users.length;i++){
+					results.push(users[i]);
+				}
+				User.find({where: {name: reg}, limit: 20}, function(err, users){
+					if(err)	return next(err);
+					for(var i=0;i<users.length;i++){
+						results.push(users[i]);
+					}
+					
+					for(var i=0;i<results.length;i++){
+						cleanService.cleanUser(results[i]);
+					}
+					return res.json({results: results});
+				});
+			});
+		},
 		show: function(req, res, next){
 			if(req.param("id")!=undefined){
 				User.findOne({username: req.param("id")}, function(err, user){

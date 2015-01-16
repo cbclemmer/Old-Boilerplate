@@ -48,6 +48,13 @@
 					}
 				}
 			});
+		};
+		scope.mSearch = function(s){
+			h.get('/api/mSearch?s='+s).success(function(res){
+				if(res.err) return showErr(res.err);
+				console.log(res);
+				rs.mOptions = res.results;
+			});
 		}
 	}]);
 })();
