@@ -68,7 +68,7 @@
 							<button ng-click="use.rFriend(pag.id)">Remove Friend</button>
 						</span>
 						<div ng-show="!pag.friendsWith">
-							<button ng-show="!pag.request" ng-click="use.addFriendRequest(pag.id)">Add Friend</button>
+							<button ng-show="!pag.request" ng-click="use.addFriendRequest(pag.username)">Add Friend</button>
 							<span ng-show="pag.request">Request Sent</span>
 						</div>
 					</div>

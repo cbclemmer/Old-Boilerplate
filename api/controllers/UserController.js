@@ -86,137 +86,94 @@ module.exports = {
 		},
 		//friends segment
 		friends: function(req,res, next){
-			Friend.find({where: {owner: req.param('user')}, limit: 100}, function(err, friends){
+			User.find({id: req.session.user.id}, {friends: true, friendRequests: true}, function(err, user){
 				if(err) return next(err);
-				if(!friends) return res.json({err: "No friends"});
-				res.json(friends);
+				res.json(user);
 			});
 		},
 		addFriend: function(req, res, next){
-			User.findOne({id: req.session.user.id}, function(err, user){
-				if(err) return next(err);
-				if(!user) return console.log("Could not find user");
-				for(var i=0;i<user.friendRequests.length;i++){
-					if(user.friendRequests[i]==req.param("request")){
-						var id = user.id.toString();
-						Friend.create({user: id, owner: req.param("request")}, function(err, f){
-							if(err) return next(err);
-							Friend.create({user: req.param("request"), owner: id}, function(err, f){
-								if(err) return next(err);
-							});
-						});
-						user.friendRequests.splice(i, 1);
-						req.session.user.friendRequests.splice(i, 1);
-						break;
+			var obj1 = {
+				$push: {
+					friends: {
+						id: req.session.user.id,
+						username: req.session.user.username,
+						name: req.session.user.name
 					}
-				};
-				User.update(user.id, user, function(err, user){
-					if(err) return res.json({err: err});
-					User.findOne({id: req.param("request")}, function(err, user){
-						if(err) return next(err);
-						for(var i=0;i<user.requestsSent.length;i++){
-							user.requestsSent.splice(i,1);
-							break;
+				}, 
+				$pull: {
+					requestsSent: req.session.user.id
+				}
+			};
+			User.update({id: req.param("request"), requestsSent: {$in: [req.session.user.id]}}, obj1, function(err, user){
+				if(err) return next(err);
+				if(user){
+					obj2 = {
+						$push: {
+							id: user.id,
+							username: user.username,
+							name: user.name
+						},
+						$pull: {
+							friendRequests: req.param("request")
 						}
-						User.update(user.id, user, function(err, user){
-							if(err) return next(err);
-							res.json(true);
-						});
-					});
-					res.json(true);
-				});
+					};
+					User.update({id: req.session.user.id, friendRequests: {$in: [req.parm("request")]}}, obj2, function(err, user) {
+						if(err) return next(err);
+						return res.json({status: true});
+					})
+				}else{
+					return res.json({err: "friend request not issued"});
+				}
 			});
 		},
 		rFriend: function(req, res, next){
-			Friend.findOne({owner: req.param('user'), user: req.session.user.id}, function(err, friend){
+			User.update({id: req.session.user.id}, {$pull: {friends: {id: req.param('user')}}}, function(err, user) {
 				if(err) return next(err);
-				if(!friend){
-					console.log("Cannot find record for owner: "+req.param('user')+" and user: "+req.session.user.id);
-					return res.json("Something has gone terribly wrong");
-				}
-				Friend.destroy(friend.id, function(err){
+				User.update({id: req.param("user")}, {$pull: {friends: {id: req.session.user.id}}}, function(err, user) {
 					if(err) return next(err);
-					Friend.findOne({owner: req.session.user.id, user: req.param('user')}, function(err, friend){
-						if(err) return next(err);
-						if(!friend){
-							console.log("Cannot find record for owner: "+req.param('user')+" and user: "+req.session.user.id);
-							return res.json("Something has gone terribly wrong");
-						}
-						Friend.destroy(friend.id, function(err){
-							if(err) return next(err);
-							return res.json({status: true});
-						});
-					})
-				})
+					return res.json({status: true});
+				});
 			});
 		},
 		addFriendRequest: function(req, res, next){
-			//friend requests are all IDs
-			console.log("this");
-			User.findOne({id: req.param('friend')}, function(err, user){
-				if(err) return next(err);
-				if(!user) return console.log("user not found");
-				if(!user.friendRequests) user.friendRequests = [];
-				//search for duplicates
-				var dup = false;
-				console.log("this");
-				for(var i=0;i<user.friendRequests.length;i++){
-					if(user.friendRequests[i]==req.session.user.id) return dup = true;
-				}
-				console.log("this");
-				//if there isn't already a request active
-				if(!dup){
-					console.log("this");
-					user.friendRequests.push(req.session.user.id);
-					User.update(user.id, user, function(err, user){
-						if(err){
-							console.log(err);
-							return res.json({err: err});
-						}
-						User.findOne({id: req.session.user.id}, function(err, user){
-							if(!user.requestsSent) user.requestsSent = [];
-							user.requestsSent.push(req.param('friend'));
-							User.update(user.id, user, function(err, use){
-								if(err) return next(err);
-								console.log("this");
-								socketServ.addFr(cleanService.cleanUser(req.session.user), cleanService.cleanUser(user), req.param("socket"));
-								return res.json(true);
-							});
-						});
+			//we have the user id in req.param("friend")
+			var obj = {
+				id: req.session.user.id,
+				username: req.session.user.username,
+				name: req.session.user.name
+			};
+			console.log(req.param("friend"));
+			console.log(obj);
+			if(req.session.user){
+				User.native(function(err, collection){
+					collection.update({username: req.param("friend")}, {$push: {friendRequests: obj}}, function(err, user){
+					if(err)	return next(err);
+					console.log(user);
+					collection.update({username: req.session.user.id}, {$push: {requestsSent: req.param("friend")}}, function(err, user) {
+						if(err) return next(err);
+						return res.json({status: true});
 					});
-				}else{
-					console.log("that");
-					return res.json(false);
-				}
-			});
+				});	
+				});
+			}else{
+				return res.json({err: "You are not logged in"});
+			}
 		},
 		deleteRequest: function(req, res, next){
 			if(req.session.user){
-			User.findOne({id: req.session.user.id}, function(err, user){
-				if(err) return next(err);
-				if(!user) return console.log("Could not find user(deleteRequest)");
-				for(var i=0;i<user.friendRequests.length;i++){
-					if(user.friendRequests[i]==req.param("request")){
-						user.friendRequests.splice(i, 1);
-						break;
-					}
-				};
-				User.update(user.id, user, function(err, user){
-					if(err) return res.json({err: err});
-					User.findOne({id: req.param("request")}, function(err, user){
-						if(err) return next(err);
-						if(!user) return console.log("could not find user: "+req.session.user.id);
-						for(var i=0;i<user.requestsSent.length;i++){
-							user.requestsSent.splice(i,1);
-							break;
-						}
-						User.update(user.id, user, function(err, user){
-							if(err) return next(err);
-							res.json(true);
-						});
-					});
+				User.native(function(err, coll){
+					coll.update({username: req.session.user.username}, {$pull: {friendRequests: {$elemMatch: {id: req.param("request")}}}}, function(err, user) {
+				    if(err) return next(err);
+				    console.log(user);
+				    coll.update({username: req.param("request")}, {$pull: {requestsSent: req.session.user.id}}, function(err, user) {
+				        if(err) return next(err);
+				        console.log("this");
+				        return res.json({status: true});
+				    });
 				});
-			});
+				});
+			}else{
+				return res.json({err: "you must be logged in"});
 			}
 		},
 		//End friend sgement

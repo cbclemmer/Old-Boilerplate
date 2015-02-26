@@ -29,7 +29,7 @@
 				if(!$rootScope.auth) $state.go("login");
 			}
 		});
-	});
+	}); 
 	app.controller("userController", ['$http', '$scope', '$rootScope', '$state', '$sails', function($http, $scope, $rootScope, $state, $sails){
 		$scope.temp = {};
 		$scope.tLogin = {};
@@ -50,31 +50,10 @@
 				//get friend
 				$http.get("/user/friends?user="+res.user.id).success(function(res){
 					if(res.err) return showErr(res.err);
-					if($rootScope.user){
-						$rootScope.user.fJSON = [];
-						$rootScope.user.friends = res;
-						if(res.length>0){
-							for(var i=0;i<$rootScope.user.friends.length;i++){	
-								$http.get("/user/getOne?user="+$rootScope.user.friends[i].user).success(function(res){
-									//friend JSON object
-									$rootScope.user.fJSON.push(res);
-								});
-							};
-						}
-					}
+					if(res[0].friends) $rootScope.user.fJSON = res[0].friends;
+					if(res[0].friendRequests) $rootScope.user.frJSON = res[0].friendRequests;
+					console.log($rootScope.user);
 				});
-				$rootScope.user.frJSON = [];
-				if(!$rootScope.user.friendRequests) $rootScope.user.friendRequests = [];
-				if(!$rootScope.user.requestsSent) $rootScope.user.requestsSent = [];
-				if($rootScope.user.friendRequests.length>=1){
-					//get friend request data
-					for(var i=0;i<$rootScope.user.friendRequests.length;i++){
-						$http.get("/user/getOne?user="+$rootScope.user.friendRequests[i]).success(function(res){
-							//friend request JSON object
-							$rootScope.user.frJSON.push(res);
-						});
-					};
-				}
 				//get the group json
 				$rootScope.user.gJSON = [];
 				if(!$rootScope.user.groups) $rootScope.user.groups = [];
@@ -89,7 +68,7 @@
 			}else{
 				$('.loggedIn').hide();
 			}
-		});
+			});
 		}
 		$sails.on("online", function(data){
 			//this is a boolean variable on: true=online; false=offline
@@ -106,6 +85,7 @@
 			$rootScope.user.frJSON.unshift(data.ask);
 		});
 		this.login = function(){
+			console.log("logging in");
 			var l = $scope.tLogin = this.tLogin;
 			$http.get("/session/create?email="+l.email+"&password="+l.password).success(function(res){
 				if(res.auth){
@@ -249,8 +229,6 @@
 			$http.get("/user/addFriendRequest?friend="+user+"&socket="+io.socket.socket.sessionid).success(function(res){
 				if(res.err){console.log(res.err);showErr(err.reason)};
 				if(res){
-					console.log("request add");
-					console.log(user);
 					$rootScope.user.requestsSent.push(user);
 					$rootScope.pag.request = true;
 				}
@@ -276,7 +254,6 @@
 					//delete the user from local vars
 					for(var i=0;i<$rootScope.user.fJSON.length;i++){
 						if($rootScope.user.fJSON[i].id==id){
-							console.log("found");
 							pag.friendsWith = false;
 							$rootScope.user.fJSON.splice(i,1);
 							break;

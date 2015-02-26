@@ -62,9 +62,9 @@
     <h5>Friend Requests</h5>
     <ul>
         <li ng-repeat="request in user.frJSON">
-            <a href="/api/show/{{request.username}}">{{request.name}}</a> ({{request.email}}) 
+            <a href="/api/show/{{request.username}}">{{request.name}}</a> @{{request.username}} 
             <button ng-click="use.addFriend(request.id)">Confirm</button> 
-            <button ng-click="use.deleteRequest(request.id)">Delete</button>
+            <button ng-click="use.deleteRequest(request.username)">Delete</button>
         </li>
     </ul>
     <p ng-show="user.frJSON.length<1">No friend requests</p>
@@ -73,6 +73,7 @@
 <div class="friends">
     <h5>Friends</h5>
     <ul>
+        <!--{{user.fJSON}}-->
         <li ng-repeat="friend in user.fJSON">
             <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>&emsp;
             <span ng-show="friend.online">Online</span>

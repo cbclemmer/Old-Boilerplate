@@ -20,10 +20,13 @@ module.exports = {
 			//gets everything for the page show
 			var pag = {};
 			//check if the target is a user
-			User.findOne({username: handle}, function(err, user){
+			var obj = {
+				name: true, username: true
+			};
+			User.find({username: handle}, obj, function(err, user){
 				if(err) return next(err);
 				//if it is not
-				if(!user){
+				if(!user[0]){
 					//check if group
 					Groupp.findOne({handle: handle}, function(err, groupp){
 						if(err) return next(err);
@@ -53,12 +56,11 @@ module.exports = {
 							}
 							pag.type="group";
 							pag.mJSON = users;
-							console.log("1");
 							if(pag.joined){
 								//listen for private posts
-								sails.sockets.join(req.socket, "post"+pag.id+"private");
+								sails.sockets.join(sails.sockets.id(req.socket), "post"+pag.id+"private");
 							}else{
-								sails.sockets.join(req.socket, "post"+pag.id);
+								sails.sockets.join(sails.sockets.id(req.socket), "post"+pag.id);
 							}
 							return res.json({user: req.session.user, pag: pag});
 						});
@@ -66,73 +68,28 @@ module.exports = {
 					return;
 				}
 				//rid of excess fields
-				user = cleanService.cleanUser(user);
-				pag = user;
-				//find the friends of the user
-				Friend.find({where: {owner: user.id}, limit: 100}, function(err, friends){
-					if(err) return next(err);
-					//if he has friends
-					if(friends.length>0){
-						//get the full JSON of the users
-						var f = [];
-						for(var i=0;i<friends.length;i++){
-							f.push(friends[i].user);
-						}
-						User.find({id: {$in: f}}, function(err, users){
-							if(err) return next(err);
-							//clean the users
-							var u = [];
-							for(var i=0;i<users.length;i++){
-								users[i] = cleanService.cleanUser(users[i]);
-								u.push(users[i].id);
-							}
-							Friend.findOne({owner: req.session.user.id, user: pag.id}, function(err, friend){
-								if(err) return next(err);
-								if(friend){
-									//if ffriends with user
-									pag.friendsWith=true;
-									pag.friends = users;
-									pag.type = "user";
-									//join private channel
-									sails.sockets.join(req.socket, "post"+pag.id+"private");
-									return res.json({user: req.session.user, pag: pag});
-								}else{
-									//if not
-									user = req.session.user;
-									if(user.friendRequests){
-									for(var i=0;i<user.friendRequests.length;i++){
-										if(user.friendRequests[i]==pag.id){
-											pag.request = true;
-											break;
-										}
-									}}
-									if(user.requestsSent){
-									for(var i=0;i<user.requestsSent.length;i++){
-										if(user.requestsSent[i]==pag.id){
-											pag.request = true;
-											break;
-										}
-									}}
-									pag.friendsWith=false;
-									pag.friends = users;
-									pag.type = "user";
-									//join public channel
-									sails.sockets.join(req.socket, "post"+pag.id);
-									return res.json({user: req.session.user, pag: pag});
-								};
-							});
-						});
-						//return so you don't return the res twice... if that's possible?
-						return;
+				pag = user[0];
+				User.find({id: req.session.user.id, "friends.username": handle}, {name: true}, function(err, user){
+					if(err)	return next(err);
+					if(user[0]){
+						pag.friendsWith = true;
+						sails.sockets.join(req.socket, "post"+pag.id+"private");
+					}else{
+						pag.friendsWith = false;
+						sails.sockets.join(req.socket, "post"+pag.id);
 					}
-					//if he has no friends  :(
-					pag.friends = [];
-					pag.type = "user";
-					//join public channel
-					sails.sockets.join(req.socket, "post"+pag.id);
-					return res.json({user: req.session.user, pag: pag});
+					User.find({username: handle, "friendRequests.id": req.session.user.id}, {name: true}, function(err, user) {
+					    if(err) return next(err);
+					    if(user[0]){
+					    	pag.request = true;
+					    }else{
+					    	pag.request = false;
+					    }
+						pag.type="user";
+						return res.json({user: req.session.user, pag: pag});
+					});
 				});
-			});
+			});	
 		},
 		search: function(req, res, next){
 			//s is query
@@ -167,7 +124,7 @@ module.exports = {
 					res.json(results);
 				});
 			});
-		},
+		}, 
 		asearch: function(req, res, next){
 			//s is query
 			var reg = new RegExp(req.param('s'), 'i');

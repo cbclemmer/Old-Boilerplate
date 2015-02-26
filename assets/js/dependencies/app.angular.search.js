@@ -1,6 +1,6 @@
 (function(){
-	var app = angular.module("search", ['ui.router']);
-	app.controller("searchController", ['$http', '$scope', '$rootScope', '$state', function(h, scope, rs, state){
+	var app = angular.module("search", ['ui.router', 'ngSails']);
+	app.controller("searchController", ['$http', '$sails', '$scope', '$rootScope', '$state', function(h, sails, scope, rs, state){
 		if(!scope.as) scope.as = {};
 		if(window.location.pathname.search("/show")!=-1) {
 			rs.pag = {};
@@ -10,7 +10,7 @@
 			//if it is a user or group page
 			if(rs.pag.type=="api"){
 				var handle = window.location.pathname.split("/")[(window.location.pathname.split("/").length)-1];
-				io.socket.get("/api/get?handle="+handle, function(res){
+				sails.get("/api/get?handle="+handle).success(function(res){
 					if(res.err) return showErr(res.err);
 					console.log(res);
 					rs.user = res.user;

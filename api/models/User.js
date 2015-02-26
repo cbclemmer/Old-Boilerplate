@@ -6,7 +6,7 @@
 */
 
 module.exports = {
-	schema: true,
+	schema: false,
   attributes: {
 		name: 'string',
 		username: 'string',
