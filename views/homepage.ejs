@@ -48,8 +48,36 @@
                 <div><a ui-sref="messages"><img src="/images/messages.png" alt="messages" style="height: 50px;"></a></div>
                 <div style="float: left" ng-click="use.logOut()" id="logout"><img src="/images/logout.png" alt="logout" style="height: 35px;"></div>
             </div>
-			<div id="topNav" class="container">
-				<div><a ui-sref="feed">App</a></div>
+        <div class="top" ng-show="!user">
+            Boiler
+        </div>
+        <div class="top loggedIn">
+			<button class="iconButton hamburger" id="menuButton"></button>
+			     <b>{{user.name}}</b> <i>@{{user.username}}</i>
+			<div id="aboutButton"><img src="images/details.png" class="notInline" /></div>
+			<div id="newPostButton">+</div>
+			&emsp;
+			<div class="topRight">
+				<input type="text" placeholder="Search..." id="searchBar"/>
+				<img src="images/search.png" class="notInline search" id="search"></img>
+			</div>
+		</div>
+        <div id="aboutDiv">
+			<div class="aboutDivOption" id="aboutFriends">Friends</div>
+		</div>
+		<div id="shadow"></div>
+		<div id="sideNav">
+			<ul>
+				<li><img src="images/home.png" class="notInline">&emsp;<a href="/api/show/{{option.handle}}">@{{user.username}}</a></li>
+                <li><a ui-sref="feed"><img src="images/feed.png" class="notInline">&emsp;Feed</a></li>
+                <li><a ui-sref="settings"><img src="images/settings.png" class="notInline">&emsp;Settings</a></li>
+                <li><a ui-sref="messages"><img src="images/messages.png" class="notInline">&emsp;Messages</a></li>
+				<li ng-click="use.logOut()"><img src="images/logout.png" class="notInline">&emsp;Logout</a></li>
+			</ul>
+		</div>
+        <!--
+			<div id="topNav" class="top">
+				<div><a ui-sref="feed">Boiler</a></div>
                 <div class="loggedIn" style="width: 5%;"><a ui-sref="settings"><img src="/images/settings.png" alt="settings" style="height: 35px;"></a></div>
                 <div class="loggedIn " style="width: 5%;"><a ui-sref="messages"><img src="/images/messages.png" alt="messages" style="height: 35px;"></a></div>
 				<div id="searchBar" ng-controller="searchController as s">
@@ -60,6 +88,7 @@
                 <div class="loggedIn" id="tName" style="width: 30%;text-align:left"><a href="/api/show"><b>{{user.name}}</b> <span style="font-size: 17px;"><i>@{{user.username}}</i></span></a></div>
                 <div ng-click="use.logOut()" class="loggedIn" id="logout"><img src="/images/logout.png" alt="logout" style="height: 35px;"></div>
 			</div>
+      -->
 	   <div id="main">
             <div ui-view></div>
 	   </div>

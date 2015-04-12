@@ -212,7 +212,7 @@
 			$http.get("/session/destroy?load=f").success(function(res){
 				if(res.status){
 					$rootScope.auth = false;
-					$rootScope.user = {};
+					$rootScope.user = null;
 					$('.loggedIn').hide();
 					$('.loggedOut').show();
 					$state.go("login");
