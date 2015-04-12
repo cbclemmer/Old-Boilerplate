@@ -32,7 +32,7 @@ function showInfo(s){
 console.log("yes");
 $("#gSelect").on("change", function(){
 });
-var $i = function (id) { return document.getElementById(id);};
+//var $i = function (id) { return document.getElementById(id);};
 $(document).ready(function(){
 	$('#err').hide();
 	$('#info').hide();
@@ -42,6 +42,7 @@ $(document).ready(function(){
 		$('#err').hide();
 		$('#info').hide();
 	});
+    
 	//when pressing enter at user/show post text area
 	$("#pUser").keypress(function(e){
 		if(e.keyCode==13){

@@ -40,35 +40,6 @@ button {
 .opt {
     float: left;
 }
-#startLog {
-    margin-top: 75px;
-    
-    padding: 30px;
-    
-}
-#startLog div {
-    width: 40%;
-    display: inline-table;
-    opacity: 1;
-    background: #F5F5F5;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 1px 1px 1px #E8E8E8;
-}
-#startLog div:last-child {
-    float: right;
-}
-#startLog input {
-    border: 0px;
-}
-#startLog div input:last-child{
-    border-radius: 3px;
-    font-size: 25px;
-    background: #E8E8E8
-}
-#startLog div input:last-child:hover{
-    box-shadow: 1px 1px 0px grey;
-}
 #err {
     text-align: center;
     font-size: 25px;
