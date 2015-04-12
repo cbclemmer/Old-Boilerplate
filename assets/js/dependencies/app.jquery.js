@@ -53,11 +53,11 @@ $(document).ready(function(){
 	  $('.opt').hide();
 	  $('#search').val("");
 	});
-	$("#search").keydown(function(){
+	$("#search").keyup(function(){
 		if($('#search').val().length>0){
-			angular.element(document.getElementById('searchBar')).scope().search($('#search').val());
+			angular.element(document.getElementById('searchResults')).scope().search($('#search').val());
 		}else{
-			$('#searchBar').find("div").remove();
+			$('#searchResults').find("div").remove();
 		}
 	});
 });

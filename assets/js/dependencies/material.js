@@ -37,14 +37,16 @@ $(document).ready(function(){
     
 	$("#sideNav").css({height: (i+"px")});
 	$("#shadow").css({height: (i+"px")});
-	$("#search").click(function(){
-		if($("#searchBar").is(":visible")){
-			$("#searchBar").animate({top: "-200px"}, 500, function(){
-				$("#searchBar").hide();
+	$("#searchButton").click(function(){
+		if($("#search").is(":visible")){
+			$("#search").animate({top: "-200px"}, 500, function(){
+				$("#search").hide();
 			});		
+            $("#searchResults").slideUp();
 		}else{
-			$("#searchBar").show();
-			$("#searchBar").animate({top: "0px"}, 500);
+			$("#search").show();
+            $("#search").val("");
+			$("#search").animate({top: "0px"}, 500);
 		}
 	});
 	$("#menuButton").click(function(){
@@ -60,8 +62,14 @@ $(document).ready(function(){
 			$("#shadow").fadeOut('fast');
 		});
 	});
-	$("#searchBar").keyup(function(){
-		if($("#searchBar").val()!=""){
+    $("#sideNav").click(function(){
+        $("#sideNav").animate({left: "-20%"}, 200, function(){
+			$("#sideNav").hide();
+			$("#shadow").fadeOut('fast');
+		}); 
+    });
+	$("#search").keyup(function(){
+		if($("#search").val()!=""){
 			$("#searchResults").slideDown();
 		}else{
 			$("#searchResults").slideUp();

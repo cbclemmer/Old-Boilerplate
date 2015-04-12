@@ -58,10 +58,17 @@
 			<div id="newPostButton">+</div>
 			&emsp;
 			<div class="topRight">
-				<input type="text" placeholder="Search..." id="searchBar"/>
-				<img src="images/search.png" class="notInline search" id="search"></img>
+				<input type="text" placeholder="Search..." id="search"/>
+				<img src="images/search.png" class="notInline search" id="searchButton"></img>
 			</div>
 		</div>
+      
+        <div id="searchResults" ng-controller="searchController as s">
+            <div ng-repeat="option in options" ng-click="s.getPage(option)">
+                <a href="/api/show/{{option.handle}}"><b>{{option.name}}</b> @{{option.handle}}</a>
+            </div>
+		</div>
+      
         <div id="aboutDiv">
 			<div class="aboutDivOption" id="aboutFriends">Friends</div>
 		</div>

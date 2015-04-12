@@ -68,7 +68,7 @@ input[type="text"]:focus {
 	Applies to all pages
 ===========================
 */
-#searchBar {
+#search {
 	background-color: #2196F3;
 	border-bottom: 2px solid #42A5F5;
 	position: relative;
@@ -76,7 +76,7 @@ input[type="text"]:focus {
 	display: none;
     color: #FFEB3B;
 }
-#searchbar:focus {
+#search:focus {
     color: #FFEB3B;
 }
 
