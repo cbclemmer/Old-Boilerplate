@@ -96,14 +96,30 @@ $(document).ready(function(){
 		$("#newPost").slideUp();
 	});
 	$("#aboutFriends").click(function(){
-		$("#friendsDiv").css({right: "-70%"});
+		//$("#friendsDiv").css({marginRight: "-70%"});
+        $(".sFriends").show();
+        $(".sFR").hide();
+        $(".sGroups").hide();
 		$("#friendsDiv").show();
-		$("#friendsDiv").animate({right: "5%"});
+		$("#aboutDiv").slideUp();
+	});
+    $("#aboutGroups").click(function(){
+		//$("#friendsDiv").css({marginRight: "-70%"});
+        $(".sFriends").hide();
+        $(".sFR").hide();
+        $(".sGroups").show();
+		$("#friendsDiv").show();
+		$("#aboutDiv").slideUp();
+	});
+    $("#aboutFR").click(function(){
+		//$("#friendsDiv").css({marginRight: "-70%"});
+        $(".sFriends").hide();
+        $(".sFR").show();
+        $(".sGroups").hide();
+		$("#friendsDiv").show();
 		$("#aboutDiv").slideUp();
 	});
 	$("#friendsExit").click(function(){
-		$("#friendsDiv").animate({right: "-70%"}, 500, function(){
-			$("#friendsDiv").hide();
-		});
+        $("#friendsDiv").hide();
 	});
 });
