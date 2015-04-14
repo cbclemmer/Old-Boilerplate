@@ -16,7 +16,7 @@ module.exports = {
 				}
 			}
 			var handle = req.param("handle");
-			if(handle=="show") handle = req.session.user.username;
+			if(handle=="show"|| handle=="") handle = req.session.user.username;
 			//gets everything for the page show
 			var pag = {};
 			//check if the target is a user
