@@ -43,12 +43,7 @@
 	<div ng-controller="userController as use">
 			<div id="err"></div>
             <div id="info"></div>
-            <div id="leftOpt">
-                <div><a ui-sref="settings"><img src="/images/settings.png" alt="settings" style="height: 50px;"></a></div>
-                <div><a ui-sref="messages"><img src="/images/messages.png" alt="messages" style="height: 50px;"></a></div>
-                <div style="float: left" ng-click="use.logOut()" id="logout"><img src="/images/logout.png" alt="logout" style="height: 35px;"></div>
-            </div>
-        <div class="top" ng-show="!user">
+        <div class="top" ng-hide="user.name">
             Boiler
         </div>
         <div class="top loggedIn">
@@ -132,7 +127,7 @@
             <div class="aboutDivOption" id="aboutFR">Friend Requests</div>
 		</div>
 		<div id="shadow"></div>
-		<div id="sideNav">
+		<div id="sideNav" ng-controller="userController as use">
 			<ul>
 				<li><img src="images/home.png" class="notInline">&emsp;<a href="/api/show/{{option.handle}}">@{{user.username}}</a></li>
                 <li><a ui-sref="feed"><img src="images/feed.png" class="notInline">&emsp;Feed</a></li>

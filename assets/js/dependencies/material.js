@@ -15,7 +15,7 @@ window.onscroll=function(){
     	$("#newPost").css({top: "80px"});
     }
     if(window.pageYOffset==0){
-    	$(".top").css({paddingTop: "100px", position: "relative", fontSize: "34pt", height: "75px"});
+    	$(".top").css({paddingTop: "100px", fontSize: "34pt", height: "75px"});
     	$(".topRight").css({marginTop: "0px"});
     	$("#searchResults").css({top: "175px"});
     	$("#aboutDiv").css({top: "175px"});
@@ -122,4 +122,7 @@ $(document).ready(function(){
 	$("#friendsExit").click(function(){
         $("#friendsDiv").hide();
 	});
+    $("#friendList").click(function(){
+        $(".friends").slideToggle();
+    });
 });

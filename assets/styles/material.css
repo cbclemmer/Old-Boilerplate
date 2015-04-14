@@ -91,9 +91,10 @@ input[type="text"]:focus {
 	box-shadow: -1px 3px 3px grey;
 	display: none;
 	z-index: 14;
+    overflow-y: scroll;
 }
-#searchResults div {
-	width: 100%;
+#searchResults div, .friends div {
+	width: 90%;
 	padding-left: 10%;
 	border-bottom: 1px solid rgba(0, 0, 0, .12);
 	padding-top: 10px;
@@ -170,6 +171,8 @@ input[type="text"]:focus {
 	padding-left: 5%;
 	padding-top: 100px;
 	z-index: 10;
+    position: fixed;
+    top: 0px;
 }
 /*
 	Home specific
@@ -414,6 +417,9 @@ box-shadow: none;
 }
 .sSign-up, .sFR, .sGroups {
     display: none;
+}
+#main {
+    margin-top: 200px;   
 }
 
 @media screen and (max-width: 800px) {

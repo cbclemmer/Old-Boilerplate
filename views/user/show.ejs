@@ -43,7 +43,7 @@
 	<div ng-controller="userController as use">
 			<div id="err"></div>
             <div id="info"></div>
-        <div class="top" ng-show="!user">
+        <div class="top" ng-hide="user">
             Boiler
         </div>
         <div class="top loggedIn">
@@ -127,12 +127,12 @@
             <div class="aboutDivOption" id="aboutFR">Friend Requests</div>
 		</div>
 		<div id="shadow"></div>
-		<div id="sideNav">
+		<div id="sideNav" ng-controller="userController as use">
 			<ul>
 				<li><img src="../../images/home.png" class="notInline">&emsp;<a href="/api/show/{{option.handle}}">@{{user.username}}</a></li>
-                <li><a ui-sref="feed"><img src="../../images/feed.png" class="notInline">&emsp;Feed</a></li>
-                <li><a ui-sref="settings"><img src="../../images/settings.png" class="notInline">&emsp;Settings</a></li>
-                <li><a ui-sref="messages"><img src="../../images/messages.png" class="notInline">&emsp;Messages</a></li>
+                <li><a href="/#/feed"><img src="../../images/feed.png" class="notInline">&emsp;Feed</a></li>
+                <li><a href="/#/settings"><img src="../../images/settings.png" class="notInline">&emsp;Settings</a></li>
+                <li><a href="/#/messages"><img src="../../images/messages.png" class="notInline">&emsp;Messages</a></li>
 				<li ng-click="use.logOut()"><img src="../../images/logout.png" class="notInline">&emsp;Logout</a></li>
 			</ul>
 		</div>
@@ -181,6 +181,14 @@
 						</div>
 					</div>
 			</div>
+            <div class="post" id="friendList">
+                <h3>Friends</h3>
+				<div class="friends" style="display:none">
+                    <div ng-repeat="friend in pag.friends">
+                        <a href="/api/show/{{friend.username}}">{{friend.name}} @{{friend.username}}</a>
+                    </div>
+				</div>
+            </div>
 			<div class="post">
 					<form ng-submit="post.create(pag.id)">
 						<textarea id="pUser" type="text" ng-model="post.temp.objekts[0].text" placeholder="write to {{pag.name}}" rows="3" cols="50" style="width: 100%;height: 50px;resize: none;margin-left: 5px"></textarea>
@@ -200,15 +208,6 @@
 				<div class="postContent"><span ng-show="!p.name">{{p.objekts[0].text}}</span></div>
 			</div>
 		</div>
-					<div class="aside" style="width: 15%;display:inline-table">
-						<div class="friends">
-							<h5>Friends</h5>
-							<ul>
-								<li ng-repeat="friend in pag.friends"><a href="/api/show/{{friend.username}}">{{friend.name}} @{{friend.username}}</a></li>
-								<p ng-show="pag.friends.length<1">Well, this is awkward...</p>
-							</ul>
-						</div>
-					</div>
 			</div>   
 	   </div>
     </div>

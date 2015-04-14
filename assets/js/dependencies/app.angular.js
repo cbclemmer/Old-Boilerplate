@@ -196,8 +196,8 @@
 				}
 			});
 			}
-		};
-		$scope.use.nGroup = function(){
+		};    
+		this.nGroup = function(){
 			var g = $rootScope.nGroup;
 			$http.get("/group/create?name="+g.name+"&handle="+g.handle).success(function(res){
 				if(res.err) return showErr(res.err);
@@ -208,14 +208,17 @@
 				return $rootScope.user.gJSON.push(res);
 			});
 		};
-		$scope.use.logOut = function(){
+		this.logOut = function(){
 			$http.get("/session/destroy?load=f").success(function(res){
 				if(res.status){
 					$rootScope.auth = false;
 					$rootScope.user = null;
 					$('.loggedIn').hide();
 					$('.loggedOut').show();
-					$state.go("login");
+                    if(window.location.pathname.length==1)
+					   $state.go("login");
+                    else    
+                        window.location.replace("/");
 					showInfo("Logged Out!");
 				}else showErr("error logging out");
 			});
@@ -245,7 +248,7 @@
 				}
 			});
 		};
-		$scope.use.addFriend = function(user){
+		this.addFriend = function(user){
 			//hold the friend request for fast access
 			req = $rootScope.user.friendRequests;
 			$http.get("/user/addFriend?request="+user).success(function(res){
@@ -262,7 +265,7 @@
 				}
 			});
 		};
-		$scope.use.addFriendRequest = function(user){
+		this.addFriendRequest = function(user){
 			//add the user: user to their friend request list
 			$http.get("/user/addFriendRequest?friend="+user+"&socket="+io.socket.socket.sessionid).success(function(res){
 				if(res.err){console.log(res.err);showErr(err.reason)};
@@ -274,7 +277,7 @@
 				}
 			});
 		};
-		$scope.use.deleteRequest = function(user){
+		this.deleteRequest = function(user){
 			req = $rootScope.user.friendRequests;
 			$http.get("/user/deleteRequest?request="+user).success(function(res){
 				if(res.err){console.log(err);showErr(err.reason)};
@@ -287,7 +290,7 @@
 				}
 			});
 		}
-		$scope.use.rFriend = function(id){
+		this.rFriend = function(id){
 			$http.get("/user/rFriend?user="+id).success(function(res){
 				if(res.err) return showErr(res.err);
 				if(res.status){
@@ -305,6 +308,6 @@
 				showErr("Something went terribly wrong");
 			});
 		}
+        console.log($scope);
 	}]);
-
 })();
