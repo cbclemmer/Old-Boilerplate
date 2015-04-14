@@ -122,7 +122,7 @@
             </div>
         </div>
         <div id="aboutDiv">
-            <div class="aboutDivOption" id="aboutGroups">Groups{{user.username}}</div>
+            <div class="aboutDivOption" id="aboutGroups">Groups</div>
 			<div class="aboutDivOption" id="aboutFriends">Friends</div>
             <div class="aboutDivOption" id="aboutFR">Friend Requests</div>
 		</div>
@@ -189,7 +189,7 @@
 			</div>
 			<div class="post" ng-repeat="p in posts">
 				<div class="postTop">
-                    <span><a href="/api/show/{{p.owner}}">@{{p.ownerName}}</a></span>&emsp;
+                    <span><a href="/api/show/{{p.ownerName}}">@{{p.ownerName}}</a></span>&emsp;
                     <span ng-click="post.destroy(p.id)" style="color: blue;cursor: pointer;" ng-show="p.owner==user.id">Delete</span>
                     <img src="../../images/visable-black.png" class="notInline postVis" ng-show="p.public"/>
                     <img src="../../images/notVisable-black.png" class="notInline postVis" ng-show="!p.public"/>

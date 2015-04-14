@@ -90,10 +90,13 @@ button {
     width: 100%;
     height: 300px;
 }
+
+/*
 #preview{
     width: 50%;
     display: inline-table;
 }
+*/
 #preview img{
     width: 100%;
 }
