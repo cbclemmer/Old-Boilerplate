@@ -236,6 +236,7 @@ input[type="text"]:focus {
 	position: fixed;
 	background-color: rgba(0,0,0, .12);
 	display: none;
+    top: 175px;
 }
 .aboutDivOption{
 	margin-top: 10px;
